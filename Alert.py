@@ -19,7 +19,7 @@ class Alert:
     '''
     alertType: string
     alertDescription: string
-    alertTime: double
+    alertTime: double #Enter as military time (e.g., 15.5 for 3:30 PM)
     recur: bool
     alertFrequency: string
     '''

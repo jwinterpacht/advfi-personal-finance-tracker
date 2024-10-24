@@ -2,8 +2,14 @@
 Budget class
 By Jonah Raef
 10-17-2024
+
+This also manages the Alerts.
+STILL NEED TO MAKE ALERTS ACTUALLY TRIGGER IN THE APP. I THINK ADDING THIS IS FATHOMABLE AFTER WE HAVE SOME FUNCTIONALITY IN 'MAIN'
+
+This class requires Python 3.12 for the 'match' functionality.
 '''
 from datetime import date
+import Alert
 
 print("Running: Budget.py")
 
@@ -28,6 +34,7 @@ class Budget:
     endDate = date(1, 1, 1) # year/month/day (i.e. 2024/10/17)
     income = []
     expenses = []
+    alertList = [] #A list of Alert objects
 
     #For AdvFi System: Find an efficient way to automatically [delete or archive] a Budget on endDate, UNLESS the endDate is (1, 1, 1)
 
@@ -65,6 +72,53 @@ class Budget:
         tempTrans = Transaction(amt, desc)
         self.expenses.append(tempTrans)
         self.calculateRemainingBudget() #update the remaining budget
+
+    '''Add an Alert that is triggered by an event happening within this budget'''
+    def addAlert(self, type, description, time, frequency, recur):
+        self.alertType = type
+        self.alertDescription = description
+        self.alertTime = time
+        self.alertFrequency = frequency
+        self.alertsList.append(Alert(type, description, time, frequency, recur))
+
+    '''Remove an alert from the list'''
+    def removeAlert(self, alert):
+        self.alertsList.remove(alert)
+
+    '''Modify the parameters of an alert for this budget
+    '''
+    def modifyAlert(self, alert):
+        print('What aspect of this alert would you like to modify?')
+        #print('1. Type\n2. Description\n3. Time\n4. Frequency\n5. Recurrance')
+        user_input = input("1. Type\n2. Description\n3. Time\n4. Frequency\n5. Recurrance")
+
+        match user_input:
+            case "1":
+                new_type = input("Enter the new type: ")
+                alert.alert_type = new_type
+            case "2":
+                new_description = input("Enter the new description: ")
+                alert.alert_description = new_description
+            case "3":
+                try:
+                    new_time = float(input("Enter the new time (e.g., 15.5 for 3:30 PM): "))
+                    alert.alert_time = new_time
+                except ValueError:
+                    print("Invalid time format. Please enter a number.")
+            case "4":
+                new_frequency = input("Enter the new frequency [hourly, daily, weekly, monthly]: ")
+                alert.alert_frequency = new_frequency
+            case "5":
+                # Assuming recurrence is toggled on/off
+                if alert.isRecurring():
+                    alert.alert_frequency = None
+                    print("Recurrence turned off.")
+                else:
+                    new_frequency = input("Enter the recurrence frequency (e.g., daily, weekly): ")
+                    alert.alert_frequency = new_frequency
+                    print("Recurrence turned on.")
+            case _:
+                print("Invalid input.")
 
 
     #GETTERS
@@ -116,7 +170,7 @@ class Budget:
         self.category = category
 
 
-
+'''
 #TESTING ENVIRONMENT!!
 test_budget = Budget(1500, "bi-weekly entertainment and expenses budget.")
 test_budget.setStartDate(date(2024, 10, 17))
@@ -136,3 +190,4 @@ print("\nPrinting expense list: ")
 
 
 print('Entire program successfully ran :D')
+'''
