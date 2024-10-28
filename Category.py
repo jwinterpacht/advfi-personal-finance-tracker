@@ -1,6 +1,17 @@
+'''
+Author: Mason Myre
+Purpose: to be used by entity and transaction to keep track of different spending/income/asset/liability categories
+
+'''
+
+
 class Category:
     category_name = ""
     category_description = ""
+
+    def __init__(self):
+        self.category_name = ""
+        self.category_description = ""
 
     def __init__(self, new_name, new_description):
         self.category_name = new_name

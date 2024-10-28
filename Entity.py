@@ -1,13 +1,15 @@
 '''
 Author: Mason Myre
 Purpose: To be used by Entity Portfolio to hold a user's assets and liabilities
-Notable Things: Will not let you set auto_update to True unless 
+Notable Things: Will not let you set auto_update to True unless given a valid ticker symbol
+                
 
 '''
 
 
 
 import yfinance
+import Category
 
 class Entity:
 
@@ -20,9 +22,11 @@ class Entity:
     description = "default description"
     auto_update = False
     stock_symbol = "n/a"
+    category = Category("Default Category", "NULL")
+    entity_ID = -1
 
     #constructor
-    def __init__(self, entity_type, entity_value, entity_amount, entity_name, entity_description, entity_auto_update, entity_stock_symbol = "n/a"):  
+    def __init__(self, entity_type, entity_value, entity_amount, entity_name, entity_description, entity_auto_update, entity_stock_symbol = "n/a", category_name = "Default Category", category_description = "NULL"):  
         self.type = entity_type
         self.single_value = entity_value
         self.amount = entity_amount
@@ -30,6 +34,10 @@ class Entity:
         self.name = entity_name
         self.description = entity_description
         self.auto_update = entity_auto_update    # if an asset is set to auto-update, then we treat it like a stock
+
+        self.category.set_name(category_name)
+        self.category.set_description(category_description)
+
 
         if self.auto_update:            #handling the case that occurs when a user instantiates an asset with an invalid stock symbol
             cur_price = get_stock_value(entity_stock_symbol)
@@ -46,6 +54,9 @@ class Entity:
     
     
     #getters
+    def get_entity_ID(self):
+        return self.entity_ID
+    
     def get_type(self):
         return self.type
 
@@ -56,6 +67,9 @@ class Entity:
         return self.amount
     
     def get_total_value(self):
+        if(self.auto_update):
+            self.single_value = get_stock_value()
+            self.real_value = self.amount * self.single_value
         return self.real_value
     
     def get_name(self):
@@ -69,9 +83,26 @@ class Entity:
     
     def get_stock_symbol(self):
         return self.stock_symbol
+    
+    def get_category_name(self):
+        return self.category.get_name()
+    
+    def get_category_description(self):
+        return self.category.get_description()
+        
+    def print_entity(self):
+        print("")
 
     
-    #setters, they return true if successful, false if unsuccessful
+    #setters, they return true if successful, false if unsuccessful, 
+    def set_entity_ID(self, entity_ID):
+        if self.entity_ID == -1:
+            self.entity_ID = entity_ID
+            return True
+        else:
+            print("entity ID was already assigned, cannot assign a new one")
+            return False
+
     def set_type(self, new_type):
         self.type = new_type
         return True
@@ -157,8 +188,17 @@ class Entity:
         print("Cannot auto update an asset that does not have the auto_update value set to true")
         return False
     
+    def set_category_name(self, category_name):
+        self.category.set_name(category_name)
+    
+    def set_category_description(self, category_description):
+        self.category.set_description(category_description)
+
+
+    
 
 #interface to get the stock value
+#should be treated as private
 def get_stock_value(stock_symbol):
 
     stock = yfinance.Ticker(stock_symbol)
