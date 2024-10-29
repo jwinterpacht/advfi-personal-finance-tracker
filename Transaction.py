@@ -4,7 +4,7 @@ by Jaden Winterpacht
 '''
 
 from datetime import date
-from TransactionCategory import TransactionCategory
+import TransactionCategory
 
 class Transaction:
     # instance variables transaction_id, amount, transaction_date, category, recurring_rate, and description
