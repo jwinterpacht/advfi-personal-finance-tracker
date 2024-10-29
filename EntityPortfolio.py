@@ -1,4 +1,10 @@
-import Entity
+'''
+Author: Mason Myre
+Purpose: to hold all of the entities for a user, and to allow the user to calculate the total value of their liabilities and assets
+
+'''
+
+import Entity  # python is lying, entity class is certainly used, dynamic typing is just clueless
 
 class EntityPortfolio:
 
