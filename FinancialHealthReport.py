@@ -3,7 +3,7 @@ this file defines a class FinancialHealthReport, which is used to assess the fin
 by Jaden Winterpacht
 '''
 
-from EntityPortfolio import EntityPortfolio
+import EntityPortfolio
 from datetime import date
 
 class FinancialHealthReport:
