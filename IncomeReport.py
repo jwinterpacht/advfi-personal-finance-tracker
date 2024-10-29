@@ -3,35 +3,38 @@ from typing import List
 
 class IncomeReport:
     def __init__(self):
-        self._report_date: date = date.min  # Default date: 00/00/0000
-        self._total_income: float = 0.0     # Default total income is 0.0
-        self._income_entries: List[float] = []  # List to store income amounts (floats)
+        self.reportDate = date.min  # Default date: 00/00/0000
+        self.totalIncome = 0.0  # Default total income is 0.0
+        self.incomeEntries = []  # List to store income amounts (floats)
 
-  
-    #Getters
-    def get_report_date(self):
-        return self._report_date
-    
-    def get_income_entries(self):
-        return self._income_entries
+    # Getters
+    def getReportDate(self):
+        return self.reportDate
 
-    def get_total_income(self):
-        return self._total_income
+    def getIncomeEntries(self):
+        return self.incomeEntries
 
-  
-    #Setters
-    def set_report_date(self, report_date: date):
-        self._report_date = report_date
+    def getTotalIncome(self):
+        return self.totalIncome
 
-    def set_income_entries(self, income_entries: List[float]):
-        self._income_entries = income_entries
-        self._total_income = sum(self._income_entries)
+    # Setters
+    def setReportDate(self, reportDate: date):
+        self.reportDate = reportDate
 
-    def set_total_income(self, total_income: float):
-        self._total_income = total_income
+    def setIncomeEntries(self, incomeEntries: List[float]):
+        self.incomeEntries = incomeEntries
+        self.totalIncome = sum(self.incomeEntries)
 
-  
-    #Generates Report
-    def generate_report(self):
-       
-        return self
+    def setTotalIncome(self, totalIncome: float):
+        self.totalIncome = totalIncome
+
+    # Generates Report
+    def generateReport(self):
+        reportSummary = {
+            "reportDate": self.reportDate,
+            "totalIncome": self.totalIncome,
+            "incomeEntryCount": len(self.incomeEntries),
+            "incomeEntries": self.incomeEntries
+        }
+
+        return reportSummary
