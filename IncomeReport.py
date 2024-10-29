@@ -30,14 +30,8 @@ class IncomeReport:
     def set_total_income(self, total_income: float):
         self._total_income = total_income
 
-
-    #Add an income entry
-    def add_income(self, amount: float):
-        self._income_entries.append(amount)
-        self._total_income += amount  # Update total income
-
   
     #Generates Report
     def generate_report(self):
-       #Need to finish
+       
         return self
