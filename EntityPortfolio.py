@@ -1,10 +1,11 @@
 '''
 Author: Mason Myre
 Purpose: to hold all of the entities for a user, and to allow the user to calculate the total value of their liabilities and assets
-
+11-5: updated to be compatible with associated use cases
 '''
 
 import Entity  # python is lying, entity class is certainly used, dynamic typing is just clueless
+import UserAccount
 
 class EntityPortfolio:
 
@@ -14,6 +15,7 @@ class EntityPortfolio:
     total_liabilities_value = 0.00
     total_value = 0.00
     next_entity_ID = 0  # will use this to ensure unique entity IDs, will increment every time we add a new entity, will not decrement when entity is deleted
+    user = UserAccount()
 
     def __init__():
         return "Entity Portfolio Created Successfully"

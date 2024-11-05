@@ -3,7 +3,7 @@ Author: Mason Myre
 Purpose: To be used by Entity Portfolio to hold a user's assets and liabilities
 Notable Things: Will not let you set auto_update to True unless given a valid ticker symbol
                 
-
+11-5: need to change TYPE to an enum. Rishi said it cannot be a String.
 '''
 
 
@@ -14,7 +14,7 @@ import Category
 class Entity:
 
     #create all of the instance variables and give them default values
-    type = "default type"
+    type = "default type" #change from String to an enum
     single_value = 0.00                     # the value of one instance of the asset, useful for when a user owns multiple of the same asset
     amount = 0                              # how many instances of the asset a user owns
     real_value = 0.00                       # the value one instance of the asset multipled by the number of instances the user owns

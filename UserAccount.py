@@ -1,10 +1,18 @@
+import TransactionList
+import EntityPortfolio
+
+'''
+11-5: updated to be compatible with associated use cases
+'''
+
 class UserAccount:
-    def __init__(self, username, password, date_created, entities):
+    def __init__(self, username, password, date_created, entities, transactionList):
         self.username = username
         self.password = password
         self.date_created = date_created
         self.entites = entities #For EntityPortfolio
         self.net_worth = 0.0
+        self.transactionList = transactionList
 
     # Getter for asset total for an entity 
     def get_asset_total(self):

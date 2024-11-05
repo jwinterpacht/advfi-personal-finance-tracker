@@ -1,17 +1,32 @@
-# Transaction Class to store each transaction
+import Transaction
+import Report
+import UserAccount
+import Budget
+from datetime import date
+#import SavingsGoalList #DELETE if we remove SavingsGoals (11-5-2024)
+
+#11-5: updated to be compatible with associated use cases && added params to __init__
+
+''' #Commented out because now we have actual Transaction class
+# Transaction Class (for testing) to store each transaction
 class Transaction:
     def __init__(self, transaction_id, description, amount):
         self.transaction_id = transaction_id
         self.description = description
         self.amount = amount
+'''
 
 # TransactionList Class used for storing income and expenses
 class TransactionList:
-    def __init__(self):
-        self.income_transactions = []
-        self.expense_transactions = []
-        self.total_income = 0.0
-        self.total_expenses = 0.0
+    def __init__(self, total_income, total_expenses, user_account: UserAccount, budget: Budget):
+        self.income_transactions = [] #not passed in as param. Should it?
+        self.expense_transactions = [] #not passed in as param. Should it?
+        self.total_income = total_income
+        self.total_expenses = total_expenses
+        self.user = user_account
+        self.budget = budget
+        self.report = Report(date(1,1,1)) # No actual report stored during initalization.
+        #self.savingsGoalList = SavingsGoalList() 
 
     # Adds a new income transaction and updates total income
     def add_income_transaction(self, transaction: Transaction) -> None:
@@ -58,6 +73,9 @@ class TransactionList:
     # Return the total expenses
     def get_total_expenses(self) -> float:
         return self.total_expenses
+    
+    def set_report(self, new_report: Report):
+        self.report = new_report
     
 # Testing
 transaction_list = TransactionList()
