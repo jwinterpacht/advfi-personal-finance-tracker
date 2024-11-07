@@ -8,45 +8,26 @@ STILL NEED TO MAKE ALERTS ACTUALLY TRIGGER IN THE APP. I THINK ADDING THIS IS FA
 
 This class requires Python 3.12 for the 'match' functionality.
 '''
-from datetime import date
 import Alert
+import Transaction
 
-print("Running: Budget.py")
+#11-5: updated to add alertType enum
 
-#Temp class while Jaden makes the actual 'Transaction' class.
-class Transaction:
-    amount = 0
-    description = ""
-    def __init__(self, amount, description):
-        self.amount = amount
-        self.description = description
-
-
-''' Budget Class
-If a date is the default value of (1, 1, 1) then it means the user
-    did not (or did not want to) define a date for their Budget.
-'''
 class Budget:
     budgetTotal = 0.0
     remainingBudget = 0.0 #Calculation: budgetTotal + income[] - expenses[]
     category = ""
-    startDate = date(1, 1, 1) #Uses imported 'Date' class from Python library
-    endDate = date(1, 1, 1) # year/month/day (i.e. 2024/10/17)
     income = []
     expenses = []
     alertList = [] #A list of Alert objects
 
-    #For AdvFi System: Find an efficient way to automatically [delete or archive] a Budget on endDate, UNLESS the endDate is (1, 1, 1)
-
     '''
     budgetTotal is required for a Budget object.
-    category, startDate, endDate are all optional parameters.
+    category is an optional parameters.
     '''
-    def __init__(self, budgetTotal, categorty="", startDate=date(1,1,1), endDate=date(1,1,1)):
+    def __init__(self, budgetTotal, categorty=""):
         self.budgetTotal = budgetTotal
         self.category = categorty
-        self.startDate = startDate
-        self.endDate = endDate
 
     def calculateRemainingBudget(self):
         incomeTotal = 0
@@ -74,7 +55,7 @@ class Budget:
         self.calculateRemainingBudget() #update the remaining budget
 
     '''Add an Alert that is triggered by an event happening within this budget'''
-    def addAlert(self, type, description, time, frequency, recur):
+    def addAlert(self, type: alertType, description, time, frequency, recur):
         self.alertType = type
         self.alertDescription = description
         self.alertTime = time
@@ -122,12 +103,6 @@ class Budget:
 
 
     #GETTERS
-    def getStartDate(self):
-        return self.startDate
-    
-    def getEndDate(self):
-        return self.endDate
-    
     def getBudget(self):
         return self.budgetTotal
     
@@ -152,15 +127,6 @@ class Budget:
                 print('-' + str(item.amount))
 
     #SETTERS
-    '''startDate is a 'date' class object 
-        unfortunately, can't override in Python, so can't allow user to
-        pass in (year, month, day) with the same func name'''
-    def setStartDate(self, startDate):
-        self.startDate = startDate
-    
-    def setEndDate(self, endDate):
-        self.endDate = endDate
-
     #amt is a float or int
     def setBudget(self, amt):
         self.budgetTotal = amt
@@ -173,8 +139,6 @@ class Budget:
 '''
 #TESTING ENVIRONMENT!!
 test_budget = Budget(1500, "bi-weekly entertainment and expenses budget.")
-test_budget.setStartDate(date(2024, 10, 17))
-test_budget.setEndDate(date(2026, 10, 17))
 test_budget.addExpense(512, "car repair")
 
 test_budget.addIncome(145, "sold Nvidia stocks")

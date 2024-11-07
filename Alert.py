@@ -7,7 +7,16 @@ Alerts are intended to be stored in an array.
 Might make the class itself into an array containing objects of itself.
 '''
 
-print('Running: Alert.py')
+import datetime
+from enum import Enum
+
+#11-5: updated to add alertType enum
+
+class alertType(Enum):
+    ALARM = 1
+    NOTIFICATION = 2
+    SILENT_NOTIFICATION = 3
+
 
 class Alert:
     alertType = ""
@@ -19,11 +28,11 @@ class Alert:
     '''
     alertType: string
     alertDescription: string
-    alertTime: double #Enter as military time (e.g., 15.5 for 3:30 PM)
+    alertTime: datetime
     recur: bool
     alertFrequency: string
     '''
-    def __init__(self, alertType, alertDescription, alertTime, alertFrequency, recur):
+    def __init__(self, alertType, alertDescription, alertTime: datetime, alertFrequency, recur):
         self.alertType = alertType
         self.alertDescription = alertDescription
         self.alertTime = alertTime
@@ -32,5 +41,13 @@ class Alert:
 
     def isRecurring(self):
         return self.alertFrequency is not None
+    
+    def setTime(self):
+        time_str = input("Enter time in the following format: HH:MM")
+        try:
+            the_time = datetime.datetime.strptime(time_str, "%H:%M").time()
+            self.alertTime = the_time
+        except ValueError:
+            print("Invalid time format. Must use HH:MM")
 
 
