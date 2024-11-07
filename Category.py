@@ -4,14 +4,20 @@ Purpose: to be used by entity and transaction to keep track of different spendin
 
 '''
 
+#11-5: updated to be compatible with associated use cases && added params to __init__
+
+import Entity
+import Transaction
 
 class Category:
     category_name = ""
     category_description = ""
 
-    def __init__(self):
+    def __init__(self, entity: Entity, transaction):
         self.category_name = ""
         self.category_description = ""
+        self.entity = entity
+        self.transaction = transaction
 
     def __init__(self, new_name, new_description):
         self.category_name = new_name
