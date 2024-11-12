@@ -12,7 +12,7 @@ class UserAccount:
         self.date_created = date_created
         self.entites = entities #For EntityPortfolio
         self.net_worth = 0.0
-        self.transactionList = transactionList
+        #self.transactionList = transactionList
 
     # Getter for asset total for an entity 
     def get_asset_total(self):
@@ -41,7 +41,7 @@ class EntityPortfolio:
 
 portfolio = EntityPortfolio([10000, 5000, 2000], [3000, 1000])
 
-user = UserAccount("Frank", "Admin", "2024-10-23", portfolio)
+user = UserAccount("Frank", "Admin", "2024-10-23", portfolio, [])
 
 print("Asset Total: ", user.get_asset_total()) #Expected 17000
 print("Liability Total: ", user.get_liability_total()) #Expected 4000

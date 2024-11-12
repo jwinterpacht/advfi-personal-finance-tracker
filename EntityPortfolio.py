@@ -15,7 +15,6 @@ class EntityPortfolio:
     total_liabilities_value = 0.00
     total_value = 0.00
     next_entity_ID = 0  # will use this to ensure unique entity IDs, will increment every time we add a new entity, will not decrement when entity is deleted
-    user = UserAccount()
 
     def __init__():
         return "Entity Portfolio Created Successfully"

@@ -1,7 +1,8 @@
 '''
 Main functionality of AdvFi, will be the user interface
 '''
-#import UserAccount
+import UserAccount
+from datetime import datetime
 
 
 #draw the AdvFi logo for the user
@@ -17,7 +18,6 @@ def draw_logo():
 def home_screen():
     print("\n\t\tWelcome to")
     draw_logo()
-    show_alerts()
     show_net_worth()
     print("1: Income Management Menu")
     print("2: Spending and Expense Management Menu")
@@ -53,14 +53,6 @@ def home_screen():
             exit()
             
 
-
-def show_alerts():
-    #go to the budget class and get any alerts that should be displayed to the user
-    #for now, display no alerts
-    alert_str = "No current alerts"
-    print(alert_str)
-
-
 def show_net_worth():
     #calculate networth and display it
     net_worth = 20,000
@@ -73,6 +65,21 @@ def income_management_menu():
     print("2: View income list")
     print("3: Delete income")
     print("0: Return to main menu")
+    user_selection = input()
+
+    match user_selection:
+        case "1":
+            #add income
+            #amount
+            print("Amount: ")
+            amount = input()
+            #date
+            print("Enter date in MM/DD/YYYY:")
+            date = input()
+            date_format = "%m/%d/%Y"
+            date_obj = datetime.strptime(date, date_format).date()
+            print(date_obj)
+            #category (not rn)
 
 
 def spending_managment_menu():

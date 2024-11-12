@@ -1,7 +1,7 @@
 import Transaction
 import Report
 import UserAccount
-import Budget
+#import Budget
 from datetime import date
 #import SavingsGoalList #DELETE if we remove SavingsGoals (11-5-2024)
 
@@ -18,15 +18,13 @@ class Transaction:
 
 # TransactionList Class used for storing income and expenses
 class TransactionList:
-    def __init__(self, total_income, total_expenses, user_account: UserAccount, budget: Budget):
+    def __init__(self, total_income, total_expenses, user_account: UserAccount):
         self.income_transactions = [] #not passed in as param. Should it?
         self.expense_transactions = [] #not passed in as param. Should it?
         self.total_income = total_income
         self.total_expenses = total_expenses
         self.user = user_account
-        self.budget = budget
         self.report = Report(date(1,1,1)) # No actual report stored during initalization.
-        #self.savingsGoalList = SavingsGoalList() 
 
     # Adds a new income transaction and updates total income
     def add_income_transaction(self, transaction: Transaction) -> None:
@@ -78,8 +76,8 @@ class TransactionList:
         self.report = new_report
     
 # Testing
-transaction_list = TransactionList()
-
+#transaction_list = TransactionList()
+'''
 # Add transactions (ID, Description, Value)
 income1 = Transaction(1, "Salary", 5000)
 expense1 = Transaction(2, "Rent", 1500)
@@ -97,3 +95,4 @@ transaction_list.remove_income_transaction(1)
 # Display totals after removal
 print(f"Total Income after removal: {transaction_list.get_total_income()}")
 print(f"Total Expenses after removal: {transaction_list.get_total_expenses()}")
+'''

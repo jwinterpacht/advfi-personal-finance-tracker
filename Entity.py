@@ -22,7 +22,7 @@ class Entity:
     description = "default description"
     auto_update = False
     stock_symbol = "n/a"
-    category = Category("Default Category", "NULL")
+    category = Category.Category("Default Category", "NULL")
     entity_ID = -1
 
     #constructor
