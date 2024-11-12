@@ -29,6 +29,30 @@ def home_screen():
     print("8: Program Settings Menu")
     print("9: Exit AdvFi")
 
+    user_selection = input()
+    
+    match user_selection:
+        case "1":
+            income_management_menu()
+        case "2":
+            spending_managment_menu()
+        case "3":
+            asset_management_menu()
+        case "4": 
+            liability_management_menu()
+        case "5":
+            financial_reports_menu()
+        case "6": 
+            retrieve_transactions()
+        case "7":
+            alert_center_menu()
+        case "8":
+            program_settings_menu()
+        case "9":
+            print("Thank you for using AdvFi")
+            exit()
+            
+
 
 def show_alerts():
     #go to the budget class and get any alerts that should be displayed to the user
@@ -40,7 +64,7 @@ def show_alerts():
 def show_net_worth():
     #calculate networth and display it
     net_worth = 20,000
-    print("\nCurrent Net Worth: ${:02.2f}".format(net_worth))
+    print("\nCurrent Net Worth: $20,000\n")
 
 
 def income_management_menu():
@@ -61,6 +85,8 @@ def spending_managment_menu():
     print("6: Monitor budget adherence")
     print("7: Delete transaction")
     print("0: Return to main menu")
+
+
 
 def asset_management_menu():
     print("Asset Management Menu")
@@ -91,6 +117,8 @@ def financial_reports_menu():
 def retrieve_transactions():
     print("Transactions")
     print("Placeholder")
+    print("0: Return to main menu")
+
 
 
 def alert_center_menu():
@@ -100,20 +128,15 @@ def alert_center_menu():
     print("3: Edit alert")
     print("4: Retrieve current alerts")
     print("5: Dismiss alert")
-    
+    print("0: Return to main menu")
+
 
 
 def program_settings_menu():
     print("Program Settings Menu")
     print("1: change password")
     print("2: delete user account")
-
-
-
-
-
-
-
+    print("0: Return to main menu")
 
 
 
