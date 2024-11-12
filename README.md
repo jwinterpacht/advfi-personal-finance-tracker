@@ -16,5 +16,4 @@ Mason Myre          <br/>
 Jonah Raef  
 Jaden Winterpacht   <br/>
 Frank Watring       <br/>
-Jason Gilani        <br/>
 
