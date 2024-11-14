@@ -7,6 +7,18 @@ from datetime import date
 import TransactionCategory
 
 class Transaction:
+
+    transaction_ID = -1
+    
+
+    def __init__(self, amount: float, transaction_date: date, recurring_rate: int = 0, description: str = ""):
+        self.amount = amount
+        self.transaction_date = transaction_date
+        self.recurring_rate = recurring_rate
+        self.description = description
+
+
+
     # instance variables transaction_id, amount, transaction_date, category, recurring_rate, and description
     def __init__(self, transaction_id: str, amount: float, transaction_date: date, category: TransactionCategory,
                  recurring_rate: int, description: str):

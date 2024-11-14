@@ -5,7 +5,8 @@ Purpose: to hold all of the entities for a user, and to allow the user to calcul
 '''
 
 import Entity  # python is lying, entity class is certainly used, dynamic typing is just clueless
-import UserAccount
+import UserAccount #idk if we need this one
+import Category
 
 class EntityPortfolio:
 
@@ -15,13 +16,49 @@ class EntityPortfolio:
     total_liabilities_value = 0.00
     total_value = 0.00
     next_entity_ID = 0  # will use this to ensure unique entity IDs, will increment every time we add a new entity, will not decrement when entity is deleted
+    category_list = []
 
-    def __init__():
-        return "Entity Portfolio Created Successfully"
+    def __init__(self):
+        name = "Default Category"  #create a default category for entites that do not get assigned a category
+        description = ""
+        cat = Category.Category(name, description)
+        self.category_list.append(cat)
+        
     
+    
+    #  add a category with a name and description to the category list
+    def add_category(self, name, description):
+        for category in self.category_list:
+            if category.get_name() == name:
+                return False    # do not allow two categories with the same name
+            
+        # allow adding a category if the name is unique
+        cat = Category(name, description)
+        self.category_list.append(cat)
 
+    def remove_category(self, name):
+        if name == "Default Category":  #do not allow user to delete the default category - this ensures we never have zero categories and always have a generic category for entities
+            return False                
+        for i in range(len(self.category_list)):
+            if self.category.get_name() == name:
+                self.category_list.pop(i)
+                return True #return true now to represent that we found the category we were searching for as well as prevent looping through the rest of the list
+        
+        #could not find the correspoinding category name
+        return False
+    
+    def get_category_list(self):
+        return self.category_list
+    
+    #get a category at a specific index
+    def get_category(self, index):
+        if index < len(self.category_list):  #handle error: given index is larger than the length of the category list
+            return self.category_list[index] 
+        else:
+            return self.category_list[0]  #solution: just return the default category, this implementation prevents the deletion of the default category and always ensures it is stored at the 0 index
+    
     #add given entity as an asset
-    def add_asset(self, entity):
+    def add_asset(self, entity: Entity):
         self.entityCount += 1  # increment next_entity_ID 
         entity.set_type("asset") #set entity type as asset
         entity.set_entity_ID(self.next_entity_ID)
@@ -39,7 +76,7 @@ class EntityPortfolio:
         print("Error: could not find the corresponding asset ID, please ensure you provide a valid entity ID")
         return False
     
-    def add_liability(self, entity):
+    def add_liability(self, entity: Entity):
         self.next_entity_ID += 1
         entity.set_type("liability")
         entity.set_entity_ID(self.next_entity_ID)

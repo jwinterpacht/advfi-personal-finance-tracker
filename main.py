@@ -3,6 +3,9 @@ Main functionality of AdvFi, will be the user interface
 '''
 import UserAccount
 from datetime import datetime
+import Category
+import Entity
+import EntityPortfolio
 
 
 #draw the AdvFi logo for the user
@@ -15,7 +18,7 @@ def draw_logo():
 
 
 #the main user interface menu for the user
-def home_screen():
+def home_screen(entity_portfolio):
     print("\n\t\tWelcome to")
     draw_logo()
     show_net_worth()
@@ -37,9 +40,9 @@ def home_screen():
         case "2":
             spending_managment_menu()
         case "3":
-            asset_management_menu()
+            asset_management_menu(entity_portfolio)
         case "4": 
-            liability_management_menu()
+            liability_management_menu(entity_portfolio)
         case "5":
             financial_reports_menu()
         case "6": 
@@ -79,7 +82,7 @@ def income_management_menu():
             date_format = "%m/%d/%Y"
             date_obj = datetime.strptime(date, date_format).date()
             print(date_obj)
-            #category (not rn)
+            #category (not rn)  
 
 
 def spending_managment_menu():
@@ -95,20 +98,65 @@ def spending_managment_menu():
 
 
 
-def asset_management_menu():
+def asset_management_menu(entity_portfolio):
     print("Asset Management Menu")
     print("1: Add asset")
     print("2: Remove asset")
     print("3: Calculate real time asset prices")
+    print("4: Add category for assets/liabilities")
     print("0: Return to main menu")
 
 
-def liability_management_menu():
+def liability_management_menu(entity_portfolio):
     print("Liability and Debt Managment Menu")
     print("1: Add Liability")
     print("2: Remove Liability")
     print("3: Track outstanding debt and payment debt") #will allow user to make a payment and reduce the debt recorded in AdvFi
+    print("4: Add category for assets/liabilities")
     print("0: Return to main menu")
+
+    user_selection = input()
+
+    match user_selection:
+        case "1":
+            print("Adding a liability:")
+            print("Enter the liability name, the value in dollars, and a description(optional).")
+            print("Please separate the name, value, and description with commas (do not worry about commas for the value)")
+            print("Press -1 to cancel") #needs functionality
+
+            user_in = input()
+            if user_in == "-1":  #return to the menu
+                liability_management_menu()
+                return      #I think this is right
+            
+            user_in = user_in.split(",")
+            name = user_in[0]
+            value = float(user_in[1])
+            if len(user_in) == 3:
+                desc = user_in[2]
+            else:
+                desc = ""
+
+            if len(entity_portfolio.get_category_list()) == 1:
+                category = entity_portfolio.get_category(0)
+            else:
+                #add logic here to print all the categories and let the user select one of them
+                pass
+            new_liability = Entity.Entity(category, "liability", value, 1, name, desc, False, "n/a")
+            entity_portfolio.add_liability(new_liability)
+            print("New liability added successfully")
+            liability_management_menu()
+            return
+
+            
+
+
+
+
+            
+
+            
+
 
 
 def financial_reports_menu():
@@ -156,5 +204,6 @@ def program_settings_menu():
 
 #will need to add functionality to create account/login
 if __name__ == "__main__":
-    home_screen()
+    entity_portfolio = EntityPortfolio.EntityPortfolio()
+    liability_management_menu(entity_portfolio)
     

@@ -14,7 +14,7 @@ import Category
 class Entity:
 
     #create all of the instance variables and give them default values
-    type = "default type" #change from String to an enum
+    type = "default type"                   #change from String to an enum
     single_value = 0.00                     # the value of one instance of the asset, useful for when a user owns multiple of the same asset
     amount = 0                              # how many instances of the asset a user owns
     real_value = 0.00                       # the value one instance of the asset multipled by the number of instances the user owns
@@ -25,8 +25,8 @@ class Entity:
     category = Category.Category("Default Category", "NULL")
     entity_ID = -1
 
-    #constructor
-    def __init__(self, entity_type, entity_value, entity_amount, entity_name, entity_description, entity_auto_update, entity_stock_symbol = "n/a", category_name = "Default Category", category_description = "NULL"):  
+    #constructor                          #change to enum
+    def __init__(self, category: Category, entity_type:str, entity_value:float, entity_amount:int, entity_name:str, entity_description="", entity_auto_update=False, entity_stock_symbol = "n/a"):  
         self.type = entity_type
         self.single_value = entity_value
         self.amount = entity_amount
@@ -34,10 +34,7 @@ class Entity:
         self.name = entity_name
         self.description = entity_description
         self.auto_update = entity_auto_update    # if an asset is set to auto-update, then we treat it like a stock
-
-        self.category.set_name(category_name)
-        self.category.set_description(category_description)
-
+        self.category = category
 
         if self.auto_update:            #handling the case that occurs when a user instantiates an asset with an invalid stock symbol
             cur_price = get_stock_value(entity_stock_symbol)
