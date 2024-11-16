@@ -19,10 +19,10 @@ class EntityPortfolio:
     category_list = []
 
     def __init__(self):
-        name = "Default Category"  #create a default category for entites that do not get assigned a category
-        description = ""
-        cat = Category.Category(name, description)
-        self.category_list.append(cat)
+        self.name = "Default Category"  #create a default category for entites that do not get assigned a category
+        self.description = ""
+        self.cat = Category.Category(self.name, self.description)
+        self.category_list.append(self.cat)
         
     
     

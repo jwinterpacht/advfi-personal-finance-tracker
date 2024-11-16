@@ -4,29 +4,17 @@ by Jaden Winterpacht
 '''
 
 from datetime import date
-import TransactionCategory
+import Category
 
 class Transaction:
 
+    #static bc defined outside of __init__
     transaction_ID = -1
     
 
-    def __init__(self, amount: float, transaction_date: date, recurring_rate: int = 0, description: str = ""):
-        self.amount = amount
-        self.transaction_date = transaction_date
-        self.recurring_rate = recurring_rate
-        self.description = description
-
-
-
-    # instance variables transaction_id, amount, transaction_date, category, recurring_rate, and description
-    def __init__(self, transaction_id: str, amount: float, transaction_date: date, category: TransactionCategory,
-                 recurring_rate: int, description: str):
-        self._transaction_id = transaction_id
+    def __init__(self, amount: float, transaction_date: date, description: str = ""):
         self._amount = amount
         self._transaction_date = transaction_date
-        self._category = category
-        self._recurring_rate = recurring_rate
         self._description = description
 
     # return the transaction ID
@@ -50,20 +38,12 @@ class Transaction:
         self._transaction_date = transaction_date
 
     # get the category of the transaction
-    def get_category(self) -> TransactionCategory:
+    def get_category(self) -> Category:
         return self._category
 
     # set the category of the transaction
-    def set_category(self, category: TransactionCategory) -> None:
+    def set_category(self, category: Category) -> None:
         self._category = category
-
-    # get the recurring rate of the transaction
-    def get_recurring_rate(self) -> int:
-        return self._recurring_rate
-
-    # set the recurring rate of the transaction
-    def set_recurring_rate(self, recurring_rate: int) -> None:
-        self._recurring_rate = recurring_rate
 
     # get the description of the transaction
     def get_description(self) -> str:
@@ -72,3 +52,5 @@ class Transaction:
     # set the description of the transaction
     def set_description(self, description: str) -> None:
         self._description = description
+
+    

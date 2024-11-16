@@ -18,16 +18,15 @@ class Transaction:
 
 # TransactionList Class used for storing income and expenses
 class TransactionList:
-    def __init__(self, total_income, total_expenses, user_account: UserAccount):
+    def __init__(self, total_income = 0, total_expenses = 0):
         self.income_transactions = [] #not passed in as param. Should it?
         self.expense_transactions = [] #not passed in as param. Should it?
         self.total_income = total_income
         self.total_expenses = total_expenses
-        self.user = user_account
-        self.report = Report(date(1,1,1)) # No actual report stored during initalization.
+        #self.report = Report.Report(date(1,1,1)) # No actual report stored during initalization.
 
     # Adds a new income transaction and updates total income
-    def add_income_transaction(self, transaction: Transaction) -> None:
+    def add_income_transaction(self, transaction) -> None:
         self.income_transactions.append(transaction)
         self.total_income += transaction.amount
 

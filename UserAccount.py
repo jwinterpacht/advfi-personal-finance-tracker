@@ -6,10 +6,9 @@ import EntityPortfolio
 '''
 
 class UserAccount:
-    def __init__(self, username, password, date_created, entities, transactionList):
+    def __init__(self, username, password, entities, transactionList):
         self.username = username
         self.password = password
-        self.date_created = date_created
         self.entites = entities #For EntityPortfolio
         self.net_worth = 0.0
         #self.transactionList = transactionList
@@ -39,6 +38,7 @@ class EntityPortfolio:
     def get_liability_total(self):
         return sum(self.liabilites)
 
+'''
 portfolio = EntityPortfolio([10000, 5000, 2000], [3000, 1000])
 
 user = UserAccount("Frank", "Admin", "2024-10-23", portfolio, [])
@@ -46,3 +46,4 @@ user = UserAccount("Frank", "Admin", "2024-10-23", portfolio, [])
 print("Asset Total: ", user.get_asset_total()) #Expected 17000
 print("Liability Total: ", user.get_liability_total()) #Expected 4000
 print("Net Worth: ", user.calculate_net_worth()) #Expected 13000
+'''

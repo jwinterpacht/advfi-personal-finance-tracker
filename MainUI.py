@@ -57,6 +57,34 @@ class MainUI:
             user_selection = input()
             stop = Validator.validate_income_management_menu_entry(user_selection)
 
+        # ensure that the user selection is an integer
+        user_selection = int(user_selection)
+        match user_selection:
+            case 1: #add income
+                # get income details from user
+                income_amt = input("Income amount: ")
+                # validate the income amount
+                stop = Validator.validate_transaction_amt(income_amt)
+                while (not stop):
+                    income_amt = input("Income amount: ")
+                    stop = Validator.validate_transaction_amt(income_amt)
+
+                # get the date of when the income was received
+                income_date = input("Date received (MM/DD/YY): ")
+                # validate the income date
+                stop = Validator.validate_transaction_date(income_date)
+                while (not stop):
+                    income_date = input("Date received (MM/DD/YY): ")
+                    stop = Validator.validate_transaction_date(income_date)
+
+                # get income description, no need to validate it
+                description = input("Income description: ")
+
+                # store income details in a list
+                income_details = [income_amt, income_date, description]
+                # validate the income details
+                Validator.are_transaction_details_valid(income_details, is_income = True)
+
     @staticmethod
     def spending_managment_menu():
         print("Spending and Expense Management Menu")
