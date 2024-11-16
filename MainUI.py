@@ -125,9 +125,8 @@ class MainUI:
         print("2: delete user account")
         print("0: Return to main menu")
 
-
+def main():
+    MainUI.home_screen()
 #will need to add functionality to create account/login
 if __name__ == "__main__":
-    MainUI.home_screen()
-    pass
-    
+    main()   
