@@ -9,6 +9,8 @@ Low Coupling
 
 """
 
+import Operations
+
 #used to check if a string is an integer
 #internal private method to help prevent code reuse
 def _validate_integer(entry: str) -> bool:
@@ -20,8 +22,7 @@ def _validate_integer(entry: str) -> bool:
         return False
 
 #another private method to check if the input integer is a valid selection
-def _validate_selection_range(entry: str, low_end: int, high_end: int) -> bool:
-    selection = int(entry)
+def _validate_selection_range(selection: int, low_end: int, high_end: int) -> bool:
     if selection > high_end or selection < low_end:
         print("Please enter an integer between {} and {}".format(low_end, high_end))
         return False
@@ -36,7 +37,12 @@ def validate_home_screen_entry(entry: str) -> bool:
     if(not _validate_integer(entry)):
         return False
     
-    return _validate_selection_range(entry, low_end, high_end)
+    selection = int(entry)
+    if not _validate_selection_range(selection, low_end, high_end):
+        return False
+    
+    Operations.home_screen_operations(selection)
+    
 
 
 def validate_income_management_menu_entry(entry: str) -> bool:
@@ -46,5 +52,8 @@ def validate_income_management_menu_entry(entry: str) -> bool:
     if not _validate_integer(entry):
         return False
     
-    return _validate_selection_range(entry, low_end, high_end)
+    selection = int(entry)
+    if not _validate_selection_range(selection, low_end, high_end):
+        return False
+    
 

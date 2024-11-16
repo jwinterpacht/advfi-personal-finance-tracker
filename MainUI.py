@@ -41,11 +41,7 @@ class MainUI:
         stop = Validator.validate_home_screen_entry(user_selection)
         while(not stop):
             user_selection = input()
-            stop = Validator.validate_home_screen_entry(user_selection)
-        
-
-            
-
+            stop = Validator.validate_home_screen_entry(user_selection)       
 
     @staticmethod
     def income_management_menu():
@@ -72,6 +68,8 @@ class MainUI:
         print("6: Monitor budget adherence")
         print("7: Delete transaction")
         print("0: Return to main menu")
+        user_selection = input()
+        stop = Validator.validate_spending_management_menu_entry(user_selection)
 
     @staticmethod
     def asset_management_menu():
@@ -127,6 +125,7 @@ class MainUI:
 
 def main():
     MainUI.home_screen()
+    
 #will need to add functionality to create account/login
 if __name__ == "__main__":
     main()   
