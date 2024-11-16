@@ -45,9 +45,6 @@ class MainUI:
         Operations.home_screen_operations(user_selection)
         
 
-            
-
-
     @staticmethod
     def income_management_menu():
         print("Income Management Menu")
@@ -62,6 +59,8 @@ class MainUI:
             user_selection = input()
             stop = Validator.validate_income_management_menu_entry(user_selection)
 
+        
+
     @staticmethod
     def spending_managment_menu():
         print("Spending and Expense Management Menu")
@@ -73,6 +72,10 @@ class MainUI:
         print("6: Monitor budget adherence")
         print("7: Delete transaction")
         print("0: Return to main menu")
+        
+        user_selection = input()
+        stop = Validator.validate_spending_management_menu_entry(user_selection)
+        
 
     @staticmethod
     def asset_management_menu():
