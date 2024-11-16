@@ -52,5 +52,8 @@ def validate_income_management_menu_entry(entry: str) -> bool:
     if not _validate_integer(entry):
         return False
     
-    return _validate_selection_range(entry, low_end, high_end)
+    selection = int(entry)
+    if not _validate_selection_range(selection, low_end, high_end):
+        return False
+    
 
