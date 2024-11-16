@@ -28,7 +28,7 @@ def _validate_selection_range(entry: str, low_end: int, high_end: int) -> bool:
     return True
 
 
-#
+
 def validate_home_screen_entry(entry: str) -> bool:
     low_end = 1
     high_end = 9
