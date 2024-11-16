@@ -57,3 +57,80 @@ def validate_income_management_menu_entry(entry: str) -> bool:
         return False
     
 
+def validate_spending_management_menu_entry(entry: str) -> bool:
+    low_end = 0
+    high_end = 7
+
+    if not _validate_integer(entry):
+        return False
+    
+    selection = int(entry)
+    if not _validate_selection_range(selection, low_end, high_end):
+        return False
+
+def validate_asset_management_menu_entry(entry: str) -> bool:
+    low_end = 0
+    high_end = 4
+
+    if not _validate_integer(entry):
+        return False
+    
+    selection = int(entry)
+    if not _validate_selection_range(selection, low_end, high_end):
+        return False
+    
+def validate_liability_management_menu_entry(entry: str) -> bool:
+    low_end = 0
+    high_end = 4
+
+    if not _validate_integer(entry):
+        return False
+    
+    selection = int(entry)
+    if not _validate_selection_range(selection, low_end, high_end):
+        return False
+    
+def validate_financial_reports_menu_entry(entry: str) -> bool:
+    low_end = 0
+    high_end = 4
+
+    if not _validate_integer(entry):
+        return False
+    
+    selection = int(entry)
+    if not _validate_selection_range(selection, low_end, high_end):
+        return False
+    
+def validate_retrieve_transactions(entry: str) -> bool:
+    low_end = 0
+    high_end = 0
+
+    if not _validate_integer(entry):
+        return False
+    
+    selection = int(entry)
+    if not _validate_selection_range(selection, low_end, high_end):
+        return False
+    
+def validate_alert_center_menu_entry(entry: str) -> bool:
+    low_end = 0
+    high_end = 5
+
+    if not _validate_integer(entry):
+        return False
+    
+    selection = int(entry)
+    if not _validate_selection_range(selection, low_end, high_end):
+        return False
+    
+def validate_program_settings_menu_entry(entry: str) -> bool:
+    low_end = 0
+    high_end = 2
+
+    if not _validate_integer(entry):
+        return False
+    
+    selection = int(entry)
+    if not _validate_selection_range(selection, low_end, high_end):
+        return False
+    
