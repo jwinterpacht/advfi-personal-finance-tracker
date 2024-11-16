@@ -1,8 +1,8 @@
 import MainUI
 
 def home_screen_operations(entry):
-    selection = int(entry) #can safely cast this because we already validated
-    
+    selection = int(entry)  # can safely cast this because we already validated
+
     match selection:
         case 1:
             MainUI.MainUI.income_management_menu()
@@ -27,6 +27,5 @@ def home_screen_operations(entry):
         
         case 8:
             MainUI.MainUI.program_settings_menu()
-        
         case 9:
             exit(0)
