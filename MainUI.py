@@ -42,6 +42,7 @@ class MainUI:
         while(not stop):
             user_selection = input()
             stop = Validator.validate_home_screen_entry(user_selection)
+        Operations.home_screen_operations(user_selection)
         
 
             
