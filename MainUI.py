@@ -41,9 +41,7 @@ class MainUI:
         stop = Validator.validate_home_screen_entry(user_selection)
         while(not stop):
             user_selection = input()
-            stop = Validator.validate_home_screen_entry(user_selection)
-        Operations.home_screen_operations(user_selection)
-        
+            stop = Validator.validate_home_screen_entry(user_selection)       
 
     @staticmethod
     def income_management_menu():
@@ -75,7 +73,7 @@ class MainUI:
         
         user_selection = input()
         stop = Validator.validate_spending_management_menu_entry(user_selection)
-        
+
 
     @staticmethod
     def asset_management_menu():
