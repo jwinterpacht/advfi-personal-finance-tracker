@@ -36,10 +36,13 @@ class MainUI:
         print("8: Program Settings Menu")
         print("9: Exit AdvFi")
 
-        stop = False
+        user_selection = input()
+        stop = Validator.validate_home_screen_entry(user_selection)
         while(not stop):
             user_selection = input()
             stop = Validator.validate_home_screen_entry(user_selection)
+
+            
 
 
     @staticmethod
@@ -49,6 +52,12 @@ class MainUI:
         print("2: View income list")
         print("3: Delete income")
         print("0: Return to main menu")
+
+        user_selection = input()
+        stop = Validator.validate_income_management_menu_entry(user_selection)
+        while(not stop):
+            user_selection = input()
+            stop = Validator.validate_income_management_menu_entry(user_selection)
 
     @staticmethod
     def spending_managment_menu():
