@@ -1,5 +1,3 @@
-#user interface updated
-
 import Validator
 import Operations
 
@@ -23,8 +21,7 @@ class MainUI:
 
     @staticmethod
     def home_screen():
-        
-        print("\n\t\tWelcome to")
+        print("\n\tWelcome to")
         MainUI.draw_logo()
         MainUI.show_net_worth()
         print("1: Income Management Menu")
@@ -56,37 +53,28 @@ class MainUI:
         while(not stop):
             user_selection = input()
             stop = Validator.validate_income_management_menu_entry(user_selection)
+    
+    def income_management_menu_add_income():
+        income_amount = input("Income amount: ")
+        stop = Validator.validate_transaction_amount(income_amount)
+        while not stop:
+            income_amount = input("Income amount: ")
+            stop = Validator.validate_transaction_amount(income_amount)
+        
+        income_date = input("Date received (MM/DD/YY): ")
+        stop = Validator.validate_transaction_date(income_date)
+        while (not stop):
+            income_date = input("Date received (MM/DD/YY): ")
+            stop = Validator.validate_transaction_date(income_date)
+        
+        income_desc = input("Income Description: ")
+        income_details = [income_amount, income_date, income_desc]
+        Validator.are_transaction_details_valid(income_details, "income")
+        
 
-        # ensure that the user selection is an integer
-        user_selection = int(user_selection)
-        match user_selection:
-            case 1: #add income
-                # get income details from user
-                income_amt = input("Income amount: ")
-                # validate the income amount
-                stop = Validator.validate_transaction_amt(income_amt)
-                while (not stop):
-                    income_amt = input("Income amount: ")
-                    stop = Validator.validate_transaction_amt(income_amt)
-
-                # get the date of when the income was received
-                income_date = input("Date received (MM/DD/YY): ")
-                # validate the income date
-                stop = Validator.validate_transaction_date(income_date)
-                while (not stop):
-                    income_date = input("Date received (MM/DD/YY): ")
-                    stop = Validator.validate_transaction_date(income_date)
-
-                # get income description, no need to validate it
-                description = input("Income description: ")
-
-                # store income details in a list
-                income_details = [income_amt, income_date, description]
-                # validate the income details
-                Validator.are_transaction_details_valid(income_details, is_income = True)
-
+    
     @staticmethod
-    def spending_managment_menu():
+    def spending_management_menu():
         print("Spending and Expense Management Menu")
         print("1: Add expense")
         print("2: Import spending data from CSV")
@@ -97,8 +85,8 @@ class MainUI:
         print("7: Delete transaction")
         print("0: Return to main menu")
         user_selection = input()
-        stop = Validator.validate_spending_management_menu_entry(user_selection)
-
+        #stop = Validator.validate_spending_management_menu_entry(user_selection)
+    
     @staticmethod
     def asset_management_menu():
         print("Asset Management Menu")
@@ -129,6 +117,7 @@ class MainUI:
     @staticmethod
     def retrieve_transactions():
         print("Transactions")
+        Operations.print_transactions()
         print("Placeholder")
         print("0: Return to main menu")
 
