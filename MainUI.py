@@ -1,7 +1,22 @@
 import Validator
 import Operations
 
+#import os
+
 class MainUI:
+
+    def get_amount():
+        
+        print("Enter amount in dollars: ")
+        return
+    
+    def get_date():
+        print("Enter date in MM/DD/YY format:")
+        return
+
+    def get_desc():
+        print("Enter a description: ")
+        return
 
     @staticmethod
     def draw_logo():
@@ -10,6 +25,7 @@ class MainUI:
         print(r"  /---\   |   |   \   /    ===   |--      |   ")
         print(r" /     \  |__/     \_/           |      __|__ ")
         print("\n")
+        return
 
 
     @staticmethod
@@ -17,10 +33,12 @@ class MainUI:
         #calculate networth and display it
         net_worth = 20,000
         print("\nCurrent Net Worth: $20,000\n")
+        return
         
 
     @staticmethod
     def home_screen():
+        #os.system('cls')
         print("\n\tWelcome to")
         MainUI.draw_logo()
         MainUI.show_net_worth()
@@ -33,49 +51,30 @@ class MainUI:
         print("7: Alert Center Menu")
         print("8: Program Settings Menu")
         print("9: Exit AdvFi")
-
-        user_selection = input()
-        stop = Validator.validate_home_screen_entry(user_selection)
-        while(not stop):
-            user_selection = input()
-            stop = Validator.validate_home_screen_entry(user_selection)       
+        return      
 
     @staticmethod
     def income_management_menu():
-        print("Income Management Menu")
+        #os.system('cls')
+        print("Income Management Menu\n----------------------------------")
         print("1: Add income")
         print("2: View income list")
         print("3: Delete income")
         print("0: Return to main menu")
+        return
 
-        user_selection = input()
-        stop = Validator.validate_income_management_menu_entry(user_selection)
-        while(not stop):
-            user_selection = input()
-            stop = Validator.validate_income_management_menu_entry(user_selection)
+        
     
     def income_management_menu_add_income():
-        income_amount = input("Income amount: ")
-        stop = Validator.validate_transaction_amount(income_amount)
-        while not stop:
-            income_amount = input("Income amount: ")
-            stop = Validator.validate_transaction_amount(income_amount)
-        
-        income_date = input("Date received (MM/DD/YY): ")
-        stop = Validator.validate_transaction_date(income_date)
-        while (not stop):
-            income_date = input("Date received (MM/DD/YY): ")
-            stop = Validator.validate_transaction_date(income_date)
-        
-        income_desc = input("Income Description: ")
-        income_details = [income_amount, income_date, income_desc]
-        Validator.are_transaction_details_valid(income_details, "income")
-        
+        #os.system('cls')
+        print("test 1")
+        print("Adding New Income \n")
+        return
 
     
     @staticmethod
     def spending_management_menu():
-        print("Spending and Expense Management Menu")
+        print("\nSpending and Expense Management Menu")
         print("1: Add expense")
         print("2: Import spending data from CSV")
         print("3: Create recurring expenses")
@@ -89,7 +88,7 @@ class MainUI:
     
     @staticmethod
     def asset_management_menu():
-        print("Asset Management Menu")
+        print("\nAsset Management Menu")
         print("1: Add asset")
         print("2: Remove asset")
         print("3: Calculate real time asset prices")
@@ -98,7 +97,7 @@ class MainUI:
 
     @staticmethod
     def liability_management_menu():
-        print("Liability and Debt Managment Menu")
+        print("\nLiability and Debt Managment Menu")
         print("1: Add Liability")
         print("2: Remove Liability")
         print("3: Track outstanding debt and payment debt") #will allow user to make a payment and reduce the debt recorded in AdvFi
@@ -107,7 +106,7 @@ class MainUI:
 
     @staticmethod
     def financial_reports_menu():
-        print("Financial Reports Menu")
+        print("\nFinancial Reports Menu")
         print("1: Generate income report")              # when the user generates a report, they will be prompted to save to database, save to pdf, or both
         print("2: Generate spending report")
         print("3: Generate financial health report")
@@ -116,7 +115,7 @@ class MainUI:
 
     @staticmethod
     def retrieve_transactions():
-        print("Transactions")
+        print("\nTransactions")
         Operations.print_transactions()
         print("Placeholder")
         print("0: Return to main menu")
@@ -124,7 +123,7 @@ class MainUI:
 
     @staticmethod
     def alert_center_menu():
-        print("Alert Center Menu")
+        print("\nAlert Center Menu")
         print("1: Create alert")
         print("2: Delete alert")
         print("3: Edit alert")
@@ -135,14 +134,8 @@ class MainUI:
 
     @staticmethod
     def program_settings_menu():
-        print("Program Settings Menu")
+        print("\nProgram Settings Menu")
         print("1: change password")
         print("2: delete user account")
         print("0: Return to main menu")
 
-def main():
-    MainUI.home_screen()
-    
-#will need to add functionality to create account/login
-if __name__ == "__main__":
-    main()   

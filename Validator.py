@@ -44,7 +44,8 @@ def validate_home_screen_entry(entry: str) -> bool:
     if not _validate_selection_range(selection, low_end, high_end): #if selection range validation is false
         return False   #return false
     
-    Operations.home_screen_operations(selection)
+    return True
+    
 
 
 def validate_income_management_menu_entry(entry: str) -> bool:

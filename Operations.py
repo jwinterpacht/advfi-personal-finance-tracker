@@ -2,6 +2,7 @@ import MainUI
 import Transaction
 from datetime import datetime as dt
 import TransactionList
+import Controller
 
 
 transaction_list = TransactionList.TransactionList()
@@ -9,10 +10,12 @@ transaction_list = TransactionList.TransactionList()
 
 def home_screen_operations(selection):
 
+    selection = int(selection) #can safely cast here because this code cannot run otherwise
+
     match selection:
 
         case 1:
-            MainUI.MainUI.income_management_menu()
+            Controller.Controller.income_management_menu()
 
         case 2:
             MainUI.MainUI.spending_management_menu()
@@ -45,11 +48,11 @@ def income_management_menu_operations(selection):
     match selection:
 
         case 1:
-            MainUI.MainUI.income_management_menu_add_income()
+            Controller.Controller.income_management_menu_add_income()
         
 
         case 0:
-            MainUI.MainUI.home_screen()
+            Controller.Controller.home_screen()
 
 
 def create_and_add_transaction(transaction_details: list, type: str):
