@@ -10,7 +10,12 @@ class MainUI:
 
     def clear_screen():
         #pass
-        os.system('cls')
+        # for Windows
+        if os.name == "nt":
+            os.system("cls")
+        # for macOS and Linux
+        else:
+            os.system("clear")
 
     def get_transaction_amount():
         print("Enter transaction amount in dollars: ")
