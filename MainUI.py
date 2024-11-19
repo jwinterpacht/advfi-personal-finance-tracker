@@ -31,6 +31,10 @@ class MainUI:
     def get_entity_value():
         print("Enter the entity value")
         return input("$")
+    
+    def get_entity_name():
+        print("Enter the entity name")
+        return input()
 
     @staticmethod
     def draw_logo():

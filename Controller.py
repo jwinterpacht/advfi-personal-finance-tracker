@@ -42,6 +42,10 @@ class Controller:
         while not stop:
             value = MainUI.MainUI.get_entity_value()
             stop = Validator.validate_value(value)
+    
+    def _get_name():
+        name = MainUI.MainUI.get_entity_name()
+        return name
 
     def home_screen():
         #display main ui text
@@ -108,11 +112,21 @@ class Controller:
         stop = False
         while not stop:
             is_stock = MainUI.MainUI.asset_management_menu_add_asset_is_stock()
-            stop = Validator.validate_yes_no()
+            stop = Validator.validate_yes_no(is_stock)
         
         num_owned = Controller._get_num_owned()
+        name = Controller._get_name()
+        desc = Controller._get_desc()
 
-        
+        if is_stock == "n":
+            value = Controller._get_entity_value()
+            auto_update = False
+        elif is_stock == "y":
+            pass
+
+
+    
+    
 
         
 
