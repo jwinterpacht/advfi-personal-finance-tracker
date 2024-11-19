@@ -7,6 +7,13 @@ input_text = ""
 #input_text = "Press enter to return to the main menu"
 
 class MainUI:
+    # class variables
+    INCOME_MGMT_MENU_LOW = 0
+    INCOME_MGMT_MENU_HIGH = 3
+    SPENDING_MGMT_MENU_LOW = 0
+    SPENDING_MGMT_MENU_HIGH = 7
+    ASSET_MGMT_MENU_LOW = 0
+    ASSET_MGMT_MENU_HIGH = 4
 
     def clear_screen():
         #pass
@@ -113,8 +120,9 @@ class MainUI:
         print("6: Monitor budget adherence")
         print("7: Delete transaction")
         print("0: Return to main menu")
-        user_selection = input()
-        #stop = Validator.validate_spending_management_menu_entry(user_selection)
+        
+        # return the user's input and give it to the Controller class
+        return input()
     
     @staticmethod
     def asset_management_menu():
