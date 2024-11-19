@@ -1,22 +1,36 @@
 import Validator
 import Operations
 
-#import os
+import os
+
+input_text = ""
+#input_text = "Press enter to return to the main menu"
 
 class MainUI:
 
-    def get_amount():
-        
-        print("Enter amount in dollars: ")
-        return
+    def clear_screen():
+        #pass
+        os.system('cls')
+
+    def get_transaction_amount():
+        print("Enter transaction amount in dollars: ")
+        return input("$")
     
     def get_date():
         print("Enter date in MM/DD/YY format:")
-        return
+        return input()
 
     def get_desc():
         print("Enter a description: ")
-        return
+        return input()
+    
+    def get_num_owned():
+        print("Enter the number of entites you own\nWill default to 1 if left blank")
+        return input()
+    
+    def get_entity_value():
+        print("Enter the entity value")
+        return input("$")
 
     @staticmethod
     def draw_logo():
@@ -38,7 +52,7 @@ class MainUI:
 
     @staticmethod
     def home_screen():
-        #os.system('cls')
+        MainUI.clear_screen()
         print("\n\tWelcome to")
         MainUI.draw_logo()
         MainUI.show_net_worth()
@@ -51,29 +65,36 @@ class MainUI:
         print("7: Alert Center Menu")
         print("8: Program Settings Menu")
         print("9: Exit AdvFi")
-        return      
+        return input()
 
     @staticmethod
     def income_management_menu():
-        #os.system('cls')
+        MainUI.clear_screen()
         print("Income Management Menu\n----------------------------------")
         print("1: Add income")
         print("2: View income list")
         print("3: Delete income")
         print("0: Return to main menu")
-        return
-
-        
+        return input()
     
+    @staticmethod
     def income_management_menu_add_income():
-        #os.system('cls')
-        print("test 1")
+        MainUI.clear_screen()
         print("Adding New Income \n")
         return
 
+    @staticmethod
+    def income_management_menu_view_income_list():
+        MainUI.clear_screen()
+
+    @staticmethod
+    def income_management_menu_remove_income():
+        print("Enter the ID of the income you would like to remove\nEnter -1 to cancel the operation")
+        return input()
     
     @staticmethod
     def spending_management_menu():
+        MainUI.clear_screen()
         print("\nSpending and Expense Management Menu")
         print("1: Add expense")
         print("2: Import spending data from CSV")
@@ -88,15 +109,27 @@ class MainUI:
     
     @staticmethod
     def asset_management_menu():
+        MainUI.clear_screen()
         print("\nAsset Management Menu")
         print("1: Add asset")
         print("2: Remove asset")
         print("3: Calculate real time asset prices")
         print("4: Add category for assets/liabilities")
         print("0: Return to main menu")
+        return input()
+    
+    @staticmethod
+    def asset_management_menu_add_asset_is_stock():
+        MainUI.clear_screen()
+        print("Adding New Asset")
+        print("Would you like to link this asset with a stock? (y/n)")
+        return input()
+    
+
 
     @staticmethod
     def liability_management_menu():
+        MainUI.clear_screen()
         print("\nLiability and Debt Managment Menu")
         print("1: Add Liability")
         print("2: Remove Liability")
@@ -106,6 +139,7 @@ class MainUI:
 
     @staticmethod
     def financial_reports_menu():
+        MainUI.clear_screen()
         print("\nFinancial Reports Menu")
         print("1: Generate income report")              # when the user generates a report, they will be prompted to save to database, save to pdf, or both
         print("2: Generate spending report")
@@ -115,14 +149,13 @@ class MainUI:
 
     @staticmethod
     def retrieve_transactions():
+        MainUI.clear_screen()
         print("\nTransactions")
-        Operations.print_transactions()
-        print("Placeholder")
-        print("0: Return to main menu")
 
 
     @staticmethod
     def alert_center_menu():
+        MainUI.clear_screen()
         print("\nAlert Center Menu")
         print("1: Create alert")
         print("2: Delete alert")
@@ -134,8 +167,50 @@ class MainUI:
 
     @staticmethod
     def program_settings_menu():
+        MainUI.clear_screen()
         print("\nProgram Settings Menu")
         print("1: change password")
         print("2: delete user account")
         print("0: Return to main menu")
+
+
+
+
+    #other misc classes
+
+    #this is used to make the program wait for the user to be ready for another action
+    #typically used before going back to the home screen
+    def wait_for_user_input():
+        return input(input_text) #don't actually need to return anything
+
+    def add_transaction_success():
+        print("Transaction added successfully!")
+        MainUI.wait_for_user_input()
+
+    def remove_transaction_success():
+        print("Transaction removed successfully!")
+        MainUI.wait_for_user_input()
+
+    
+    def remove_transaction_failure(transaction_id):
+        print("Transaction ID {} was not found in the given list, nothing was removed")
+        MainUI.wait_for_user_input()
+
+    
+    def action_cancelled():
+        print("Action was cancelled")
+        MainUI.wait_for_user_input()
+
+
+
+
+
+
+
+
+
+
+
+
+
 

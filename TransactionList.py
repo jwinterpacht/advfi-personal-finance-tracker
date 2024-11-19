@@ -25,9 +25,9 @@ class TransactionList:
 
     def remove_income_transaction(self, transaction_id: int) -> bool:
         for income in self._income_transactions:
-            if income.Transaction.get_transaction_id() == transaction_id:
+            if income._transaction_ID == transaction_id:
                 self._income_transactions.remove(income)
-                self.total_income -= income._amount
+                self._total_income -= income._amount
                 return True
         return False
     
@@ -56,12 +56,12 @@ class TransactionList:
         return self.total_expenses
     
     def print_expenses(self) -> None:
-        print("Expense List:")
+        print("\nExpense List:")
         for expense in self._expense_transactions:
             expense.print_transaction()
     
     def print_incomes(self) -> None:
-        print("Income List:")
+        print("\nIncome List:")
         for income in self._income_transactions:
             income.print_transaction()
     

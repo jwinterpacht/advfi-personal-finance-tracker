@@ -58,11 +58,23 @@ def validate_income_management_menu_entry(entry: str) -> bool:
     selection = int(entry)
     if not _validate_selection_range(selection, low_end, high_end):
         return False
+    return True
+
+def validate_asset_management_menu_entry(entry: str) -> bool:
+    low_end = 0
+    high_end = 4
+
+    if not _validate_integer(entry):
+        return False
     
-    Operations.income_management_menu_operations(selection)
+    selection = int(entry)
+    if not _validate_selection_range(selection, low_end, high_end):
+        return False
+    return True
+    
 
 
-def validate_transaction_amount(amount) -> bool:
+def validate_value(amount) -> bool:
     if not _validate_float(amount):
         return False
     amount = float(amount)
@@ -90,10 +102,30 @@ def are_transaction_details_valid(transaction_details: list, type: str) -> bool:
         Operations.create_and_add_transaction(transaction_details, type)
         pass
 
+def validate_transaction_id(transaction_id: str):
+    if not _validate_integer(transaction_id):
+        return False
+    transaction_id = int(transaction_id)
+    if transaction_id < -1:
+        print("Error: smallest allowed value is -1")
+        return False
+    return True
 
 
 
+def validate_num_owned(num_owned: str):
+    if not _validate_integer(num_owned):
+        return False
+    owned = int(num_owned)
+    if owned < 0:
+        print("Error: cannot own negative entities")
+        return False
+    return True
 
 
-
-
+def validate_yes_no(user_input: str):
+    if user_input[0].lower == "y":
+        return True
+    elif user_input[0].lower == "n":
+        return True
+    return False
