@@ -26,6 +26,8 @@ class TransactionList:
     def remove_income_transaction(self, transaction_id: int) -> bool:
         for income in self._income_transactions:
             if income._transaction_ID == transaction_id:
+                print(f"From list: {income._transaction_ID}")
+                print(f"From passed-in: {transaction_id}")
                 self._income_transactions.remove(income)
                 self._total_income -= income._amount
                 return True
@@ -49,11 +51,14 @@ class TransactionList:
     
     # Return the total income
     def get_total_income(self) -> float:
-        return self.total_income
+        return self._total_income
     
     # Return the total expenses
     def get_total_expenses(self) -> float:
-        return self.total_expenses
+        return self._total_expenses
+    
+    def get_transaction_count(self) -> float:
+        return self._transaction_count
     
     def print_expenses(self) -> None:
         print("\nExpense List:")
