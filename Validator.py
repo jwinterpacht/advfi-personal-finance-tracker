@@ -49,10 +49,8 @@ def validate_home_screen_entry(entry: str) -> bool:
     
 
 
-def validate_income_management_menu_entry(entry: str) -> bool:
-    low_end = 0
-    high_end = 3
-
+def validate_menu_entry(entry: str, low_end: int, high_end: int) -> bool:
+    # user's entry must be an integer
     if not _validate_integer(entry):
         return False
     
@@ -60,19 +58,6 @@ def validate_income_management_menu_entry(entry: str) -> bool:
     if not _validate_selection_range(selection, low_end, high_end):
         return False
     return True
-
-def validate_asset_management_menu_entry(entry: str) -> bool:
-    low_end = 0
-    high_end = 4
-
-    if not _validate_integer(entry):
-        return False
-    
-    selection = int(entry)
-    if not _validate_selection_range(selection, low_end, high_end):
-        return False
-    return True
-    
 
 
 def validate_value(amount) -> bool:

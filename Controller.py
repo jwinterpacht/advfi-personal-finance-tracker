@@ -63,7 +63,7 @@ class Controller:
         stop = False
         while(not stop):
             user_selection = MainUI.MainUI.income_management_menu()
-            stop = Validator.validate_income_management_menu_entry(user_selection)
+            stop = Validator.validate_menu_entry(user_selection, MainUI.MainUI.INCOME_MGMT_MENU_LOW, MainUI.MainUI.INCOME_MGMT_MENU_HIGH)
         selection = int(user_selection)
         Operations.income_management_menu_operations(selection)
 
@@ -97,13 +97,23 @@ class Controller:
         Operations.remove_transaction(income_id, "income")
         Controller.home_screen()
 
+    def spending_management_menu():
+        #display the main ui text
+        #get user input and ensure validity
+        stop = False
+        while(not stop):
+            user_selection = MainUI.MainUI.spending_management_menu()
+            stop = Validator.validate_menu_entry(user_selection, MainUI.MainUI.SPENDING_MGMT_MENU_LOW, MainUI.MainUI.SPENDING_MGMT_MENU_HIGH)
+        selection = int(user_selection)
+        Operations.income_management_menu_operations(selection)
+
     
     def asset_management_menu():
         
         stop = False
         while not stop:
             user_selection = MainUI.MainUI.asset_management_menu()
-            stop = Validator.validate_asset_management_menu_entry(user_selection)
+            stop = Validator.validate_menu_entry(user_selection, MainUI.MainUI.ASSET_MGMT_MENU_LOW, MainUI.MainUI.ASSET_MGMT_MENU_HIGH)
         selection = int(user_selection)
         Operations.asset_management_menu_operations(selection)
 
