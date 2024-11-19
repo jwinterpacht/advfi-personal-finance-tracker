@@ -1,71 +1,103 @@
 import MainUI
 import Transaction
+from datetime import datetime as dt
 import TransactionList
-import UserAccount
-import EntityPortfolio
-from datetime import datetime
+import Controller
+
 
 transaction_list = TransactionList.TransactionList()
-entity_portfolio = EntityPortfolio.EntityPortfolio()
-user_account = UserAccount.UserAccount("rishi", "326", entity_portfolio, transaction_list)
 
-def home_screen_operations(entry):
-    selection = int(entry)  # can safely cast this because we already validated
+
+def home_screen_operations(selection):
+
+    selection = int(selection) #can safely cast here because this code cannot run otherwise
 
     match selection:
+
         case 1:
-            MainUI.MainUI.income_management_menu()
-        
+            Controller.Controller.income_management_menu()
+
         case 2:
-            MainUI.MainUI.spending_managment_menu()
+            MainUI.MainUI.spending_management_menu()
         
-        case 3:
-            MainUI.MainUI.asset_management_menu()
+        case 3: 
+            Controller.Controller.asset_management_menu()
         
-        case 4:
+        case 4: 
             MainUI.MainUI.liability_management_menu()
         
         case 5:
             MainUI.MainUI.financial_reports_menu()
         
         case 6:
-            MainUI.MainUI.retrieve_transactions()
+            Controller.Controller.retrieve_transactions()
         
-        case 7:
+        case 7: 
             MainUI.MainUI.alert_center_menu()
         
         case 8:
             MainUI.MainUI.program_settings_menu()
+        
         case 9:
+            print("Thank you for using AdvFi!")
             exit(0)
 
 
-'''Income Operations'''
-def create_transaction(input_list: list) -> Transaction:
-    '''
-    adds a transaction (income)
-    '''
-    transaction_amt = float(input_list[0])
-    transaction_date = datetime.strptime(input_list[1], '%m/%d/%y')
-    transaction_desc = input_list[2]
-    new_transaction = Transaction.Transaction(transaction_amt, transaction_date, transaction_desc)
-
-    return new_transaction
-
-def add_income(transaction):
-    TransactionList.TransactionList.add_income_transaction(transaction)
-
-
-'''
-def income_management_operations(entry, transaction):
-    selection = int(entry)
-
+def income_management_menu_operations(selection):
     match selection:
         case 1:
-            add_income(input_list)
-'''
+            Controller.Controller.income_management_menu_add_income()
+        case 2:
+            Controller.Controller.income_management_menu_view_income_list()
+        case 3:
+            Controller.Controller.income_management_menu_remove_income()
+        case 0:
+            Controller.Controller.home_screen()
 
 
+def create_and_add_transaction(amount, date, desc, type: str):
+    amount = float(amount)
+    date = dt.strptime(date, '%m/%d/%y')
+
+    transaction = Transaction.Transaction(amount, date, desc)
+
+    if type == "income":
+        transaction_list.add_income_transaction(transaction)
+    
+    elif type == "expense":
+        transaction_list.add_expense_transaction(transaction)
+    
+    else:
+        print("error")
+    
+def remove_transaction(transaction_id, type: str):
+    transaction_id = int(transaction_id)
+
+    found_id = False
+    if type == "income":
+        found_id = transaction_list.remove_income_transaction(transaction_id)
+    elif type == "expense":
+        found_id = transaction_list.remove_expense_transaction(transaction_id)
+    
+    if found_id:
+        MainUI.MainUI.remove_transaction_success()
+    else:
+        MainUI.MainUI.remove_transaction_failure()
 
 
-'''[some other] Operations'''
+def asset_management_menu_operations(selection):
+    match selection:
+        case 1:
+            Controller.Controller.asset_management_menu_add_asset()
+
+
+def print_transactions():
+    transaction_list.print_transactions()
+
+
+def print_income_list():
+    transaction_list.print_incomes()
+
+def print_expense_list():
+    transaction_list.print_expenses()
+

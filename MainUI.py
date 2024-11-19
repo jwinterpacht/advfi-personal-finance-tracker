@@ -1,9 +1,36 @@
-#user interface updated
-
 import Validator
 import Operations
 
+import os
+
+input_text = ""
+#input_text = "Press enter to return to the main menu"
+
 class MainUI:
+
+    def clear_screen():
+        #pass
+        os.system('cls')
+
+    def get_transaction_amount():
+        print("Enter transaction amount in dollars: ")
+        return input("$")
+    
+    def get_date():
+        print("Enter date in MM/DD/YY format:")
+        return input()
+
+    def get_desc():
+        print("Enter a description: ")
+        return input()
+    
+    def get_num_owned():
+        print("Enter the number of entites you own\nWill default to 1 if left blank")
+        return input()
+    
+    def get_entity_value():
+        print("Enter the entity value")
+        return input("$")
 
     @staticmethod
     def draw_logo():
@@ -12,6 +39,7 @@ class MainUI:
         print(r"  /---\   |   |   \   /    ===   |--      |   ")
         print(r" /     \  |__/     \_/           |      __|__ ")
         print("\n")
+        return
 
 
     @staticmethod
@@ -19,12 +47,13 @@ class MainUI:
         #calculate networth and display it
         net_worth = 20,000
         print("\nCurrent Net Worth: $20,000\n")
+        return
         
 
     @staticmethod
     def home_screen():
-        
-        print("\n\t\tWelcome to")
+        MainUI.clear_screen()
+        print("\n\tWelcome to")
         MainUI.draw_logo()
         MainUI.show_net_worth()
         print("1: Income Management Menu")
@@ -36,58 +65,37 @@ class MainUI:
         print("7: Alert Center Menu")
         print("8: Program Settings Menu")
         print("9: Exit AdvFi")
-
-        user_selection = input()
-        stop = Validator.validate_home_screen_entry(user_selection)
-        while(not stop):
-            user_selection = input()
-            stop = Validator.validate_home_screen_entry(user_selection)       
+        return input()
 
     @staticmethod
     def income_management_menu():
-        print("Income Management Menu")
+        MainUI.clear_screen()
+        print("Income Management Menu\n----------------------------------")
         print("1: Add income")
         print("2: View income list")
         print("3: Delete income")
         print("0: Return to main menu")
-
-        user_selection = input()
-        stop = Validator.validate_income_management_menu_entry(user_selection)
-        while(not stop):
-            user_selection = input()
-            stop = Validator.validate_income_management_menu_entry(user_selection)
-
-        # ensure that the user selection is an integer
-        user_selection = int(user_selection)
-        match user_selection:
-            case 1: #add income
-                # get income details from user
-                income_amt = input("Income amount: ")
-                # validate the income amount
-                stop = Validator.validate_transaction_amt(income_amt)
-                while (not stop):
-                    income_amt = input("Income amount: ")
-                    stop = Validator.validate_transaction_amt(income_amt)
-
-                # get the date of when the income was received
-                income_date = input("Date received (MM/DD/YY): ")
-                # validate the income date
-                stop = Validator.validate_transaction_date(income_date)
-                while (not stop):
-                    income_date = input("Date received (MM/DD/YY): ")
-                    stop = Validator.validate_transaction_date(income_date)
-
-                # get income description, no need to validate it
-                description = input("Income description: ")
-
-                # store income details in a list
-                income_details = [income_amt, income_date, description]
-                # validate the income details
-                Validator.are_transaction_details_valid(income_details, is_income = True)
+        return input()
+    
+    @staticmethod
+    def income_management_menu_add_income():
+        MainUI.clear_screen()
+        print("Adding New Income \n")
+        return
 
     @staticmethod
-    def spending_managment_menu():
-        print("Spending and Expense Management Menu")
+    def income_management_menu_view_income_list():
+        MainUI.clear_screen()
+
+    @staticmethod
+    def income_management_menu_remove_income():
+        print("Enter the ID of the income you would like to remove\nEnter -1 to cancel the operation")
+        return input()
+    
+    @staticmethod
+    def spending_management_menu():
+        MainUI.clear_screen()
+        print("\nSpending and Expense Management Menu")
         print("1: Add expense")
         print("2: Import spending data from CSV")
         print("3: Create recurring expenses")
@@ -97,20 +105,32 @@ class MainUI:
         print("7: Delete transaction")
         print("0: Return to main menu")
         user_selection = input()
-        stop = Validator.validate_spending_management_menu_entry(user_selection)
-
+        #stop = Validator.validate_spending_management_menu_entry(user_selection)
+    
     @staticmethod
     def asset_management_menu():
-        print("Asset Management Menu")
+        MainUI.clear_screen()
+        print("\nAsset Management Menu")
         print("1: Add asset")
         print("2: Remove asset")
         print("3: Calculate real time asset prices")
         print("4: Add category for assets/liabilities")
         print("0: Return to main menu")
+        return input()
+    
+    @staticmethod
+    def asset_management_menu_add_asset_is_stock():
+        MainUI.clear_screen()
+        print("Adding New Asset")
+        print("Would you like to link this asset with a stock? (y/n)")
+        return input()
+    
+
 
     @staticmethod
     def liability_management_menu():
-        print("Liability and Debt Managment Menu")
+        MainUI.clear_screen()
+        print("\nLiability and Debt Managment Menu")
         print("1: Add Liability")
         print("2: Remove Liability")
         print("3: Track outstanding debt and payment debt") #will allow user to make a payment and reduce the debt recorded in AdvFi
@@ -119,7 +139,8 @@ class MainUI:
 
     @staticmethod
     def financial_reports_menu():
-        print("Financial Reports Menu")
+        MainUI.clear_screen()
+        print("\nFinancial Reports Menu")
         print("1: Generate income report")              # when the user generates a report, they will be prompted to save to database, save to pdf, or both
         print("2: Generate spending report")
         print("3: Generate financial health report")
@@ -128,14 +149,14 @@ class MainUI:
 
     @staticmethod
     def retrieve_transactions():
-        print("Transactions")
-        print("Placeholder")
-        print("0: Return to main menu")
+        MainUI.clear_screen()
+        print("\nTransactions")
 
 
     @staticmethod
     def alert_center_menu():
-        print("Alert Center Menu")
+        MainUI.clear_screen()
+        print("\nAlert Center Menu")
         print("1: Create alert")
         print("2: Delete alert")
         print("3: Edit alert")
@@ -146,14 +167,50 @@ class MainUI:
 
     @staticmethod
     def program_settings_menu():
-        print("Program Settings Menu")
+        MainUI.clear_screen()
+        print("\nProgram Settings Menu")
         print("1: change password")
         print("2: delete user account")
         print("0: Return to main menu")
 
-def main():
-    MainUI.home_screen()
+
+
+
+    #other misc classes
+
+    #this is used to make the program wait for the user to be ready for another action
+    #typically used before going back to the home screen
+    def wait_for_user_input():
+        return input(input_text) #don't actually need to return anything
+
+    def add_transaction_success():
+        print("Transaction added successfully!")
+        MainUI.wait_for_user_input()
+
+    def remove_transaction_success():
+        print("Transaction removed successfully!")
+        MainUI.wait_for_user_input()
+
     
-#will need to add functionality to create account/login
-if __name__ == "__main__":
-    main()   
+    def remove_transaction_failure(transaction_id):
+        print("Transaction ID {} was not found in the given list, nothing was removed")
+        MainUI.wait_for_user_input()
+
+    
+    def action_cancelled():
+        print("Action was cancelled")
+        MainUI.wait_for_user_input()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
