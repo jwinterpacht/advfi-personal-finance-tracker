@@ -93,6 +93,7 @@ class Controller:
         while not stop:
             income_id = MainUI.MainUI.income_management_menu_remove_income() 
             stop = Validator.validate_transaction_id(income_id)
+
         Operations.remove_transaction(income_id, "income")
         Controller.home_screen()
 

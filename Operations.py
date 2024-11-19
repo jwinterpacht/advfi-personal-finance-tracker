@@ -84,6 +84,9 @@ def remove_transaction(transaction_id, type: str):
     else:
         MainUI.MainUI.remove_transaction_failure()
 
+def retrieve_transaction_count():
+    return transaction_list.get_transaction_count()
+
 
 def asset_management_menu_operations(selection):
     match selection:

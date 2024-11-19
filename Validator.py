@@ -1,6 +1,7 @@
 import Operations
 import Transaction
 from datetime import datetime
+import MainUI
 
 
 
@@ -108,6 +109,10 @@ def validate_transaction_id(transaction_id: str):
     transaction_id = int(transaction_id)
     if transaction_id < -1:
         print("Error: smallest allowed value is -1")
+        return False
+    #Make sure that a transaction id that exists was entered
+    if transaction_id > Operations.retrieve_transaction_count():
+        MainUI.MainUI.remove_transaction_failure(transaction_id)
         return False
     return True
 

@@ -197,7 +197,7 @@ class MainUI:
 
     
     def remove_transaction_failure(transaction_id):
-        print("Transaction ID {} was not found in the given list, nothing was removed")
+        print(f"Transaction ID {transaction_id} was not found in the given list, nothing was removed")
         MainUI.wait_for_user_input()
 
     
