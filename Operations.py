@@ -3,9 +3,11 @@ import Transaction
 from datetime import datetime as dt
 import TransactionList
 import Controller
-
+import Entity
+import EntityPortfolio
 
 transaction_list = TransactionList.TransactionList()
+entity_portfolio = EntityPortfolio.EntityPortfolio()
 
 
 def home_screen_operations(selection):
@@ -92,6 +94,35 @@ def asset_management_menu_operations(selection):
     match selection:
         case 1:
             Controller.Controller.asset_management_menu_add_asset()
+        case 2:
+            Controller.Controller.asset_management_menu_view_asset_list()
+
+def asset_management_menu_view_asset_list_operations():
+    entity_portfolio.print_assets()
+
+'''
+type: string used to determine if entity is asset or liability
+
+'''
+def add_entity_to_portfolio(type, name, desc, value, num_owned, auto_update, stock_symbol):
+    #first we need to create the entity
+    new_entity = Entity.Entity(value, num_owned, name, desc, auto_update, stock_symbol)
+
+    #now we need to add it to the respective list
+    if type == "asset":
+        EntityPortfolio.EntityPortfolio.add_asset(entity_portfolio, new_entity)
+    elif type == "liability":
+        EntityPortfolio.EntityPortfolio.add_liability(new_entity)
+    
+    MainUI.MainUI.add_entity_success(type)
+
+    Controller.Controller.home_screen()
+
+
+
+
+    
+
 
 
 def print_transactions():

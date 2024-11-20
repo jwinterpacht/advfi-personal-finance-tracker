@@ -104,6 +104,9 @@ def validate_transaction_id(transaction_id: str):
 
 
 def validate_num_owned(num_owned: str):
+    if num_owned == "": #allow for the case where the user enters nothing
+        return True
+    
     if not _validate_integer(num_owned):
         return False
     owned = int(num_owned)
@@ -114,8 +117,17 @@ def validate_num_owned(num_owned: str):
 
 
 def validate_yes_no(user_input: str):
-    if user_input[0].lower == "y":
+    if user_input == "":
+        return False
+    if user_input[0] == "y":
         return True
-    elif user_input[0].lower == "n":
+    elif user_input[0] == "n":
         return True
     return False
+
+#used to ensure that the user did not leave the space blank
+def validate_name(user_input: str):
+    if user_input == "":
+        MainUI.MainUI.empty_name()
+        return False
+    return True

@@ -24,8 +24,11 @@ class Entity:
     #constructor                          #change to enum
     def __init__(self, entity_value:float, entity_amount:int, entity_name:str, entity_description="", entity_auto_update=False, entity_stock_symbol = "n/a"):  
         self.single_value = entity_value
-        self.amount = entity_amount
-        self.real_value = self.single_value * self.amount
+        if entity_amount == "":
+            self.amount = 1
+        else:
+            self.amount = entity_amount
+        self.real_value = self.single_value * float(self.amount)
         self.name = entity_name
         self.description = entity_description
         self.auto_update = entity_auto_update    # if an asset is set to auto-update, then we treat it like a stock
@@ -47,9 +50,6 @@ class Entity:
     #getters
     def get_entity_ID(self):
         return self.entity_ID
-    
-    def get_type(self):
-        return self.type
 
     def get_single_value(self):
         return self.single_value
@@ -77,7 +77,18 @@ class Entity:
     
         
     def print_entity(self):
-        print("")
+        if self.amount == 1 and self.auto_update == False:
+            print(f"ID: {self.entity_ID}\tName: {self.name}\tValue: ${self.single_value}\tDesc: {self.description}")
+        elif self.amount == 1 and self.auto_update == True:
+            self.auto_update_value() #get the most up to date value for the stock
+            print(f"ID: {self.entity_ID}\tName: {self.name}\tValue: ${self.single_value}\tStock Symbol: {self.stock_symbol}\tDesc: {self.description}")
+        elif self.auto_update == False:
+            print(f"ID: {self.entity_ID}\tName: {self.name}\tIndividual Value: {self.single_value}\tOwned: {self.amount}\tTotal Value: ${self.real_value}\tDesc: {self.description}")
+        else:
+            self.auto_update_value() #get the most up to date value for the stock
+            print(f"ID: {self.entity_ID}\tName: {self.name}\tIndividual Value: ${self.single_value}\tOwned: {self.amount}\tTotal Value: ${self.real_value}\tStock Symbol: {self.stock_symbol}\tDesc: {self.description}")
+
+    
 
     
     #setters, they return true if successful, false if unsuccessful, 

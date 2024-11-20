@@ -42,9 +42,13 @@ class Controller:
         while not stop:
             value = MainUI.MainUI.get_entity_value()
             stop = Validator.validate_value(value)
+        return float(value)
     
     def _get_name():
-        name = MainUI.MainUI.get_entity_name()
+        stop = False
+        while not stop:
+            name = MainUI.MainUI.get_entity_name()
+            stop = Validator.validate_name(name)
         return name
 
     def home_screen():
@@ -126,16 +130,27 @@ class Controller:
             stop = Validator.validate_yes_no(is_stock)
         
         num_owned = Controller._get_num_owned()
+        if num_owned == "":
+            num_owned = 1
         name = Controller._get_name()
         desc = Controller._get_desc()
 
-        if is_stock == "n":
+        if is_stock[0] == "n":
             value = Controller._get_entity_value()
             auto_update = False
-        elif is_stock == "y":
+            stock_symbol = "n/a"
+        elif is_stock[0] == "y":
             pass
+        
+        #now that we have all the data we need to create a non stock asset, we will
+        #call a method in operations to do exactly that
+        Operations.add_entity_to_portfolio("asset", name, desc, value, num_owned, auto_update, stock_symbol)
 
+    def asset_management_menu_view_asset_list():
+        Operations.asset_management_menu_view_asset_list_operations()
+        
 
+    
     
     
 

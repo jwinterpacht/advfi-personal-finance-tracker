@@ -129,9 +129,10 @@ class MainUI:
         MainUI.clear_screen()
         print("\nAsset Management Menu")
         print("1: Add asset")
-        print("2: Remove asset")
-        print("3: Calculate real time asset prices")
-        print("4: Add category for assets/liabilities")
+        print("2: View asset list")
+        print("3: Remove asset")
+        print("4: Calculate real time asset prices")
+        print("5: Add category for assets/liabilities")
         print("0: Return to main menu")
         return input()
     
@@ -141,6 +142,10 @@ class MainUI:
         print("Adding New Asset")
         print("Would you like to link this asset with a stock? (y/n)")
         return input()
+    
+
+
+
     
 
 
@@ -219,7 +224,12 @@ class MainUI:
         MainUI.wait_for_user_input()
 
 
+    def empty_name():
+        print("Error: cannot enter an empty name")
 
+    def add_entity_success(entity_type): #should only ever be asset or liability
+        print(f"{entity_type} added successfully") #asset/liability added successfully
+        MainUI.wait_for_user_input()
 
 
 
