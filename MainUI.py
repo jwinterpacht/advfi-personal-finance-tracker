@@ -47,6 +47,10 @@ class MainUI:
     def get_entity_name():
         print("Enter the entity name")
         return input()
+    
+    def get_stock_symbol():
+        print("Enter the stock symbol that you want to link with the asset")
+        return input()
 
     @staticmethod
     def draw_logo():
@@ -129,9 +133,10 @@ class MainUI:
         MainUI.clear_screen()
         print("\nAsset Management Menu")
         print("1: Add asset")
-        print("2: Remove asset")
-        print("3: Calculate real time asset prices")
-        print("4: Add category for assets/liabilities")
+        print("2: View asset list")
+        print("3: Remove asset")
+        print("4: Calculate real time asset prices")
+        print("5: Add category for assets/liabilities")
         print("0: Return to main menu")
         return input()
     
@@ -219,10 +224,18 @@ class MainUI:
         MainUI.wait_for_user_input()
 
 
+    def empty_name():
+        print("Error: cannot enter an empty name")
 
+    def add_entity_success(entity_type): #should only ever be asset or liability
+        print(f"{entity_type} added successfully") #asset/liability added successfully
+        MainUI.wait_for_user_input()
 
+    def stock_not_found(stock):
+        print(f"{stock} was not found, please ensure correct spelling and that the stock is listed in yahoo finance")
+        
 
-
+    
 
 
 

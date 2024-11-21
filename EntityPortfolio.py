@@ -15,8 +15,9 @@ class EntityPortfolio:
     total_assets_value = 0.00
     total_liabilities_value = 0.00
     total_value = 0.00
-    next_entity_ID = 0  # will use this to ensure unique entity IDs, will increment every time we add a new entity, will not decrement when entity is deleted
+    next_entity_id = 0  # will use this to ensure unique entity IDs, will increment every time we add a new entity, will not decrement when entity is deleted
     category_list = []
+    entity_count = 0
 
     def __init__(self):
         self.name = "Default Category"  #create a default category for entites that do not get assigned a category
@@ -59,9 +60,9 @@ class EntityPortfolio:
     
     #add given entity as an asset
     def add_asset(self, entity: Entity):
-        self.entityCount += 1  # increment next_entity_ID 
-        entity.set_type("asset") #set entity type as asset
-        entity.set_entity_ID(self.next_entity_ID)
+        self.entity_count += 1  # increment next_entity_ID 
+        self.next_entity_id += 1
+        entity.set_entity_ID(self.next_entity_id)
         self.assets.append(entity)
         self.update_values()  # do this every time we add or remove an entity to ensure that we always give the user up-to-date information
         return True
@@ -72,14 +73,15 @@ class EntityPortfolio:
             if asset.get_entity_ID() == entity_ID:
                 self.assets.remove(asset)
                 self.update_values()
+                self.entity_count -= 1
                 return True
         print("Error: could not find the corresponding asset ID, please ensure you provide a valid entity ID")
         return False
     
     def add_liability(self, entity: Entity):
-        self.next_entity_ID += 1
-        entity.set_type("liability")
-        entity.set_entity_ID(self.next_entity_ID)
+        self.next_entity_id += 1
+        self.entity_count += 1
+        entity.set_entity_ID(self.next_entity_id)
         self.liabilities.append(entity)
         self.update_values()
         return True
@@ -89,6 +91,7 @@ class EntityPortfolio:
             if liability.get_entity_ID() == entity_ID:
                 self.liabilities.remove(liability)
                 self.update_values()
+                self.entity_count -= 1
                 return True
         print("Error: could not find the corresponding liability ID, please ensure you provide a valid entity ID")
         return False    
@@ -129,6 +132,11 @@ class EntityPortfolio:
         self.update_values()
         return self.total_value
         
+    
+    def print_assets(self):
+        print("Asset List:")
+        for item in self.assets:
+            item.print_entity()
             
     
     

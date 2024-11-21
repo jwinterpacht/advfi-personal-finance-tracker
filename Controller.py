@@ -42,10 +42,22 @@ class Controller:
         while not stop:
             value = MainUI.MainUI.get_entity_value()
             stop = Validator.validate_value(value)
+        return float(value)
     
     def _get_name():
-        name = MainUI.MainUI.get_entity_name()
+        stop = False
+        while not stop:
+            name = MainUI.MainUI.get_entity_name()
+            stop = Validator.validate_name(name)
         return name
+    
+    def _get_stock_symbol():
+        stop = False
+        while not stop:
+            stock = MainUI.MainUI.get_stock_symbol()
+            stop = Validator.validate_stock_symbol(stock)
+        return stock
+    
 
     def home_screen():
         #display main ui text
@@ -109,7 +121,6 @@ class Controller:
 
     
     def asset_management_menu():
-        
         stop = False
         while not stop:
             user_selection = MainUI.MainUI.asset_management_menu()
@@ -126,18 +137,31 @@ class Controller:
             stop = Validator.validate_yes_no(is_stock)
         
         num_owned = Controller._get_num_owned()
+        if num_owned == "":
+            num_owned = 1
         name = Controller._get_name()
         desc = Controller._get_desc()
 
-        if is_stock == "n":
+        if is_stock[0] == "n":
             value = Controller._get_entity_value()
             auto_update = False
-        elif is_stock == "y":
-            pass
+            stock_symbol = "n/a"
+        elif is_stock[0] == "y":
+            #can pass in value as 0 because we will automatically update it anyway
+            value = 0
+            auto_update = True #tell entity.py that this is a stock and that the symbol matters
+            stock_symbol = Controller._get_stock_symbol()        
+        #now that we have all the data we need to create a non stock asset, we will
+        #call a method in operations to do exactly that
+        Operations.add_entity_to_portfolio("asset", name, desc, value, num_owned, auto_update, stock_symbol)
 
 
-    
-    
+    def asset_management_menu_view_asset_list():
+        Operations.asset_management_menu_view_asset_list_operations()
+        MainUI.MainUI.wait_for_user_input()
+        Controller.home_screen()
+        
+
 
         
 
