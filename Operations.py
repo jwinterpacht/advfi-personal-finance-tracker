@@ -98,7 +98,10 @@ def asset_management_menu_operations(selection):
             Controller.Controller.asset_management_menu_view_asset_list()
 
 def asset_management_menu_view_asset_list_operations():
+    MainUI.MainUI.clear_screen()
     entity_portfolio.print_assets()
+
+
 
 '''
 type: string used to determine if entity is asset or liability
@@ -112,7 +115,7 @@ def add_entity_to_portfolio(type, name, desc, value, num_owned, auto_update, sto
     if type == "asset":
         EntityPortfolio.EntityPortfolio.add_asset(entity_portfolio, new_entity)
     elif type == "liability":
-        EntityPortfolio.EntityPortfolio.add_liability(new_entity)
+        EntityPortfolio.EntityPortfolio.add_liability(entity_portfolio, new_entity)
     
     MainUI.MainUI.add_entity_success(type)
 

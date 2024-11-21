@@ -47,6 +47,10 @@ class MainUI:
     def get_entity_name():
         print("Enter the entity name")
         return input()
+    
+    def get_stock_symbol():
+        print("Enter the stock symbol that you want to link with the asset")
+        return input()
 
     @staticmethod
     def draw_logo():
@@ -145,10 +149,6 @@ class MainUI:
     
 
 
-
-    
-
-
     @staticmethod
     def liability_management_menu():
         MainUI.clear_screen()
@@ -231,8 +231,11 @@ class MainUI:
         print(f"{entity_type} added successfully") #asset/liability added successfully
         MainUI.wait_for_user_input()
 
+    def stock_not_found(stock):
+        print(f"{stock} was not found, please ensure correct spelling and that the stock is listed in yahoo finance")
+        
 
-
+    
 
 
 

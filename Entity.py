@@ -22,13 +22,13 @@ class Entity:
     entity_ID = -1
 
     #constructor                          #change to enum
-    def __init__(self, entity_value:float, entity_amount:int, entity_name:str, entity_description="", entity_auto_update=False, entity_stock_symbol = "n/a"):  
+    def __init__(self, entity_value:float, entity_amount:int, entity_name:str, entity_description, entity_auto_update, entity_stock_symbol):  
         self.single_value = entity_value
         if entity_amount == "":
             self.amount = 1
         else:
-            self.amount = entity_amount
-        self.real_value = self.single_value * float(self.amount)
+            self.amount = int(entity_amount)
+        self.real_value = self.single_value * self.amount
         self.name = entity_name
         self.description = entity_description
         self.auto_update = entity_auto_update    # if an asset is set to auto-update, then we treat it like a stock
@@ -38,11 +38,11 @@ class Entity:
             if cur_price == None:
                 self.auto_update = False
                 print("Stock not found, cannot auto update")
-                return False
+                
             self.single_value = cur_price
             self.total_value = self.single_value * self.amount
             self.stock_symbol = entity_stock_symbol  # if a stock symbol is not provided, it will be assigned a default value of "n/a" 
-            return True
+            
     
     
     
@@ -59,7 +59,7 @@ class Entity:
     
     def get_total_value(self):
         if(self.auto_update):
-            self.single_value = get_stock_value()
+            self.single_value = get_stock_value(self.stock_symbol)
             self.real_value = self.amount * self.single_value
         return self.real_value
     
@@ -83,7 +83,7 @@ class Entity:
             self.auto_update_value() #get the most up to date value for the stock
             print(f"ID: {self.entity_ID}\tName: {self.name}\tValue: ${self.single_value}\tStock Symbol: {self.stock_symbol}\tDesc: {self.description}")
         elif self.auto_update == False:
-            print(f"ID: {self.entity_ID}\tName: {self.name}\tIndividual Value: {self.single_value}\tOwned: {self.amount}\tTotal Value: ${self.real_value}\tDesc: {self.description}")
+            print(f"ID: {self.entity_ID}\tName: {self.name}\tIndividual Value: ${self.single_value}\tOwned: {self.amount}\tTotal Value: ${self.real_value}\tDesc: {self.description}")
         else:
             self.auto_update_value() #get the most up to date value for the stock
             print(f"ID: {self.entity_ID}\tName: {self.name}\tIndividual Value: ${self.single_value}\tOwned: {self.amount}\tTotal Value: ${self.real_value}\tStock Symbol: {self.stock_symbol}\tDesc: {self.description}")
@@ -175,7 +175,7 @@ class Entity:
                 return False
             
             self.single_value = cur_price
-            self.total_value = self.amount * self.single_clear
+            self.total_value = self.amount * self.single_value
             return True
         
         print("Cannot auto update an asset that does not have the auto_update value set to true")
@@ -192,8 +192,6 @@ def get_stock_value(stock_symbol):
     cur_price = stock.fast_info.get("lastPrice")
 
     return cur_price
-            
-            
             
 
             
