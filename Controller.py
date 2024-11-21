@@ -160,6 +160,17 @@ class Controller:
         Operations.asset_management_menu_view_asset_list_operations()
         MainUI.MainUI.wait_for_user_input()
         Controller.home_screen()
+
+    def asset_management_menu_delete_asset():
+        #
+        stop = False
+        while not stop:
+            id = MainUI.MainUI.asset_management_menu_delete_asset()
+            stop = Validator.validate_entity_id("asset", id)
+        #once the asset id is validated we need to actually remove the asset
+        Operations.remove_entity_from_portfolio("asset", id)
+        Controller.home_screen()
+
         
 
 

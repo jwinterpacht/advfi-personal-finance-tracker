@@ -62,15 +62,15 @@ class EntityPortfolio:
     def add_asset(self, entity: Entity):
         self.entity_count += 1  # increment next_entity_ID 
         self.next_entity_id += 1
-        entity.set_entity_ID(self.next_entity_id)
+        entity.set_entity_id(self.next_entity_id)
         self.assets.append(entity)
         self.update_values()  # do this every time we add or remove an entity to ensure that we always give the user up-to-date information
         return True
         
     #will need to thoroughly test remove functions because I do not trust them to work first try
-    def remove_asset(self, entity_ID):
+    def remove_asset(self, entity_id):
         for asset in self.assets:
-            if asset.get_entity_ID() == entity_ID:
+            if asset.get_entity_id() == entity_id:
                 self.assets.remove(asset)
                 self.update_values()
                 self.entity_count -= 1
@@ -81,14 +81,14 @@ class EntityPortfolio:
     def add_liability(self, entity: Entity):
         self.next_entity_id += 1
         self.entity_count += 1
-        entity.set_entity_ID(self.next_entity_id)
+        entity.set_entity_id(self.next_entity_id)
         self.liabilities.append(entity)
         self.update_values()
         return True
     
-    def remove_liability(self, entity_ID):
+    def remove_liability(self, entity_id):
         for liability in self.liabilities:
-            if liability.get_entity_ID() == entity_ID:
+            if liability.get_entity_id() == entity_id:
                 self.liabilities.remove(liability)
                 self.update_values()
                 self.entity_count -= 1
@@ -111,6 +111,13 @@ class EntityPortfolio:
         self.total_assets_value = updated_asset_value
         self.total_liabilities_value = updated_liability_value
         self.total_value = updated_asset_value - updated_liability_value
+
+    #used by the validator class to check if a certain id was found in the asset list
+    def find_asset_id(self, asset_id):  #lets us handle any potential problems as early as possible
+        for item in self.assets:
+            if item.get_entity_id() == asset_id:
+                return True
+        return False
 
 
     #getters

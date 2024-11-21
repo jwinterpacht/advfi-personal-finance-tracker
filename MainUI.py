@@ -147,6 +147,12 @@ class MainUI:
         print("Would you like to link this asset with a stock? (y/n)")
         return input()
     
+    def asset_management_menu_delete_asset():
+        print("Delete Asset Menu:\n")
+        Operations.asset_management_menu_view_asset_list_operations()
+        print("Enter the ID of the income you would like to remove\nEnter -1 to cancel the operation")
+        return input()
+    
 
 
     @staticmethod
@@ -235,7 +241,9 @@ class MainUI:
         print(f"{stock} was not found, please ensure correct spelling and that the stock is listed in yahoo finance")
         
 
-    
+    def remove_entity_success(entity_type):
+        print(f"{entity_type} removed successfully")
+        MainUI.wait_for_user_input()
 
 
 

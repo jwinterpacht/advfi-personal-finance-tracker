@@ -3,7 +3,7 @@ import Transaction
 from datetime import datetime
 import MainUI
 import Entity
-
+import EntityPortfolio
 
 
 #-----------PRIVATE METHODS-------------------
@@ -142,4 +142,16 @@ def validate_stock_symbol(stock_symbol: str):
         return False
     #if we make it here, then the user input stock symbol is valid
     return True
-    
+
+def validate_entity_id(type: str, entity_id: str):
+    if not _validate_integer(entity_id):
+        return False
+    entity_id = int(entity_id)
+    if entity_id < -1:
+        print("Error: smallest allowed value is -1")
+        return False
+    if entity_id == -1: #action cancelled
+        return True
+    #Make sure that a transaction id that exists was entered
+    if type == "asset":
+        return Operations.entity_portfolio.find_asset_id(entity_id)

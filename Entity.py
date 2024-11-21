@@ -19,7 +19,7 @@ class Entity:
     description = "default description"
     auto_update = False
     stock_symbol = "n/a"
-    entity_ID = -1
+    entity_id = -1
 
     #constructor                          #change to enum
     def __init__(self, entity_value:float, entity_amount:int, entity_name:str, entity_description, entity_auto_update, entity_stock_symbol):  
@@ -48,8 +48,8 @@ class Entity:
     
     
     #getters
-    def get_entity_ID(self):
-        return self.entity_ID
+    def get_entity_id(self):
+        return self.entity_id
 
     def get_single_value(self):
         return self.single_value
@@ -75,26 +75,26 @@ class Entity:
     def get_stock_symbol(self):
         return self.stock_symbol
     
-        
+        #it would be pretty cool if we could get these to line up, but it's not a high priority
     def print_entity(self):
         if self.amount == 1 and self.auto_update == False:
-            print(f"ID: {self.entity_ID}\t\tName: {self.name}\t\tValue: ${self.single_value}\t\tDesc: {self.description}")
+            print(f"ID: {self.entity_id}\t\tName: {self.name}\t\tValue: ${self.single_value}\t\tDesc: {self.description}")
         elif self.amount == 1 and self.auto_update == True:
             self.auto_update_value() #get the most up to date value for the stock
-            print(f"ID: {self.entity_ID}\t\tName: {self.name}\t\tValue: ${self.single_value}\t\tStock Symbol: {self.stock_symbol}\t\tDesc: {self.description}")
+            print(f"ID: {self.entity_id}\t\tName: {self.name}\t\tValue: ${self.single_value}\t\tStock Symbol: {self.stock_symbol}\t\tDesc: {self.description}")
         elif self.auto_update == False:
-            print(f"ID: {self.entity_ID}\t\tName: {self.name}\t\tIndividual Value: ${self.single_value}\t\tOwned: {self.amount}\t\tTotal Value: ${self.real_value}\t\tDesc: {self.description}")
+            print(f"ID: {self.entity_id}\t\tName: {self.name}\t\tIndividual Value: ${self.single_value}\t\tOwned: {self.amount}\t\tTotal Value: ${self.real_value}\t\tDesc: {self.description}")
         else:
             self.auto_update_value() #get the most up to date value for the stock
-            print(f"ID: {self.entity_ID}\t\tName: {self.name}\t\tIndividual Value: ${self.single_value}\t\tOwned: {self.amount}\t\tTotal Value: ${self.real_value}\t\tStock Symbol: {self.stock_symbol}\t\tDesc: {self.description}")
+            print(f"ID: {self.entity_id}\t\tName: {self.name}\t\tIndividual Value: ${self.single_value}\t\tOwned: {self.amount}\t\tTotal Value: ${self.real_value}\t\tStock Symbol: {self.stock_symbol}\t\tDesc: {self.description}")
 
     
 
     
     #setters, they return true if successful, false if unsuccessful, 
-    def set_entity_ID(self, entity_ID):
-        if self.entity_ID == -1:
-            self.entity_ID = entity_ID
+    def set_entity_id(self, entity_id):
+        if self.entity_id == -1:
+            self.entity_id = entity_id
             return True
         else:
             print("entity ID was already assigned, cannot assign a new one")
