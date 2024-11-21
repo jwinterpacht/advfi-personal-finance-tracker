@@ -148,7 +148,6 @@ class MainUI:
         return input()
     
     def asset_management_menu_delete_asset():
-        print("Delete Asset Menu:\n")
         Operations.asset_management_menu_view_asset_list_operations()
         print("Enter the ID of the income you would like to remove\nEnter -1 to cancel the operation")
         return input()
