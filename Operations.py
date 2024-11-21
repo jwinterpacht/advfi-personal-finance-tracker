@@ -74,6 +74,10 @@ def create_and_add_transaction(amount, date, desc, type: str):
     
 def remove_transaction(transaction_id, type: str):
     transaction_id = int(transaction_id)
+    #allow for the user to cancel the action
+    if transaction_id == -1:
+        MainUI.MainUI.action_cancelled()
+        return
 
     found_id = False
     if type == "income":
@@ -96,6 +100,11 @@ def asset_management_menu_operations(selection):
             Controller.Controller.asset_management_menu_add_asset()
         case 2:
             Controller.Controller.asset_management_menu_view_asset_list()
+        case 3:
+            Controller.Controller.asset_management_menu_delete_asset()
+
+        case 0:
+            Controller.Controller.home_screen()
 
 def asset_management_menu_view_asset_list_operations():
     MainUI.MainUI.clear_screen()
@@ -122,9 +131,24 @@ def add_entity_to_portfolio(type, name, desc, value, num_owned, auto_update, sto
     Controller.Controller.home_screen()
 
 
+def remove_entity_from_portfolio(type, entity_id):
+    #since we have already checked to make sure that the entity id is in the respective list,
+    #we do not need to worry about that
+    entity_id = int(entity_id)
 
+    if entity_id == -1:
+        MainUI.MainUI.action_cancelled()
+        return
 
+    if type == "asset":
+        entity_portfolio.remove_asset(entity_id)
+
+    elif type == "liability":
+        entity_portfolio.remove_liability(entity_id)
     
+    MainUI.MainUI.remove_entity_success(type)
+    
+
 
 
 
