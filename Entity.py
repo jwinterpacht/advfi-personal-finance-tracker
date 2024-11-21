@@ -78,15 +78,15 @@ class Entity:
         
     def print_entity(self):
         if self.amount == 1 and self.auto_update == False:
-            print(f"ID: {self.entity_ID}\tName: {self.name}\tValue: ${self.single_value}\tDesc: {self.description}")
+            print(f"ID: {self.entity_ID}\t\tName: {self.name}\t\tValue: ${self.single_value}\t\tDesc: {self.description}")
         elif self.amount == 1 and self.auto_update == True:
             self.auto_update_value() #get the most up to date value for the stock
-            print(f"ID: {self.entity_ID}\tName: {self.name}\tValue: ${self.single_value}\tStock Symbol: {self.stock_symbol}\tDesc: {self.description}")
+            print(f"ID: {self.entity_ID}\t\tName: {self.name}\t\tValue: ${self.single_value}\t\tStock Symbol: {self.stock_symbol}\t\tDesc: {self.description}")
         elif self.auto_update == False:
-            print(f"ID: {self.entity_ID}\tName: {self.name}\tIndividual Value: ${self.single_value}\tOwned: {self.amount}\tTotal Value: ${self.real_value}\tDesc: {self.description}")
+            print(f"ID: {self.entity_ID}\t\tName: {self.name}\t\tIndividual Value: ${self.single_value}\t\tOwned: {self.amount}\t\tTotal Value: ${self.real_value}\t\tDesc: {self.description}")
         else:
             self.auto_update_value() #get the most up to date value for the stock
-            print(f"ID: {self.entity_ID}\tName: {self.name}\tIndividual Value: ${self.single_value}\tOwned: {self.amount}\tTotal Value: ${self.real_value}\tStock Symbol: {self.stock_symbol}\tDesc: {self.description}")
+            print(f"ID: {self.entity_ID}\t\tName: {self.name}\t\tIndividual Value: ${self.single_value}\t\tOwned: {self.amount}\t\tTotal Value: ${self.real_value}\t\tStock Symbol: {self.stock_symbol}\t\tDesc: {self.description}")
 
     
 
