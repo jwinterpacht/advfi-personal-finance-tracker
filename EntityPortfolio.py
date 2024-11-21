@@ -146,7 +146,10 @@ class EntityPortfolio:
             item.print_entity()
             
     
-    
+    def print_liabilities(self):
+        print("Liability List: ")
+        for item in self.liabilities:
+            item.print_entity()
     
 
     

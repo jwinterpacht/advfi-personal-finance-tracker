@@ -171,10 +171,34 @@ class Controller:
         Operations.remove_entity_from_portfolio("asset", id)
         Controller.home_screen()
 
-        
+    def liability_management_menu():
+        stop = False
+        while not stop:
+            user_selection = MainUI.MainUI.liability_management_menu()
+            stop = Validator.validate_menu_entry(user_selection, MainUI.MainUI.LIABILITY_MGMG_MENU_LOW, MainUI.MainUI.LIABILITY_MGMG_MENU_HIGH)
+        selection = int(user_selection)
+        print(selection)
+        Operations.liability_management_menu_operations(selection)
+
+    def liability_management_menu_add_liability():
+        print("test 3")
+        #since we will have no liabilies that auto update, we will not include stocks
+        #anyone who is smart enough to be shorting stocks is not really our taraget audience
+        num_owned = 1  #for sake of simplicity, we only allow one copy of each liability
+        name = Controller._get_name()
+        desc = Controller._get_desc()
+        value = Controller._get_entity_value()
+        auto_update = False
+        stock_symbol = "n/a"
+
+        Operations.add_entity_to_portfolio("liability", name, desc, value, num_owned, auto_update, stock_symbol)
 
 
-        
+
+    def liability_management_menu_view_liability_list():
+        Operations.liability_management_menu_view_liability_list_operations()
+        MainUI.MainUI.wait_for_user_input()
+        Controller.home_screen()
 
         
 

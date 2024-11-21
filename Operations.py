@@ -26,7 +26,7 @@ def home_screen_operations(selection):
             Controller.Controller.asset_management_menu()
         
         case 4: 
-            MainUI.MainUI.liability_management_menu()
+            Controller.Controller.liability_management_menu()
         
         case 5:
             MainUI.MainUI.financial_reports_menu()
@@ -110,6 +110,18 @@ def asset_management_menu_view_asset_list_operations():
     MainUI.MainUI.clear_screen()
     entity_portfolio.print_assets()
 
+def liability_management_menu_operations(selection):
+    match selection:
+        case 0:
+            Controller.Controller.home_screen()
+        case 1:
+            Controller.Controller.liability_management_menu_add_liability()
+        case 2:
+            Controller.Controller.liability_management_menu_view_liability_list()
+
+def liability_management_menu_view_liability_list_operations():
+    MainUI.MainUI.clear_screen()
+    entity_portfolio.print_liabilities()
 
 
 '''
