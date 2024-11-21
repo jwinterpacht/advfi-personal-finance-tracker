@@ -13,7 +13,10 @@ class MainUI:
     SPENDING_MGMT_MENU_LOW = 0
     SPENDING_MGMT_MENU_HIGH = 7
     ASSET_MGMT_MENU_LOW = 0
-    ASSET_MGMT_MENU_HIGH = 4
+    ASSET_MGMT_MENU_HIGH = 5
+    LIABILITY_MGMG_MENU_LOW = 0
+    LIABILITY_MGMG_MENU_HIGH = 5
+
 
     def clear_screen():
         #pass
@@ -152,17 +155,17 @@ class MainUI:
         print("Enter the ID of the income you would like to remove\nEnter -1 to cancel the operation")
         return input()
     
-
-
     @staticmethod
     def liability_management_menu():
         MainUI.clear_screen()
         print("\nLiability and Debt Managment Menu")
-        print("1: Add Liability")
-        print("2: Remove Liability")
-        print("3: Track outstanding debt and payment debt") #will allow user to make a payment and reduce the debt recorded in AdvFi
-        print("4: Add category for assets/liabilities")
+        print("1: Add liability")
+        print("2: View liability list")
+        print("3: Remove liability")
+        print("4: Track outstanding debt and payment debt") #will allow user to make a payment and reduce the debt recorded in AdvFi
+        print("5: Add category for assets/liabilities")
         print("0: Return to main menu")
+        return input()
 
     @staticmethod
     def financial_reports_menu():
