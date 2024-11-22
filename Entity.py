@@ -186,6 +186,8 @@ class Entity:
 
 #interface to get the stock value
 #should be treated as private
+#make own file
+#need api factory
 def get_stock_value(stock_symbol):
 
     stock = yfinance.Ticker(stock_symbol)
