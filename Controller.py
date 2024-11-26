@@ -359,8 +359,8 @@ class Controller:
     
 
 def main():
-    test_debt = Entity.Entity(50600.41, 1, "Student Debt", "", False, "n/a")
-    entity_portfolio.add_liability(test_debt)
+    #test_debt = Entity.Entity(50600.41, 1, "Student Debt", "", False, "n/a")
+    #entity_portfolio.add_liability(test_debt)
     Controller.home_screen()
 
 
