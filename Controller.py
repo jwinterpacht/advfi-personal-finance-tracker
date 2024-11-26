@@ -17,6 +17,8 @@ entity_portfolio = EntityPortfolio.EntityPortfolio()
 transaction_list = TransactionList.TransactionList()
 
 
+
+
 class Controller:
 
     #internal functions
@@ -66,13 +68,22 @@ class Controller:
             stop = Validator.validate_stock_symbol(stock)
         return stock
     
+    def _calculate_current_net_worth():
+        entity_portfolio.update_values()
+        net_worth = 0 #reset net worth value
+        net_worth += transaction_list.get_total_income()  #add total income
+        net_worth -= transaction_list.get_total_expenses() #add total expense
+        net_worth += entity_portfolio.total_value
+        return net_worth #now we have a complete picture of the net worth so we can just return that
+    
 
     def home_screen():
         #display main ui text
         #get user input and make sure user input is always valid
         stop = False
+        net_worth = Controller._calculate_current_net_worth()
         while(not stop):
-            user_selection = MainUI.MainUI.home_screen()
+            user_selection = MainUI.MainUI.home_screen(net_worth)
             stop = Validator.validate_home_screen_entry(user_selection)   
         selection = int(user_selection)
         match selection:
@@ -197,9 +208,10 @@ class Controller:
         Controller.home_screen()    
 
     def asset_management_menu():
+        assets_value = entity_portfolio.total_assets_value
         stop = False
         while not stop:
-            user_selection = MainUI.MainUI.asset_management_menu()
+            user_selection = MainUI.MainUI.asset_management_menu(assets_value)
             stop = Validator.validate_menu_entry(user_selection, MainUI.MainUI.ASSET_MGMT_MENU_LOW, MainUI.MainUI.ASSET_MGMT_MENU_HIGH)
         selection = int(user_selection)
         match selection:
@@ -209,7 +221,8 @@ class Controller:
                 Controller.asset_management_menu_view_asset_list()
             case 3:
                 Controller.asset_management_menu_delete_asset()
-
+            case 4:
+                Controller.asset_management_menu_update_assets()
             case 0:
                 Controller.home_screen()
 
@@ -239,6 +252,7 @@ class Controller:
         #now that we have all the data we need to create a non stock asset, we will
         #call a method in operations to do exactly that
         Operations.add_entity_to_portfolio(entity_portfolio, "asset", name, desc, value, num_owned, auto_update, stock_symbol)
+        Controller.home_screen()
 
 
     def asset_management_menu_view_asset_list():
@@ -247,13 +261,19 @@ class Controller:
         Controller.home_screen()
 
     def asset_management_menu_delete_asset():
-        #
+        #3
+        Operations.asset_management_menu_view_asset_list_operations(entity_portfolio)
         stop = False
         while not stop:
             id = MainUI.MainUI.asset_management_menu_delete_asset()
-            stop = Validator.validate_entity_id("asset", id)
+            stop = Validator.validate_entity_id(entity_portfolio, "asset", id)
         #once the asset id is validated we need to actually remove the asset
         Operations.remove_entity_from_portfolio(entity_portfolio, "asset", id)
+        Controller.home_screen()
+    
+    def asset_management_menu_update_assets():
+        EntityPortfolio.EntityPortfolio.update_values(entity_portfolio)
+        MainUI.MainUI.update_asset_values_success()
         Controller.home_screen()
 
     def liability_management_menu():
@@ -262,7 +282,6 @@ class Controller:
             user_selection = MainUI.MainUI.liability_management_menu()
             stop = Validator.validate_menu_entry(user_selection, MainUI.MainUI.LIABILITY_MGMG_MENU_LOW, MainUI.MainUI.LIABILITY_MGMG_MENU_HIGH)
         selection = int(user_selection)
-        print(selection)
         match selection:
                 case 0:
                     Controller.home_screen()
@@ -270,9 +289,13 @@ class Controller:
                     Controller.liability_management_menu_add_liability()
                 case 2:
                     Controller.liability_management_menu_view_liability_list()
+                case 3:
+                    Controller.liability_management_menu_make_liability_payment()
+                case 4:
+                    Controller.liability_management_menu_delete_liability()
 
     def liability_management_menu_add_liability():
-        print("test 3")
+        MainUI.MainUI.liability_management_menu_add_liability()
         #since we will have no liabilies that auto update, we will not include stocks
         #anyone who is smart enough to be shorting stocks is not really our taraget audience
         num_owned = 1  #for sake of simplicity, we only allow one copy of each liability
@@ -284,12 +307,39 @@ class Controller:
 
         Operations.add_entity_to_portfolio(entity_portfolio, "liability", name, desc, value, num_owned, auto_update, stock_symbol)
 
+        Controller.home_screen()
 
 
     def liability_management_menu_view_liability_list():
         Operations.liability_management_menu_view_liability_list_operations(entity_portfolio)
         MainUI.MainUI.wait_for_user_input()
         Controller.home_screen()
+
+    def liability_management_menu_make_liability_payment():
+        Operations.liability_management_menu_view_liability_list_operations(entity_portfolio)
+        stop = False
+        while not stop:
+            id = MainUI.MainUI.liability_management_menu_get_liability_id()
+            stop = Validator.validate_entity_id(entity_portfolio, "liability", id)
+        #once we have found the corresponding liability ID
+        #we get the amount that that the user has just paid into the liability
+        stop = False
+        while not stop:
+            payment = MainUI.MainUI.get_payment_value()
+            stop = Validator.validate_payment_debt(payment, entity_portfolio, id)
+        #now that the payment is validated, we have to apply it to the debt
+        Operations.make_liability_payment_operations(entity_portfolio, id, payment)
+        Controller.home_screen()
+    
+    def liability_management_menu_delete_liability():
+        Operations.liability_management_menu_view_liability_list_operations(entity_portfolio)
+        stop = False
+        while not stop:
+            id = MainUI.MainUI.liability_management_menu_get_liability_id()
+            stop = Validator.validate_entity_id(entity_portfolio, "liability", id)
+        Operations.remove_entity_from_portfolio(entity_portfolio, "liability", id)
+        Controller.home_screen()
+
 
         
 
@@ -309,6 +359,8 @@ class Controller:
     
 
 def main():
+    #test_debt = Entity.Entity(50600.41, 1, "Student Debt", "", False, "n/a")
+    #entity_portfolio.add_liability(test_debt)
     Controller.home_screen()
 
 

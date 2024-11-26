@@ -18,7 +18,7 @@ def _validate_integer(entry: str) -> bool:
         int(entry)
         return True
     except:
-        print("Please be sure to enter an integer")
+        MainUI.MainUI.integer_not_given()
         return False
 
 #used to check if a given string can be converted to float safely
@@ -27,7 +27,7 @@ def _validate_float(entry: str) -> bool:
         float(entry)
         return True
     except:
-        print("Please be sure to enter a number")
+        MainUI.MainUI.float_not_given()
         return False
 
 #another private method to check if the input integer is within a valid range
@@ -142,14 +142,15 @@ def validate_name(user_input: str):
 def validate_stock_symbol(stock_symbol: str):
     if stock_symbol == "":
         return False
+    
     stock_price = Entity.get_stock_value(stock_symbol)
     if stock_price == None:  #this means advfi couldn't find the corresponding stock
-        MainUI.MainUI.stock_not_found()
+        MainUI.MainUI.stock_not_found(stock_symbol)
         return False
     #if we make it here, then the user input stock symbol is valid
     return True
 
-def validate_entity_id(type: str, entity_id: str):
+def validate_entity_id(entity_portfolio, type: str, entity_id: str):
     if not _validate_integer(entity_id):
         return False
     entity_id = int(entity_id)
@@ -160,5 +161,23 @@ def validate_entity_id(type: str, entity_id: str):
         return True
     #Make sure that a transaction id that exists was entered
     if type == "asset":
-        return Operations.entity_portfolio.find_asset_id(entity_id)
-    
+        return entity_portfolio.find_asset_id(entity_id)
+    if type == "liability":
+        return entity_portfolio.find_liability_id(entity_id)
+    return False #if by some SM64 bit switching magic we find ourselves here, prevent the program from erroring out
+
+def validate_payment_debt(payment_value: str, entity_portfolio, entity_id):
+    entity_id = int(entity_id)
+    if not _validate_float(payment_value):
+        return False
+    payment_value = float(payment_value)
+    if payment_value <= 0:  #do not allow user to make a debt payment for zero dollars or negative dollars
+        MainUI.MainUI.pos_num_not_given()
+        return False
+    #make sure the user cannot pay more into the debt than the debt itself
+    #in other words: make sure the user cannot pay $200 into a $100 debt
+    debt_entity = entity_portfolio.get_entity(entity_id)
+    debt_value = debt_entity.get_single_value()
+    if debt_value < payment_value:
+        return False
+    return True

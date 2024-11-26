@@ -2,7 +2,6 @@ import MainUI
 import Transaction
 from datetime import datetime as dt
 import TransactionList
-import Controller
 import Entity
 import EntityPortfolio
 
@@ -10,7 +9,7 @@ import EntityPortfolio
 
 
 
-def create_and_add_transaction(transaction_list, amount, date, desc, type: str):
+def create_and_add_transaction(transaction_list: TransactionList, amount, date, desc, type: str):
     amount = float(amount)
     date = dt.strptime(date, '%m/%d/%y')
 
@@ -66,13 +65,12 @@ def add_entity_to_portfolio(entity_portfolio, type, name, desc, value, num_owned
 
     #now we need to add it to the respective list
     if type == "asset":
-        EntityPortfolio.EntityPortfolio.add_asset(entity_portfolio, new_entity)
+        entity_portfolio.add_asset(new_entity)
     elif type == "liability":
-        EntityPortfolio.EntityPortfolio.add_liability(entity_portfolio, new_entity)
-    
+        entity_portfolio.add_liability(new_entity)
+        
     MainUI.MainUI.add_entity_success(type)
 
-    Controller.Controller.home_screen()
 
 
 def remove_entity_from_portfolio(entity_portfolio, type, entity_id):
@@ -91,6 +89,16 @@ def remove_entity_from_portfolio(entity_portfolio, type, entity_id):
         entity_portfolio.remove_liability(entity_id)
     
     MainUI.MainUI.remove_entity_success(type)
+
+def make_liability_payment_operations(entity_portfolio, entity_id, payment_amount):
+    liability = entity_portfolio.get_entity(entity_id)
+    payment_amount = float(payment_amount)
+    new_entity_value = entity_portfolio.make_liability_payment(liability, payment_amount)
+    entity_portfolio.total_value += payment_amount
+    entity_portfolio.total_liabilities_value -= payment_amount
+    MainUI.MainUI.liability_payment_success(payment_amount, new_entity_value)
+    return entity_portfolio
+
     
 
 def print_transactions(transaction_list):
