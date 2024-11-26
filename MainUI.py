@@ -111,8 +111,8 @@ class MainUI:
         MainUI.clear_screen()
 
     @staticmethod
-    def income_management_menu_remove_income():
-        print("Enter the ID of the income you would like to remove\nEnter -1 to cancel the operation")
+    def remove_transaction():
+        print("\nEnter the ID of the transaction you would like to remove\nEnter -1 to cancel the operation")
         return input()
     
     @staticmethod
@@ -120,17 +120,23 @@ class MainUI:
         MainUI.clear_screen()
         print("\nSpending and Expense Management Menu")
         print("1: Add expense")
-        print("2: Import spending data from CSV")
-        print("3: Create recurring expenses")
-        print("4: Create new spending category")
-        print("5: Set budgets for spending categories")
-        print("6: Monitor budget adherence")
-        print("7: Delete transaction")
+        print("2: View expense list")
+        print("3: Delete expense")
+        print("--under construction--")
+        print("4: Import spending data from CSV")
+        print("5: Create new spending category")
+        print("6: Set budgets for spending categories")
+        print("7: Monitor budget adherence")
         print("0: Return to main menu")
         
         # return the user's input and give it to the Controller class
         return input()
     
+    @staticmethod
+    def spending_management_menu_add_expense():
+        MainUI.clear_screen()
+        print("Adding New Expense\n")
+
     @staticmethod
     def asset_management_menu():
         MainUI.clear_screen()
@@ -224,7 +230,6 @@ class MainUI:
     
     def remove_transaction_failure(transaction_id):
         print(f"Transaction ID {transaction_id} was not found in the given list, nothing was removed")
-        MainUI.wait_for_user_input()
 
     
     def action_cancelled():
@@ -246,6 +251,9 @@ class MainUI:
     def remove_entity_success(entity_type):
         print(f"{entity_type} removed successfully")
         MainUI.wait_for_user_input()
+
+    def exit_adv_fi():
+        print("Thank you for using AdvFi!")
 
 
 
