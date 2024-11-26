@@ -83,10 +83,10 @@ class MainUI:
         print("2: Spending and Expense Management Menu")
         print("3: Asset Management Menu")
         print("4: Liability and Debt Management Menu")
-        print("5: Fiancial Reports Menu")
+        print("5: Fiancial Reports Menu (not ready yet)")
         print("6: Retrieve Transactions")
-        print("7: Alert Center Menu")
-        print("8: Program Settings Menu")
+        print("7: Alert Center Menu (not ready yet)")
+        print("8: Program Settings Menu (not ready yet)")
         print("9: Exit AdvFi")
         return input()
 
@@ -144,8 +144,8 @@ class MainUI:
         print("1: Add asset")
         print("2: View asset list")
         print("3: Remove asset")
-        print("4: Calculate real time asset prices")
-        print("5: Add category for assets/liabilities")
+        print("4: Calculate real time asset prices (not ready yet)")
+        print("5: Add category for assets/liabilities (not ready yet)")
         print("0: Return to main menu")
         return input()
     
@@ -168,8 +168,8 @@ class MainUI:
         print("1: Add liability")
         print("2: View liability list")
         print("3: Remove liability")
-        print("4: Track outstanding debt and payment debt") #will allow user to make a payment and reduce the debt recorded in AdvFi
-        print("5: Add category for assets/liabilities")
+        print("4: Track outstanding debt and payment debt (not ready yet)") #will allow user to make a payment and reduce the debt recorded in AdvFi
+        print("5: Add category for assets/liabilities (not ready yet)")
         print("0: Return to main menu")
         return input()
 

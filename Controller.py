@@ -85,13 +85,16 @@ class Controller:
             case 4: 
                 Controller.liability_management_menu()
             case 5:
-                MainUI.MainUI.financial_reports_menu()
+                #Controller.financial_reports_menu()
+                pass
             case 6:
                 Controller.retrieve_transactions()
             case 7: 
-                MainUI.MainUI.alert_center_menu()
+                #Controller.alert_center_menu()
+                pass
             case 8:
-                MainUI.MainUI.program_settings_menu()
+                #Controller.program_settings_menu()
+                pass
             case 9:
                 MainUI.MainUI.exit_adv_fi()
                 exit(0)     
