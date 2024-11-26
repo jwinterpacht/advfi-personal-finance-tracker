@@ -44,15 +44,19 @@ class MainUI:
         return input()
     
     def get_entity_value():
-        print("Enter the entity value")
+        print("Enter the entity value:")
         return input("$")
     
     def get_entity_name():
-        print("Enter the entity name")
+        print("Enter the entity name:")
         return input()
     
     def get_stock_symbol():
-        print("Enter the stock symbol that you want to link with the asset")
+        print("Enter the stock symbol that you want to link with the asset:")
+        return input()
+
+    def get_payment_value():
+        print("Enter the value of the payment made towards paying off this debt: ")
         return input()
 
     @staticmethod
@@ -66,19 +70,19 @@ class MainUI:
 
 
     @staticmethod
-    def show_net_worth():
+    def show_net_worth(net_worth):
         #calculate networth and display it
-        net_worth = 20,000
-        print("\nCurrent Net Worth: $20,000\n")
+        
+        print(f"\nCurrent Net Worth: ${net_worth}\n")
         return
         
 
     @staticmethod
-    def home_screen():
+    def home_screen(net_worth):
         MainUI.clear_screen()
         print("\n\tWelcome to")
         MainUI.draw_logo()
-        MainUI.show_net_worth()
+        MainUI.show_net_worth(net_worth)
         print("1: Income Management Menu")
         print("2: Spending and Expense Management Menu")
         print("3: Asset Management Menu")
@@ -138,9 +142,10 @@ class MainUI:
         print("Adding New Expense\n")
 
     @staticmethod
-    def asset_management_menu():
+    def asset_management_menu(assets_value: float):
         MainUI.clear_screen()
-        print("\nAsset Management Menu")
+        print("Asset Management Menu\n")
+        print(f"Current total value of assets: ${assets_value}\n")
         print("1: Add asset")
         print("2: View asset list")
         print("3: Remove asset")
@@ -157,8 +162,7 @@ class MainUI:
         return input()
     
     def asset_management_menu_delete_asset():
-        Operations.asset_management_menu_view_asset_list_operations()
-        print("Enter the ID of the income you would like to remove\nEnter -1 to cancel the operation")
+        print("\nEntere the ID of the asset you would like to remove\nEnter -1 to cancel the operation")
         return input()
     
     @staticmethod
@@ -167,10 +171,21 @@ class MainUI:
         print("\nLiability and Debt Managment Menu")
         print("1: Add liability")
         print("2: View liability list")
-        print("3: Remove liability")
-        print("4: Track outstanding debt and payment debt (not ready yet)") #will allow user to make a payment and reduce the debt recorded in AdvFi
-        print("5: Add category for assets/liabilities (not ready yet)")
+        print("3: Make a payment towards a liability")
+        print("4: Remove liability")
+        print("5: Track outstanding debt and payment debt (not ready yet)") #will allow user to make a payment and reduce the debt recorded in AdvFi
+        print("6: Add category for assets/liabilities (not ready yet)")
         print("0: Return to main menu")
+        return input()
+    
+    @staticmethod
+    def liability_management_menu_add_liability():
+        MainUI.clear_screen()
+    
+    @staticmethod
+    def liability_management_menu_get_liability_id():
+        #no clearing screen here
+        print("Enter the ID of the desired liability:")
         return input()
 
     @staticmethod
@@ -245,7 +260,7 @@ class MainUI:
         MainUI.wait_for_user_input()
 
     def stock_not_found(stock):
-        print(f"{stock} was not found, please ensure correct spelling and that the stock is listed in yahoo finance")
+        print(f"{stock} was not found, please ensure correct spelling and that the stock is listed in yahoo finance\nAlso please ensure you are connected to the internet")
         
 
     def remove_entity_success(entity_type):
@@ -255,10 +270,23 @@ class MainUI:
     def exit_adv_fi():
         print("Thank you for using AdvFi!")
 
+    def update_asset_values_success():
+        MainUI.clear_screen()
+        print("All values have been updated with the most up-to-date prices")
+        MainUI.wait_for_user_input()
 
+    def integer_not_given():
+        print("Please be sure to enter an integer")
 
+    def float_not_given():
+        print("Please be sure to enter a number")
+    
+    def pos_num_not_given():
+        print("Please be sure to enter a number that is larger than zero")
 
-
+    def liability_payment_success(amount_paid, amount_left):
+        print(f"Sucessfully paid ${amount_paid}, ${amount_left} left to pay")
+        MainUI.wait_for_user_input()
 
 
 

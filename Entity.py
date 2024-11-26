@@ -11,16 +11,6 @@ import yfinance
 
 class Entity:
 
-    #create all of the instance variables and give them default values
-    single_value = 0.00                     # the value of one instance of the asset, useful for when a user owns multiple of the same asset
-    amount = 0                              # how many instances of the asset a user owns
-    real_value = 0.00                       # the value one instance of the asset multipled by the number of instances the user owns
-    name = "default name"
-    description = "default description"
-    auto_update = False
-    stock_symbol = "n/a"
-    entity_id = -1
-
     #constructor                          #change to enum
     def __init__(self, entity_value:float, entity_amount:int, entity_name:str, entity_description, entity_auto_update, entity_stock_symbol):  
         self.single_value = entity_value
@@ -43,7 +33,7 @@ class Entity:
             self.total_value = self.single_value * self.amount
             self.stock_symbol = entity_stock_symbol  # if a stock symbol is not provided, it will be assigned a default value of "n/a" 
             
-    
+        self.entity_id = -1
     
     
     
@@ -105,7 +95,7 @@ class Entity:
             print("Asset is set to auto update, cannot manually modify value")
             return False
         self.single_value = new_single_value
-        self.total_value = self.single_value * self.amount
+        self.total_value = self.single_value * float(self.amount)
         return True
     
     def set_amount(self, new_amount):
@@ -190,10 +180,14 @@ class Entity:
 #need api factory
 def get_stock_value(stock_symbol):
 
-    stock = yfinance.Ticker(stock_symbol)
-    cur_price = stock.fast_info.get("lastPrice")
+    try: 
+        stock = yfinance.Ticker(stock_symbol)
+        cur_price = stock.fast_info.get("lastPrice")
 
-    return cur_price
+        return cur_price
+    except:
+        return None
+
             
 
             
