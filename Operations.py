@@ -95,7 +95,6 @@ def remove_entity_from_portfolio(entity_portfolio, type, entity_id):
 
 
 
-
 def print_transactions(transaction_list):
     transaction_list.print_transactions()
 
