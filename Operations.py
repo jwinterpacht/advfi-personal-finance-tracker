@@ -6,58 +6,11 @@ import Controller
 import Entity
 import EntityPortfolio
 
-transaction_list = TransactionList.TransactionList()
-entity_portfolio = EntityPortfolio.EntityPortfolio()
 
 
-def home_screen_operations(selection):
-
-    selection = int(selection) #can safely cast here because this code cannot run otherwise
-
-    match selection:
-
-        case 1:
-            Controller.Controller.income_management_menu()
-
-        case 2:
-            MainUI.MainUI.spending_management_menu()
-        
-        case 3: 
-            Controller.Controller.asset_management_menu()
-        
-        case 4: 
-            Controller.Controller.liability_management_menu()
-        
-        case 5:
-            MainUI.MainUI.financial_reports_menu()
-        
-        case 6:
-            Controller.Controller.retrieve_transactions()
-        
-        case 7: 
-            MainUI.MainUI.alert_center_menu()
-        
-        case 8:
-            MainUI.MainUI.program_settings_menu()
-        
-        case 9:
-            print("Thank you for using AdvFi!")
-            exit(0)
 
 
-def income_management_menu_operations(selection):
-    match selection:
-        case 1:
-            Controller.Controller.income_management_menu_add_income()
-        case 2:
-            Controller.Controller.income_management_menu_view_income_list()
-        case 3:
-            Controller.Controller.income_management_menu_remove_income()
-        case 0:
-            Controller.Controller.home_screen()
-
-
-def create_and_add_transaction(amount, date, desc, type: str):
+def create_and_add_transaction(transaction_list, amount, date, desc, type: str):
     amount = float(amount)
     date = dt.strptime(date, '%m/%d/%y')
 
@@ -72,7 +25,7 @@ def create_and_add_transaction(amount, date, desc, type: str):
     else:
         print("error")
     
-def remove_transaction(transaction_id, type: str):
+def remove_transaction(transaction_list, transaction_id, type: str):
     transaction_id = int(transaction_id)
     #allow for the user to cancel the action
     if transaction_id == -1:
@@ -88,38 +41,17 @@ def remove_transaction(transaction_id, type: str):
     if found_id:
         MainUI.MainUI.remove_transaction_success()
     else:
-        MainUI.MainUI.remove_transaction_failure()
+        MainUI.MainUI.remove_transaction_failure(transaction_id)
 
-def retrieve_transaction_count():
+def retrieve_transaction_count(transaction_list):
     return transaction_list.get_transaction_count()
 
 
-def asset_management_menu_operations(selection):
-    match selection:
-        case 1:
-            Controller.Controller.asset_management_menu_add_asset()
-        case 2:
-            Controller.Controller.asset_management_menu_view_asset_list()
-        case 3:
-            Controller.Controller.asset_management_menu_delete_asset()
-
-        case 0:
-            Controller.Controller.home_screen()
-
-def asset_management_menu_view_asset_list_operations():
+def asset_management_menu_view_asset_list_operations(entity_portfolio):
     MainUI.MainUI.clear_screen()
     entity_portfolio.print_assets()
 
-def liability_management_menu_operations(selection):
-    match selection:
-        case 0:
-            Controller.Controller.home_screen()
-        case 1:
-            Controller.Controller.liability_management_menu_add_liability()
-        case 2:
-            Controller.Controller.liability_management_menu_view_liability_list()
-
-def liability_management_menu_view_liability_list_operations():
+def liability_management_menu_view_liability_list_operations(entity_portfolio):
     MainUI.MainUI.clear_screen()
     entity_portfolio.print_liabilities()
 
@@ -128,7 +60,7 @@ def liability_management_menu_view_liability_list_operations():
 type: string used to determine if entity is asset or liability
 
 '''
-def add_entity_to_portfolio(type, name, desc, value, num_owned, auto_update, stock_symbol):
+def add_entity_to_portfolio(entity_portfolio, type, name, desc, value, num_owned, auto_update, stock_symbol):
     #first we need to create the entity
     new_entity = Entity.Entity(value, num_owned, name, desc, auto_update, stock_symbol)
 
@@ -143,7 +75,7 @@ def add_entity_to_portfolio(type, name, desc, value, num_owned, auto_update, sto
     Controller.Controller.home_screen()
 
 
-def remove_entity_from_portfolio(type, entity_id):
+def remove_entity_from_portfolio(entity_portfolio, type, entity_id):
     #since we have already checked to make sure that the entity id is in the respective list,
     #we do not need to worry about that
     entity_id = int(entity_id)
@@ -164,13 +96,13 @@ def remove_entity_from_portfolio(type, entity_id):
 
 
 
-def print_transactions():
+def print_transactions(transaction_list):
     transaction_list.print_transactions()
 
 
-def print_income_list():
+def print_income_list(transaction_list):
     transaction_list.print_incomes()
 
-def print_expense_list():
+def print_expense_list(transaction_list):
     transaction_list.print_expenses()
 

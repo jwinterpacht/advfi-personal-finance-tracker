@@ -12,22 +12,18 @@ class TransactionList:
     def add_income_transaction(self, income: Transaction) -> None:
         self._transaction_count += 1  #increment our transaction count
         income.set_transaction_id(self._transaction_count)
-
         self._income_transactions.append(income)
         self._total_income += income._amount
     
     def add_expense_transaction(self, expense: Transaction) -> None:
         self._transaction_count += 1  #increment our transaction count
         expense.set_transaction_id(self._transaction_count)
-
         self._expense_transactions.append(expense)
         self._total_expenses += expense._amount
 
     def remove_income_transaction(self, transaction_id: int) -> bool:
         for income in self._income_transactions:
             if income._transaction_ID == transaction_id:
-                print(f"From list: {income._transaction_ID}")
-                print(f"From passed-in: {transaction_id}")
                 self._income_transactions.remove(income)
                 self._total_income -= income._amount
                 return True
@@ -35,20 +31,31 @@ class TransactionList:
     
     def remove_expense_transaction(self, transaction_id: int) -> bool:
         for expense in self._expense_transactions:
-            if expense.Transaction.get_transaction_id() == transaction_id:
-                self._income_transactions.remove(expense)
-                self.total_income -= expense._amount
+            if expense._transaction_ID == transaction_id:
+                self._expense_transactions.remove(expense)
+                self._total_expenses -= expense._amount
                 return True
         return False
     
     # Finds and returns transacton by its ID from income or expense transaction
     def get_transaction(self, transaction_id: int) -> Transaction:
         # Add the two lengths to find which ID they're in
-        for transaction in self.income_transactions + self.expense_transactions:
-            if transaction.transaction_id == transaction_id:
+        for transaction in self._income_transactions + self._expense_transactions:
+            if transaction._transaction_ID == transaction_id:
                 return transaction
         return None
     
+    def is_transaction_in_list(self, transaction_id: int, type: str) -> bool:
+        if type == "income":
+            for income in self._income_transactions:
+                if income._transaction_ID == transaction_id:
+                    return True
+        if type == "expense":
+            for expense in self._expense_transactions:
+                if expense._transaction_ID == transaction_id:
+                    return True
+        return False
+
     # Return the total income
     def get_total_income(self) -> float:
         return self._total_income

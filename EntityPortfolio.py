@@ -118,7 +118,7 @@ class EntityPortfolio:
             if item.get_entity_id() == asset_id:
                 return True
         return False
-
+    
 
     #getters
     def get_asset_list(self):

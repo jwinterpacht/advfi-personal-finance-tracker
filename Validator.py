@@ -4,6 +4,11 @@ from datetime import datetime
 import MainUI
 import Entity
 import EntityPortfolio
+import TransactionList
+
+transaction_list = TransactionList.TransactionList()
+entity_portfolio = EntityPortfolio.EntityPortfolio()
+
 
 
 #-----------PRIVATE METHODS-------------------
@@ -89,18 +94,19 @@ def are_transaction_details_valid(transaction_details: list, type: str) -> bool:
         Operations.create_and_add_transaction(transaction_details, type)
         pass
 
-def validate_transaction_id(transaction_id: str):
-    if not _validate_integer(transaction_id):
-        return False
+def validate_transaction_id(transaction_list, transaction_id: str, type):
+    if not _validate_integer(transaction_id): #if we do not have a valid integer
+        return False                            #automatically return false
     transaction_id = int(transaction_id)
     if transaction_id < -1:
         print("Error: smallest allowed value is -1")
         return False
+    if transaction_id == -1:  #always allow user to back out of deleting a transaction
+        return True
     #Make sure that a transaction id that exists was entered
-    if transaction_id > Operations.retrieve_transaction_count():
-        MainUI.MainUI.remove_transaction_failure(transaction_id)
-        return False
-    return True
+    if TransactionList.TransactionList.is_transaction_in_list(transaction_list, transaction_id, type):
+        return True
+    return False
 
 
 
@@ -155,3 +161,4 @@ def validate_entity_id(type: str, entity_id: str):
     #Make sure that a transaction id that exists was entered
     if type == "asset":
         return Operations.entity_portfolio.find_asset_id(entity_id)
+    

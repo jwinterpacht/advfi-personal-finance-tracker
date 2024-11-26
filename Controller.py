@@ -7,6 +7,14 @@ My current mood: https://www.youtube.com/watch?v=9wtvXoXh0VU
 import MainUI
 import Validator
 import Operations
+import EntityPortfolio
+import Entity
+import Transaction
+import TransactionList
+
+
+entity_portfolio = EntityPortfolio.EntityPortfolio()
+transaction_list = TransactionList.TransactionList()
 
 
 class Controller:
@@ -66,8 +74,27 @@ class Controller:
         while(not stop):
             user_selection = MainUI.MainUI.home_screen()
             stop = Validator.validate_home_screen_entry(user_selection)   
-        Operations.home_screen_operations(user_selection)
-    
+        selection = int(user_selection)
+        match selection:
+            case 1:
+                Controller.income_management_menu()
+            case 2:
+                Controller.spending_management_menu()
+            case 3: 
+                Controller.asset_management_menu()
+            case 4: 
+                Controller.liability_management_menu()
+            case 5:
+                MainUI.MainUI.financial_reports_menu()
+            case 6:
+                Controller.retrieve_transactions()
+            case 7: 
+                MainUI.MainUI.alert_center_menu()
+            case 8:
+                MainUI.MainUI.program_settings_menu()
+            case 9:
+                MainUI.MainUI.exit_adv_fi()
+                exit(0)     
 
     def income_management_menu():
         #display the main ui text
@@ -77,7 +104,15 @@ class Controller:
             user_selection = MainUI.MainUI.income_management_menu()
             stop = Validator.validate_menu_entry(user_selection, MainUI.MainUI.INCOME_MGMT_MENU_LOW, MainUI.MainUI.INCOME_MGMT_MENU_HIGH)
         selection = int(user_selection)
-        Operations.income_management_menu_operations(selection)
+        match selection:
+            case 1:
+                Controller.income_management_menu_add_income()
+            case 2:
+                Controller.income_management_menu_view_income_list()
+            case 3:
+                Controller.income_management_menu_remove_income()
+            case 0:
+                Controller.home_screen()
 
     
     def income_management_menu_add_income():
@@ -86,27 +121,27 @@ class Controller:
         date = Controller._get_date()
         desc = Controller._get_desc()
 
-        Operations.create_and_add_transaction(amount, date, desc, "income")
+        Operations.create_and_add_transaction(transaction_list, amount, date, desc, "income")
         MainUI.MainUI.add_transaction_success()
         Controller.home_screen()
 
     def income_management_menu_view_income_list():
         MainUI.MainUI.income_management_menu_view_income_list()
-        Operations.print_income_list()
+        Operations.print_income_list(transaction_list)
         MainUI.MainUI.wait_for_user_input()
         Controller.home_screen()
 
     
     def income_management_menu_remove_income():
         MainUI.MainUI.income_management_menu_view_income_list() #display the income list
-        Operations.print_income_list()                          #so the user can find the relevant ID
+        Operations.print_income_list(transaction_list)                          #so the user can find the relevant ID
 
         stop = False
         while not stop:
-            income_id = MainUI.MainUI.income_management_menu_remove_income() 
-            stop = Validator.validate_transaction_id(income_id)
+            income_id = MainUI.MainUI.remove_transaction() 
+            stop = Validator.validate_transaction_id(transaction_list, income_id, "income")
 
-        Operations.remove_transaction(income_id, "income")
+        Operations.remove_transaction(transaction_list, income_id, "income")
         Controller.home_screen()
 
     def spending_management_menu():
@@ -117,16 +152,63 @@ class Controller:
             user_selection = MainUI.MainUI.spending_management_menu()
             stop = Validator.validate_menu_entry(user_selection, MainUI.MainUI.SPENDING_MGMT_MENU_LOW, MainUI.MainUI.SPENDING_MGMT_MENU_HIGH)
         selection = int(user_selection)
-        Operations.income_management_menu_operations(selection)
+        print(selection)
+        match selection:
+            case 0:
+                Controller.home_screen()
+            case 1: 
+                Controller.spending_management_menu_add_expense()
+            case 2:
+                Controller.spending_management_menu_view_expense_list()
+            case 3:
+                Controller.spending_management_menu_delete_expense()
+            case 4:
+                #Controller.spending_management_menu_import_spending_CSV()
+                pass
 
+    def spending_management_menu_add_expense():
+        MainUI.MainUI.spending_management_menu_add_expense()
+        amount = Controller._get_transaction_amount()
+        date = Controller._get_date()
+        desc = Controller._get_desc()
+
+        Operations.create_and_add_transaction(transaction_list, amount, date, desc, "expense")
+        MainUI.MainUI.add_transaction_success()
+        Controller.home_screen()
     
+    def spending_management_menu_view_expense_list():
+        MainUI.MainUI.clear_screen()
+        Operations.print_expense_list(transaction_list)
+        MainUI.MainUI.wait_for_user_input()
+        Controller.home_screen()
+    
+    def spending_management_menu_delete_expense():
+        MainUI.MainUI.clear_screen() #
+        Operations.print_expense_list(transaction_list)
+
+        stop = False
+        while not stop:
+            expense_id = MainUI.MainUI.remove_transaction() 
+            stop = Validator.validate_transaction_id(transaction_list, expense_id, "expense")
+        Operations.remove_transaction(transaction_list, expense_id, "expense")
+        Controller.home_screen()    
+
     def asset_management_menu():
         stop = False
         while not stop:
             user_selection = MainUI.MainUI.asset_management_menu()
             stop = Validator.validate_menu_entry(user_selection, MainUI.MainUI.ASSET_MGMT_MENU_LOW, MainUI.MainUI.ASSET_MGMT_MENU_HIGH)
         selection = int(user_selection)
-        Operations.asset_management_menu_operations(selection)
+        match selection:
+            case 1:
+                Controller.asset_management_menu_add_asset()
+            case 2:
+                Controller.asset_management_menu_view_asset_list()
+            case 3:
+                Controller.asset_management_menu_delete_asset()
+
+            case 0:
+                Controller.home_screen()
 
         
     def asset_management_menu_add_asset():
@@ -153,11 +235,11 @@ class Controller:
             stock_symbol = Controller._get_stock_symbol()        
         #now that we have all the data we need to create a non stock asset, we will
         #call a method in operations to do exactly that
-        Operations.add_entity_to_portfolio("asset", name, desc, value, num_owned, auto_update, stock_symbol)
+        Operations.add_entity_to_portfolio(entity_portfolio, "asset", name, desc, value, num_owned, auto_update, stock_symbol)
 
 
     def asset_management_menu_view_asset_list():
-        Operations.asset_management_menu_view_asset_list_operations()
+        Operations.asset_management_menu_view_asset_list_operations(entity_portfolio)
         MainUI.MainUI.wait_for_user_input()
         Controller.home_screen()
 
@@ -168,7 +250,7 @@ class Controller:
             id = MainUI.MainUI.asset_management_menu_delete_asset()
             stop = Validator.validate_entity_id("asset", id)
         #once the asset id is validated we need to actually remove the asset
-        Operations.remove_entity_from_portfolio("asset", id)
+        Operations.remove_entity_from_portfolio(entity_portfolio, "asset", id)
         Controller.home_screen()
 
     def liability_management_menu():
@@ -178,7 +260,13 @@ class Controller:
             stop = Validator.validate_menu_entry(user_selection, MainUI.MainUI.LIABILITY_MGMG_MENU_LOW, MainUI.MainUI.LIABILITY_MGMG_MENU_HIGH)
         selection = int(user_selection)
         print(selection)
-        Operations.liability_management_menu_operations(selection)
+        match selection:
+                case 0:
+                    Controller.home_screen()
+                case 1:
+                    Controller.liability_management_menu_add_liability()
+                case 2:
+                    Controller.liability_management_menu_view_liability_list()
 
     def liability_management_menu_add_liability():
         print("test 3")
@@ -191,12 +279,12 @@ class Controller:
         auto_update = False
         stock_symbol = "n/a"
 
-        Operations.add_entity_to_portfolio("liability", name, desc, value, num_owned, auto_update, stock_symbol)
+        Operations.add_entity_to_portfolio(entity_portfolio, "liability", name, desc, value, num_owned, auto_update, stock_symbol)
 
 
 
     def liability_management_menu_view_liability_list():
-        Operations.liability_management_menu_view_liability_list_operations()
+        Operations.liability_management_menu_view_liability_list_operations(entity_portfolio)
         MainUI.MainUI.wait_for_user_input()
         Controller.home_screen()
 
@@ -206,7 +294,7 @@ class Controller:
         
     def retrieve_transactions():
         MainUI.MainUI.retrieve_transactions()
-        Operations.print_transactions()
+        Operations.print_transactions(transaction_list)
         MainUI.MainUI.wait_for_user_input()
         Controller.home_screen()
         
