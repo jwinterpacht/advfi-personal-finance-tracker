@@ -99,6 +99,11 @@ def make_liability_payment_operations(entity_portfolio, entity_id, payment_amoun
     MainUI.MainUI.liability_payment_success(payment_amount, new_entity_value)
     return entity_portfolio
 
+def liability_management_menu_track_debt_operations(entity_portfolio):
+    debt_status = entity_portfolio.get_debt_status()
+    return debt_status
+
+
     
 
 def print_transactions(transaction_list):

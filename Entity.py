@@ -34,6 +34,7 @@ class Entity:
             self.stock_symbol = entity_stock_symbol  # if a stock symbol is not provided, it will be assigned a default value of "n/a" 
             
         self.entity_id = -1
+        self.initial_value = self.single_value #only to be used by liabilities to help track how much has been paid
     
     
     
@@ -170,7 +171,8 @@ class Entity:
         
         print("Cannot auto update an asset that does not have the auto_update value set to true")
         return False
-
+    
+    
 
     
 

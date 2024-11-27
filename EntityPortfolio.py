@@ -181,3 +181,10 @@ class EntityPortfolio:
         self.total_value += payment_amount
         return new_value
     
+    def get_debt_status(self):
+        debt_status = ""
+        for debt in self.liabilities:
+            percentage_paid = ((debt.initial_value - debt.single_value) / debt.initial_value) * 100
+            temp_str = f"ID: {debt.entity_id}\tName: {debt.name}\tCurrent Value: ${debt.single_value}\tStarting Value: ${debt.initial_value}\tPercentage Paid: {percentage_paid:.2f}%\n"
+            debt_status += temp_str
+        return debt_status
