@@ -173,7 +173,7 @@ class MainUI:
         print("2: View liability list")
         print("3: Make a payment towards a liability")
         print("4: Remove liability")
-        print("5: Track outstanding debt and payment debt (not ready yet)") #will allow user to make a payment and reduce the debt recorded in AdvFi
+        print("5: Track outstanding debt and payment debt (not ready yet)") 
         print("6: Add category for assets/liabilities (not ready yet)")
         print("0: Return to main menu")
         return input()
@@ -288,5 +288,10 @@ class MainUI:
         print(f"Sucessfully paid ${amount_paid}, ${amount_left} left to pay")
         MainUI.wait_for_user_input()
 
+    def liability_track_debt(debt_status: str):
+        MainUI.clear_screen()
+        print("Debt Tracking\n")
+        print(debt_status)
+        MainUI.wait_for_user_input()
 
 

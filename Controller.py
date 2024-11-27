@@ -293,6 +293,8 @@ class Controller:
                     Controller.liability_management_menu_make_liability_payment()
                 case 4:
                     Controller.liability_management_menu_delete_liability()
+                case 5:
+                    Controller.liability_management_menu_track_debt()
 
     def liability_management_menu_add_liability():
         MainUI.MainUI.liability_management_menu_add_liability()
@@ -340,6 +342,13 @@ class Controller:
         Operations.remove_entity_from_portfolio(entity_portfolio, "liability", id)
         Controller.home_screen()
 
+    def liability_management_menu_track_debt():
+        #print out each debt and how much is left to be paid
+        debt_status = Operations.liability_management_menu_track_debt_operations(entity_portfolio)
+        MainUI.MainUI.liability_track_debt(debt_status)
+        Controller.home_screen()
+
+
 
         
 
@@ -359,8 +368,8 @@ class Controller:
     
 
 def main():
-    #test_debt = Entity.Entity(50600.41, 1, "Student Debt", "", False, "n/a")
-    #entity_portfolio.add_liability(test_debt)
+    test_debt = Entity.Entity(100, 1, "Student Debt", "", False, "n/a")
+    entity_portfolio.add_liability(test_debt)
     Controller.home_screen()
 
 
