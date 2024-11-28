@@ -17,7 +17,6 @@ class MainUI:
     LIABILITY_MGMG_MENU_LOW = 0
     LIABILITY_MGMG_MENU_HIGH = 5
 
-
     def clear_screen():
         #pass
         # for Windows
@@ -58,6 +57,33 @@ class MainUI:
     def get_payment_value():
         print("Enter the value of the payment made towards paying off this debt: ")
         return input()
+
+    def create_password():
+        MainUI.clear_screen()
+        print("Welcome to Adv-Fi, your personal finance tracker")
+        print("We will start by creating a password that you will use to log in, please store this password in a safe place.")
+        return input()
+    
+    def get_password():
+        MainUI.clear_screen()
+        print("Welcome back!")
+        print("Please enter the password you previously set, if you forgot this password and would like to reset it, enter -1")
+        return input()
+    
+    def invalid_password():
+        print("That password was incorrect, please re-enter your password correctly or enter -1 to reset your password")
+        return input()
+    
+    def create_pin():
+        print("Here we will set up a 4 digit pin, this pin will be used to reset your password should you forget it.")
+        #print("NOTE: YOU WILL BE LOCKED OUT OF YOUR ACCOUNT IF YOU FORGET BOTH YOUR PASSWORD AND PIN")
+        print("NOTE: you WILL be locked out of your account if you forget both your password and pin")
+        return input()
+    
+    def invalid_pin():
+        print("That pin was not valid, please input 4 digits then press enter")
+        return input()
+    
 
     @staticmethod
     def draw_logo():
@@ -233,6 +259,10 @@ class MainUI:
     #typically used before going back to the home screen
     def wait_for_user_input():
         return input(input_text) #don't actually need to return anything
+    
+    def account_creation_success():
+        print("Account created successfully!")
+        MainUI.wait_for_user_input()
 
     def add_transaction_success():
         print("Transaction added successfully!")
@@ -292,6 +322,7 @@ class MainUI:
         MainUI.clear_screen()
         print("Debt Tracking\n")
         print(debt_status)
+
         MainUI.wait_for_user_input()
 
 

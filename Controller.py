@@ -11,10 +11,12 @@ import EntityPortfolio
 import Entity
 import Transaction
 import TransactionList
+import UserAccount
 
 
 entity_portfolio = EntityPortfolio.EntityPortfolio()
 transaction_list = TransactionList.TransactionList()
+account = UserAccount.UserAccount()
 
 
 
@@ -76,6 +78,25 @@ class Controller:
         net_worth += entity_portfolio.total_value
         return net_worth #now we have a complete picture of the net worth so we can just return that
     
+    def new_user_setup():
+        new_pass = MainUI.MainUI.create_password()  #always assume the password is valid
+
+        new_pin = MainUI.MainUI.create_pin()
+        while not Validator.validate_pin(new_pin):
+            new_pin = MainUI.MainUI.invalid_pin()
+
+        #create the account using the information input by the user
+        Operations.create_user_account_operations(account, new_pass, new_pin)
+
+        #send the user to the home screen
+        Controller.home_screen()
+    
+    def user_login():
+        password = MainUI.MainUI.get_password()
+
+        while not Validator.validate_password(account, password):
+            password = MainUI.MainUI.invalid_password()
+
 
     def home_screen():
         #display main ui text
@@ -368,10 +389,18 @@ class Controller:
     
 
 def main():
+    if True: #change this to True for testing the whole program, False to bypass everything
+        if account.new_user == True:  #if we have a new user
+            Controller.new_user_setup()
+            pass
+        else:
+            Controller.user_login()
+
     test_debt = Entity.Entity(100, 1, "Student Debt", "", False, "n/a")
     entity_portfolio.add_liability(test_debt)
     Controller.home_screen()
 
 
 if __name__ == "__main__":
+
     main()

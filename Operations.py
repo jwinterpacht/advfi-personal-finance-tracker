@@ -4,8 +4,14 @@ from datetime import datetime as dt
 import TransactionList
 import Entity
 import EntityPortfolio
+import UserAccount
 
 
+def create_user_account_operations(account: UserAccount, password: str, pin: str):
+    account.new_user = False
+    account.set_password(password)
+    account.set_pin(pin)
+    
 
 
 
