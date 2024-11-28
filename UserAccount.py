@@ -1,11 +1,22 @@
 import TransactionList
 import EntityPortfolio
 
-class userAccount:
-    def __init__(self, username, password):
-        self._username = username
-        self._password = password
-        self._entity_portfolio = []
-        self._transaction_list = []
-        self._net_worth = 0.0
-        
+class UserAccount:
+    def __init__(self):
+        #self._username = username
+        self.new_user = True  #only hardcode this to False in testing
+        self._password = "admin"
+        self._pin = "1515"
+
+    def set_password(self, new_password):
+        self._password = new_password
+    
+    def set_pin(self, new_pin):
+        self._pin = new_pin
+    
+    #pass in the password to the user account instead of bringing the actual password from the user account
+    #increases overall program security
+    def check_password(self, input_password):
+        if self._password == input_password:
+            return True
+        return False

@@ -5,6 +5,7 @@ import MainUI
 import Entity
 import EntityPortfolio
 import TransactionList
+import UserAccount
 
 transaction_list = TransactionList.TransactionList()
 entity_portfolio = EntityPortfolio.EntityPortfolio()
@@ -181,3 +182,16 @@ def validate_payment_debt(payment_value: str, entity_portfolio, entity_id):
     if debt_value < payment_value:
         return False
     return True
+
+#use to validate user pin entry, only allow pins of length 4 and only numbers
+def validate_pin(pin: str):
+    if len(pin) != 4:
+        return False
+    if not _validate_integer(pin):
+        return False
+    if int(pin) < 0:
+        return False #do not allow negative pins because that's just silly
+    return True
+
+def validate_password(account: UserAccount, input_password: str):
+    return account.check_password(input_password)
