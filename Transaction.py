@@ -8,6 +8,7 @@ class Transaction:
         self._amount = amount
         self._transaction_date = transaction_date
         self._description = description
+        self._category_name = ""
     
     # return the transaction ID
     def get_transaction_id(self) -> str:
@@ -44,5 +45,19 @@ class Transaction:
     def set_description(self, description: str) -> None:
         self._description = description
 
+    def set_category_name(self, category_name: str) -> None:
+        self._category_name = category_name
+    
+    def get_category_name(self) -> str:
+        return self._category_name
+
     def print_transaction(self) -> None:
-        print("ID: {}\tAmount: {}\tDate: {}\tDescription: {}".format(self._transaction_ID, self._amount, self._transaction_date.date(), self._description))
+        id = f"ID: {self._transaction_ID}"
+        amount = f"Amount: {self._amount}"
+        transaction_date = f"Date: {self._transaction_date.date()}"
+        desc = f"Description: {self._description}"
+        category = f"Category: {self._category_name}"
+        info = f"{id}\t{amount}\t{transaction_date}\t{desc}"
+        if self._category_name != "":
+            info += f"\tCategory: {self._category_name}"
+        return info

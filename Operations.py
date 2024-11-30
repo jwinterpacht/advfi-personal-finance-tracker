@@ -5,6 +5,8 @@ import TransactionList
 import Entity
 import EntityPortfolio
 import UserAccount
+import Category
+import CategoryList
 
 
 def create_user_account_operations(account: UserAccount, password: str, pin: str):
@@ -50,6 +52,16 @@ def remove_transaction(transaction_list, transaction_id, type: str):
 
 def retrieve_transaction_count(transaction_list):
     return transaction_list.get_transaction_count()
+
+def categorize_transaction(transaction_list: TransactionList, category_list: CategoryList, transaction_id: str, category_name: str, type: str):
+    category = category_list.get_category(category_name)
+    transaction = transaction_list.get_transaction(transaction_id)
+
+    if type == "income":
+        category.add_income(transaction)
+    elif type == "expense":
+        category.add_expense(transaction)
+    transaction.set_category_name(category_name)
 
 
 def asset_management_menu_view_asset_list_operations(entity_portfolio):
@@ -110,6 +122,12 @@ def liability_management_menu_track_debt_operations(entity_portfolio):
     return debt_status
 
 
+def category_management_menu_add_category_operations(category_list, new_cat_name, new_cat_desc):
+    #create a new category using the provided information
+    new_cat = Category.Category(new_cat_name, new_cat_desc)
+    #add that new category to the list
+    category_list.add_category(new_cat)
+    
     
 
 def print_transactions(transaction_list):
@@ -117,7 +135,7 @@ def print_transactions(transaction_list):
 
 
 def print_income_list(transaction_list):
-    transaction_list.print_incomes()
+    return transaction_list.print_incomes()
 
 def print_expense_list(transaction_list):
     transaction_list.print_expenses()

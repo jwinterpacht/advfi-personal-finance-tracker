@@ -6,6 +6,8 @@ import Entity
 import EntityPortfolio
 import TransactionList
 import UserAccount
+import Category
+import CategoryList
 
 transaction_list = TransactionList.TransactionList()
 entity_portfolio = EntityPortfolio.EntityPortfolio()
@@ -34,14 +36,14 @@ def _validate_float(entry: str) -> bool:
 #another private method to check if the input integer is within a valid range
 def _validate_selection_range(selection: int, low_end: int, high_end: int) -> bool:
     if selection > high_end or selection < low_end: 
-        print("Please enter an integer between {} and {}".format(low_end, high_end))
+        MainUI.MainUI.invalid_selection_range(low_end, high_end)
         return False
     return True
 
 def validate_home_screen_entry(entry: str) -> bool:
     #technically for speed this should be implemented below the validate integer
     #however this is more readable
-    low_end = 1
+    low_end = 0
     high_end = 9
 
     #if validate integer returns false
@@ -134,11 +136,28 @@ def validate_yes_no(user_input: str):
     return False
 
 #used to ensure that the user did not leave the space blank
-def validate_name(user_input: str):
+def validate_entity_name(user_input: str):
     if user_input == "":
         MainUI.MainUI.empty_name()
         return False
     return True
+
+def validate_new_category_name(category_list: CategoryList, user_input: str):
+    if len(user_input) == 0:
+        return False
+    name_list = category_list.get_category_names()
+    if user_input in name_list:
+        MainUI.MainUI.category_name_already_exists(user_input)
+        return False
+    return True
+
+def validate_category_name(category_list: CategoryList, user_input: str):
+    category = category_list.get_category(user_input)
+    if category == None:
+        MainUI.MainUI.category_not_found()
+        return False
+    return True
+
 
 def validate_stock_symbol(stock_symbol: str):
     if stock_symbol == "":
@@ -176,7 +195,7 @@ def validate_payment_debt(payment_value: str, entity_portfolio, entity_id):
         MainUI.MainUI.pos_num_not_given()
         return False
     #make sure the user cannot pay more into the debt than the debt itself
-    #in other words: make sure the user cannot pay $200 into a $100 debt
+    #in other words: make sure the user cannot pay $200 into a $100 debt beacuse that would just be silly
     debt_entity = entity_portfolio.get_entity(entity_id)
     debt_value = debt_entity.get_single_value()
     if debt_value < payment_value:

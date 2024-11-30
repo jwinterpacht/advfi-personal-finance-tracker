@@ -1,6 +1,3 @@
-import Validator
-import Operations
-
 import os
 
 input_text = ""
@@ -9,13 +6,15 @@ input_text = ""
 class MainUI:
     # class variables
     INCOME_MGMT_MENU_LOW = 0
-    INCOME_MGMT_MENU_HIGH = 3
+    INCOME_MGMT_MENU_HIGH = 4
     SPENDING_MGMT_MENU_LOW = 0
     SPENDING_MGMT_MENU_HIGH = 7
     ASSET_MGMT_MENU_LOW = 0
     ASSET_MGMT_MENU_HIGH = 5
-    LIABILITY_MGMG_MENU_LOW = 0
-    LIABILITY_MGMG_MENU_HIGH = 5
+    LIABILITY_MGMT_MENU_LOW = 0
+    LIABILITY_MGMT_MENU_HIGH = 5
+    CATEGORY_MGMT_MENU_LOW = 0
+    CATEGORY_MGMT_MENU_HIGH = 4
 
     def clear_screen():
         #pass
@@ -48,6 +47,18 @@ class MainUI:
     
     def get_entity_name():
         print("Enter the entity name:")
+        return input()
+    
+    def get_new_category_name(category_names):
+        MainUI.clear_screen()
+        print(category_names)
+        print("Enter the name for the new category:\nPlease note, this name must be unique as category names are not allowed to repeat")
+        return input()
+    
+    def get_category_name(category_names):
+        MainUI.clear_screen()
+        print(category_names)
+        print("Enter the name of the category you would like to associate the item with, please ensure correct spelling")
         return input()
     
     def get_stock_symbol():
@@ -117,7 +128,8 @@ class MainUI:
         print("6: Retrieve Transactions")
         print("7: Alert Center Menu (not ready yet)")
         print("8: Program Settings Menu (not ready yet)")
-        print("9: Exit AdvFi")
+        print("9: Category Menu")
+        print("0: Exit AdvFi")
         return input()
 
     @staticmethod
@@ -127,6 +139,7 @@ class MainUI:
         print("1: Add income")
         print("2: View income list")
         print("3: Delete income")
+        print("4: Categorize incomes")
         print("0: Return to main menu")
         return input()
     
@@ -137,13 +150,32 @@ class MainUI:
         return
 
     @staticmethod
-    def income_management_menu_view_income_list():
+    def income_management_menu_view_income_list(income_list):
         MainUI.clear_screen()
+        print(income_list)
+        MainUI.wait_for_user_input()
+
+    
+    @staticmethod
+    def categorize_transaction(transaction_list):
+        #MainUI.clear_screen()
+        print(transaction_list)
+        print("\nEnter the ID of the transaction you would like to categorize\nEnter -1 to cancel the operation")
+        return input()
 
     @staticmethod
-    def remove_transaction():
+    def categorize_transaction_success():
+        print("Transaction categorized successfully!")
+        MainUI.wait_for_user_input()
+
+
+    @staticmethod
+    def remove_transaction(transaction_list: str):
+        MainUI.clear_screen()
+        print(transaction_list)
         print("\nEnter the ID of the transaction you would like to remove\nEnter -1 to cancel the operation")
         return input()
+
     
     @staticmethod
     def spending_management_menu():
@@ -154,7 +186,7 @@ class MainUI:
         print("3: Delete expense")
         print("--under construction--")
         print("4: Import spending data from CSV")
-        print("5: Create new spending category")
+        print("5: Categorize expenses")
         print("6: Set budgets for spending categories")
         print("7: Monitor budget adherence")
         print("0: Return to main menu")
@@ -175,8 +207,8 @@ class MainUI:
         print("1: Add asset")
         print("2: View asset list")
         print("3: Remove asset")
-        print("4: Calculate real time asset prices (not ready yet)")
-        print("5: Add category for assets/liabilities (not ready yet)")
+        print("4: Calculate real time asset prices")
+        print("5: Categorize assets")
         print("0: Return to main menu")
         return input()
     
@@ -199,8 +231,8 @@ class MainUI:
         print("2: View liability list")
         print("3: Make a payment towards a liability")
         print("4: Remove liability")
-        print("5: Track outstanding debt and payment debt (not ready yet)") 
-        print("6: Add category for assets/liabilities (not ready yet)")
+        print("5: Track outstanding debt and payment debt") 
+        print("6: Categorize liabilities")
         print("0: Return to main menu")
         return input()
     
@@ -245,12 +277,37 @@ class MainUI:
     @staticmethod
     def program_settings_menu():
         MainUI.clear_screen()
-        print("\nProgram Settings Menu")
+        print("\nProgram Settings Menu:")
         print("1: change password")
         print("2: delete user account")
         print("0: Return to main menu")
 
+    @staticmethod
+    def category_menu():
+        MainUI.clear_screen()
+        print("\nCategory Menu:")
+        print("1: Add a new category")
+        print("2: View all current category names")
+        print("3: View all current categories with their associated transactions and entites")
+        print("4: Delete a category")
+        print("0: Return to main menu")
+        return input()
 
+    @staticmethod
+    def category_menu_show_category_names(name_list) -> None:
+        MainUI.clear_screen()
+        print("Category List:")
+        print(*name_list)
+        MainUI.wait_for_user_input()        
+
+    @staticmethod
+    def category_menu_show_category_list_info(category_list_info: str) -> None:
+        MainUI.clear_screen()
+        print("Category List Info:")
+        print(category_list_info)
+        MainUI.wait_for_user_input()
+
+    #more category stuff!!
 
 
     #other misc classes
@@ -318,11 +375,29 @@ class MainUI:
         print(f"Sucessfully paid ${amount_paid}, ${amount_left} left to pay")
         MainUI.wait_for_user_input()
 
-    def liability_track_debt(debt_status: str):
+    def liability_track_debt(debt_status: str) -> None:
         MainUI.clear_screen()
         print("Debt Tracking\n")
         print(debt_status)
 
         MainUI.wait_for_user_input()
 
+    def category_name_already_exists(cat_name: str) -> None:
+        print(f"The category name '{cat_name}' is already in use, please provide a new name or delete/modify the old one")
+        MainUI.wait_for_user_input()
+    
+    def category_added_success(cat_name:str) -> None:
+        print(f"The category {cat_name} was added successfully")
+        MainUI.wait_for_user_input()
 
+    def category_not_found() -> None:
+        MainUI.clear_screen()
+        print("The provided category name could not be found, please ensure correct spelling and capitalization")
+        MainUI.wait_for_user_input()
+
+
+    def invalid_selection_range(low_end: int, high_end: int) -> None:
+        print("Please enter an integer between {} and {}".format(low_end, high_end))
+        MainUI.wait_for_user_input()
+
+    

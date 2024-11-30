@@ -38,8 +38,9 @@ class TransactionList:
         return False
     
     # Finds and returns transacton by its ID from income or expense transaction
-    def get_transaction(self, transaction_id: int) -> Transaction:
+    def get_transaction(self, transaction_id) -> Transaction:
         # Add the two lengths to find which ID they're in
+        transaction_id = int(transaction_id)
         for transaction in self._income_transactions + self._expense_transactions:
             if transaction._transaction_ID == transaction_id:
                 return transaction
@@ -73,9 +74,10 @@ class TransactionList:
             expense.print_transaction()
     
     def print_incomes(self) -> None:
-        print("\nIncome List:")
+        income_list = "Income List:\n"
         for income in self._income_transactions:
-            income.print_transaction()
+            income_list += income.print_transaction()
+        return income_list
     
     def print_transactions(self) -> None:
         TransactionList.print_expenses(self)
