@@ -12,11 +12,14 @@ import Entity
 import Transaction
 import TransactionList
 import UserAccount
+import CategoryList
+import Category
 
 
 entity_portfolio = EntityPortfolio.EntityPortfolio()
 transaction_list = TransactionList.TransactionList()
 account = UserAccount.UserAccount()
+category_list = CategoryList.CategoryList()
 
 
 
@@ -56,11 +59,18 @@ class Controller:
             stop = Validator.validate_value(value)
         return float(value)
     
-    def _get_name():
+    def _get_entity_name():
         stop = False
         while not stop:
             name = MainUI.MainUI.get_entity_name()
-            stop = Validator.validate_name(name)
+            stop = Validator.validate_entity_name(name)
+        return name
+    
+    def _get_category_name():
+        stop = False
+        while not stop:
+            name = MainUI.MainUI.get_new_category_name(category_list.get_category_names_str())
+            stop = Validator.validate_new_category_name(category_list, name)
         return name
     
     def _get_stock_symbol():
@@ -128,6 +138,8 @@ class Controller:
                 #Controller.program_settings_menu()
                 pass
             case 9:
+                Controller.category_management_menu() 
+            case 0:
                 MainUI.MainUI.exit_adv_fi()
                 exit(0)     
 
@@ -146,6 +158,8 @@ class Controller:
                 Controller.income_management_menu_view_income_list()
             case 3:
                 Controller.income_management_menu_remove_income()
+            case 4:
+                Controller.income_management_menu_categorize_income()
             case 0:
                 Controller.home_screen()
 
@@ -161,23 +175,48 @@ class Controller:
         Controller.home_screen()
 
     def income_management_menu_view_income_list():
-        MainUI.MainUI.income_management_menu_view_income_list()
-        Operations.print_income_list(transaction_list)
-        MainUI.MainUI.wait_for_user_input()
+        income_list = Operations.print_income_list(transaction_list)
+        MainUI.MainUI.income_management_menu_view_income_list(income_list)
         Controller.home_screen()
 
     
     def income_management_menu_remove_income():
-        MainUI.MainUI.income_management_menu_view_income_list() #display the income list
-        Operations.print_income_list(transaction_list)                          #so the user can find the relevant ID
+        income_list = Operations.print_income_list(transaction_list)                          #so the user can find the relevant ID
 
         stop = False
         while not stop:
-            income_id = MainUI.MainUI.remove_transaction() 
+            income_id = MainUI.MainUI.remove_transaction(income_list) 
             stop = Validator.validate_transaction_id(transaction_list, income_id, "income")
 
         Operations.remove_transaction(transaction_list, income_id, "income")
         Controller.home_screen()
+    
+    def income_management_menu_categorize_income():
+        """
+        oh boy time to actually categorize everything
+        1. print out all of the categories
+        2. print out all of our incomes, with their IDs
+        3. the user can then type an income ID followed by the target category
+        4. by pressing enter when nothing was typed, user will be sent back to the home screen        
+        """
+        income_list = Operations.print_income_list(transaction_list)
+
+        stop = False
+        while not stop:  #get the ID of the income we are going to categorize
+            income_id = MainUI.MainUI.categorize_transaction(income_list)
+            stop = Validator.validate_transaction_id(transaction_list, income_id, "income")
+        
+        category_list_names = category_list.get_category_names_str()
+        stop = False
+        while not stop:   #get the target category
+            category_name = MainUI.MainUI.get_category_name(category_list_names)
+            stop = Validator.validate_category_name(category_list, category_name)
+        
+        #once we have both, now we will call the operator to assign the income to the category
+        Operations.categorize_transaction(transaction_list, category_list, income_id, category_name, "income")
+        MainUI.MainUI.categorize_transaction_success()
+        Controller.home_screen()
+        
 
     def spending_management_menu():
         #display the main ui text
@@ -258,7 +297,7 @@ class Controller:
         num_owned = Controller._get_num_owned()
         if num_owned == "":
             num_owned = 1
-        name = Controller._get_name()
+        name = Controller._get_entity_name()
         desc = Controller._get_desc()
 
         if is_stock[0] == "n":
@@ -322,7 +361,7 @@ class Controller:
         #since we will have no liabilies that auto update, we will not include stocks
         #anyone who is smart enough to be shorting stocks is not really our taraget audience
         num_owned = 1  #for sake of simplicity, we only allow one copy of each liability
-        name = Controller._get_name()
+        name = Controller._get_entity_name()
         desc = Controller._get_desc()
         value = Controller._get_entity_value()
         auto_update = False
@@ -380,21 +419,63 @@ class Controller:
         Operations.print_transactions(transaction_list)
         MainUI.MainUI.wait_for_user_input()
         Controller.home_screen()
-        
-        
 
+    
+    def category_management_menu():
+        stop = False
+        while not stop:
+            user_selection = MainUI.MainUI.category_menu()       
+            stop = Validator.validate_menu_entry(user_selection, MainUI.MainUI.LIABILITY_MGMT_MENU_LOW, MainUI.MainUI.LIABILITY_MGMT_MENU_HIGH)
+        selection = int(user_selection)
+        match selection:
+                case 0:
+                    Controller.home_screen()
+                case 1:
+                    Controller.category_management_menu_add_category()
+                case 2:
+                    Controller.category_management_menu_view_category_names()
+                case 3:
+                    Controller.category_management_menu_view_category_list_info()
+    
+    def category_management_menu_add_category():
+        #need name and description
+        #also need to ensure the name is unique
+        cat_name = Controller._get_category_name()
+        cat_desc = Controller._get_desc()
+        #now that we have a name and description, we will send the data to operations
+        #so that operations can create the category, then add it to the list
+        Operations.category_management_menu_add_category_operations(category_list, cat_name, cat_desc)
+
+        #let the user know that the category has been added successfully
+        MainUI.MainUI.category_added_success(cat_name)
+        #send user to the home screen
+        Controller.home_screen()
+        
+    def category_management_menu_view_category_names():
+        #go to the category list and grab the category name list
+        category_name_list = category_list.get_category_names()
+        #send to MainUI
+        MainUI.MainUI.category_menu_show_category_names(category_name_list)
+        Controller.home_screen()
+    
+    def category_management_menu_view_category_list_info():
+        category_list_info = category_list.get_category_list_info()
+        MainUI.MainUI.category_menu_show_category_list_info(category_list_info)
+        Controller.home_screen()
 
         
 
     
 
 def main():
-    if True: #change this to True for testing the whole program, False to bypass everything
+    if False: #change this to True for testing the whole program, False to bypass everything
         if account.new_user == True:  #if we have a new user
             Controller.new_user_setup()
             pass
         else:
             Controller.user_login()
+    
+
 
     test_debt = Entity.Entity(100, 1, "Student Debt", "", False, "n/a")
     entity_portfolio.add_liability(test_debt)
