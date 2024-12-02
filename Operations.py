@@ -56,29 +56,47 @@ def retrieve_transaction_count(transaction_list):
 def categorize_transaction(transaction_list: TransactionList, category_list: CategoryList, transaction_id: str, category_name: str, type: str):
     category = category_list.get_category(category_name)
     transaction = transaction_list.get_transaction(transaction_id)
-
+    if transaction.get_category_name() != "":
+        old_category = category_list.get_category(transaction.get_category_name())
     if type == "income":
         category.add_income(transaction)
     elif type == "expense":
         category.add_expense(transaction)
     transaction.set_category_name(category_name)
 
+def categorize_entity(entity_list: EntityPortfolio, category_list: CategoryList, entity_id: str, category_name: str, type: str) -> None:
+    category = category_list.get_category(category_name)
+    entity = entity_list.get_entity(entity_id)
+    #we have this part here to ensure that when you recategorize an entity, it is removed from the previous category
+    if entity.get_category_name() != "":
+        old_category = category_list.get_category(entity.get_category_name())
+        if type == "asset":
+            old_category.remove_asset(entity)
+        elif type == "liability":
+            old_category.remove_liability(entity)
+        
+    if type == "asset":
+        category.add_asset(entity)
+    elif type == "liability":
+        category.add_liability(entity)
+    entity.set_category_name(category_name)
+
 
 def asset_management_menu_view_asset_list_operations(entity_portfolio):
-    MainUI.MainUI.clear_screen()
-    entity_portfolio.print_assets()
+    return entity_portfolio.print_assets()
 
 def liability_management_menu_view_liability_list_operations(entity_portfolio):
-    MainUI.MainUI.clear_screen()
-    entity_portfolio.print_liabilities()
+    return entity_portfolio.print_liabilities()
 
 
 '''
 type: string used to determine if entity is asset or liability
 
 '''
-def add_entity_to_portfolio(entity_portfolio, type, name, desc, value, num_owned, auto_update, stock_symbol):
+def add_entity_to_portfolio(entity_portfolio, type: str, name, desc, value, num_owned, auto_update: bool, stock_symbol: str):
     #first we need to create the entity
+    value = float(value)
+    num_owned = int(num_owned)
     new_entity = Entity.Entity(value, num_owned, name, desc, auto_update, stock_symbol)
 
     #now we need to add it to the respective list
@@ -127,6 +145,13 @@ def category_management_menu_add_category_operations(category_list, new_cat_name
     new_cat = Category.Category(new_cat_name, new_cat_desc)
     #add that new category to the list
     category_list.add_category(new_cat)
+    return
+
+def category_management_menu_delete_category_operations(category_list: CategoryList, cat_name: str) -> None:
+    category_list.remove_category(cat_name)
+    MainUI.MainUI.category_menu_delete_category_success(cat_name)
+    return
+
     
     
 
@@ -138,5 +163,6 @@ def print_income_list(transaction_list):
     return transaction_list.print_incomes()
 
 def print_expense_list(transaction_list):
-    transaction_list.print_expenses()
+    return transaction_list.print_expenses()
+
 

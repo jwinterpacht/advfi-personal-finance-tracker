@@ -36,6 +36,7 @@ class Entity:
         self.entity_id = -1
         self.initial_value = self.single_value #only to be used by liabilities to help track how much has been paid
     
+        self.category_name = ""
     
     
     #getters
@@ -66,21 +67,28 @@ class Entity:
     def get_stock_symbol(self):
         return self.stock_symbol
     
-        #it would be pretty cool if we could get these to line up, but it's not a high priority
+    #it would be pretty cool if we could get these to line up, but it's not a high priority
     def print_entity(self):
-        if self.amount == 1 and self.auto_update == False:
-            print(f"ID: {self.entity_id}\t\tName: {self.name}\t\tValue: ${self.single_value}\t\tDesc: {self.description}")
-        elif self.amount == 1 and self.auto_update == True:
-            self.auto_update_value() #get the most up to date value for the stock
-            print(f"ID: {self.entity_id}\t\tName: {self.name}\t\tValue: ${self.single_value}\t\tStock Symbol: {self.stock_symbol}\t\tDesc: {self.description}")
-        elif self.auto_update == False:
-            print(f"ID: {self.entity_id}\t\tName: {self.name}\t\tIndividual Value: ${self.single_value}\t\tOwned: {self.amount}\t\tTotal Value: ${self.real_value}\t\tDesc: {self.description}")
+        id = f"ID: {self.entity_id}\t\t"
+        name = f"Name: {self.name}\t\t"
+        if self.amount == 1:
+            value = f"Value: ${self.single_value:.2f}\t\t"
         else:
-            self.auto_update_value() #get the most up to date value for the stock
-            print(f"ID: {self.entity_id}\t\tName: {self.name}\t\tIndividual Value: ${self.single_value}\t\tOwned: {self.amount}\t\tTotal Value: ${self.real_value}\t\tStock Symbol: {self.stock_symbol}\t\tDesc: {self.description}")
+            value = f"Value: ${self.single_value:.2f}\t\tOwned: {self.amount}\t\tTotal Value: ${self.real_value:.2f}\t\t"
+        desc = f"Desc: {self.description}"
+        entity_info = f"{id}{name}{value}"
+        if self.auto_update == True:
+            entity_info += f"Stock Symbol: {self.stock_symbol}\t\t"
+        if self.category_name != "":
+            entity_info += f"Category: {self.category_name}\t\t"
+        entity_info += f"{desc}\n"
+        return entity_info
 
+    def set_category_name(self, cat_name):
+        self.category_name = cat_name
     
-
+    def get_category_name(self) -> str:
+        return self.category_name
     
     #setters, they return true if successful, false if unsuccessful, 
     def set_entity_id(self, entity_id):

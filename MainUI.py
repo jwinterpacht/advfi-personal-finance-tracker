@@ -12,7 +12,7 @@ class MainUI:
     ASSET_MGMT_MENU_LOW = 0
     ASSET_MGMT_MENU_HIGH = 5
     LIABILITY_MGMT_MENU_LOW = 0
-    LIABILITY_MGMT_MENU_HIGH = 5
+    LIABILITY_MGMT_MENU_HIGH = 6
     CATEGORY_MGMT_MENU_LOW = 0
     CATEGORY_MGMT_MENU_HIGH = 4
 
@@ -52,13 +52,13 @@ class MainUI:
     def get_new_category_name(category_names):
         MainUI.clear_screen()
         print(category_names)
-        print("Enter the name for the new category:\nPlease note, this name must be unique as category names are not allowed to repeat")
+        print("Enter the name for the new category:\nPlease note, this name must be unique as category names are not allowed to repeat\nEnter -1 if you would like to cancel this operation")
         return input()
     
     def get_category_name(category_names):
-        MainUI.clear_screen()
-        print(category_names)
-        print("Enter the name of the category you would like to associate the item with, please ensure correct spelling")
+        #MainUI.clear_screen()
+        print(f"\n{category_names}")
+        print("Enter the name of the category you would like to associate the item with, please ensure correct spelling\nEnter -1 to cancel this operation")
         return input()
     
     def get_stock_symbol():
@@ -110,7 +110,7 @@ class MainUI:
     def show_net_worth(net_worth):
         #calculate networth and display it
         
-        print(f"\nCurrent Net Worth: ${net_worth}\n")
+        print(f"\nCurrent Net Worth: ${net_worth:.2f}\n")
         return
         
 
@@ -149,25 +149,39 @@ class MainUI:
         print("Adding New Income \n")
         return
 
+    #used to print whatever you pass in, does not add anything
+    #perfect for printing incomes, expenses, and reminders not to text your ex
     @staticmethod
-    def income_management_menu_view_income_list(income_list):
+    def utility_print(info: str):
         MainUI.clear_screen()
-        print(income_list)
+        print(info)
         MainUI.wait_for_user_input()
+
 
     
     @staticmethod
     def categorize_transaction(transaction_list):
-        #MainUI.clear_screen()
+        MainUI.clear_screen()
         print(transaction_list)
-        print("\nEnter the ID of the transaction you would like to categorize\nEnter -1 to cancel the operation")
+        print("Enter the ID of the transaction you would like to categorize\nEnter -1 to cancel this operation")
         return input()
 
     @staticmethod
     def categorize_transaction_success():
         print("Transaction categorized successfully!")
         MainUI.wait_for_user_input()
-
+    
+    @staticmethod
+    def categorize_entity(entity_list):
+        MainUI.clear_screen()
+        print(entity_list)
+        print("Enter the ID of the item you would like to categorize\nEnter -1 to cancel this operation")
+        return input()
+    
+    @staticmethod
+    def categorize_entity_success():
+        print("Item categorized successfully!")
+        MainUI.wait_for_user_input()
 
     @staticmethod
     def remove_transaction(transaction_list: str):
@@ -186,7 +200,7 @@ class MainUI:
         print("3: Delete expense")
         print("--under construction--")
         print("4: Import spending data from CSV")
-        print("5: Categorize expenses")
+        print("5: Categorize expenses (hopefully working)")
         print("6: Set budgets for spending categories")
         print("7: Monitor budget adherence")
         print("0: Return to main menu")
@@ -219,8 +233,10 @@ class MainUI:
         print("Would you like to link this asset with a stock? (y/n)")
         return input()
     
-    def asset_management_menu_delete_asset():
-        print("\nEntere the ID of the asset you would like to remove\nEnter -1 to cancel the operation")
+    def asset_management_menu_delete_asset(asset_list):
+        MainUI.clear_screen()
+        print(asset_list)
+        print("\nEnter the ID of the asset you would like to remove\nEnter -1 to cancel the operation")
         return input()
     
     @staticmethod
@@ -241,8 +257,9 @@ class MainUI:
         MainUI.clear_screen()
     
     @staticmethod
-    def liability_management_menu_get_liability_id():
-        #no clearing screen here
+    def liability_management_menu_get_liability_id(liability_list):
+        MainUI.clear_screen()
+        print(liability_list)
         print("Enter the ID of the desired liability:")
         return input()
 
@@ -288,7 +305,7 @@ class MainUI:
         print("\nCategory Menu:")
         print("1: Add a new category")
         print("2: View all current category names")
-        print("3: View all current categories with their associated transactions and entites")
+        print("3: View all current categories with their number of associated transactions and entites")
         print("4: Delete a category")
         print("0: Return to main menu")
         return input()
@@ -296,19 +313,25 @@ class MainUI:
     @staticmethod
     def category_menu_show_category_names(name_list) -> None:
         MainUI.clear_screen()
-        print("Category List:")
-        print(*name_list)
+        print(name_list)
         MainUI.wait_for_user_input()        
 
     @staticmethod
     def category_menu_show_category_list_info(category_list_info: str) -> None:
         MainUI.clear_screen()
-        print("Category List Info:")
         print(category_list_info)
         MainUI.wait_for_user_input()
-
-    #more category stuff!!
-
+    
+    @staticmethod
+    def category_menu_delete_category(category_list_info: str) -> None:
+        MainUI.clear_screen()
+        print(category_list_info)
+        print("Enter a category name to delete, please ensure correct spelling\nEnter -1 to cancel this operation")
+        return input()
+    @staticmethod
+    def category_menu_delete_category_success(deleted_category_name: str) -> None:
+        print(f"Category '{deleted_category_name}' was deleted successfully")
+        MainUI.wait_for_user_input()
 
     #other misc classes
 
@@ -391,13 +414,16 @@ class MainUI:
         MainUI.wait_for_user_input()
 
     def category_not_found() -> None:
-        MainUI.clear_screen()
+        #MainUI.clear_screen()
         print("The provided category name could not be found, please ensure correct spelling and capitalization")
         MainUI.wait_for_user_input()
 
-
     def invalid_selection_range(low_end: int, high_end: int) -> None:
         print("Please enter an integer between {} and {}".format(low_end, high_end))
+        MainUI.wait_for_user_input()
+
+    def error_no_categories():
+        print("You cannot categorize an item without first creating a category using the category menu")
         MainUI.wait_for_user_input()
 
     

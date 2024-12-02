@@ -152,6 +152,8 @@ def validate_new_category_name(category_list: CategoryList, user_input: str):
     return True
 
 def validate_category_name(category_list: CategoryList, user_input: str):
+    if user_input == "-1":
+        return True
     category = category_list.get_category(user_input)
     if category == None:
         MainUI.MainUI.category_not_found()
