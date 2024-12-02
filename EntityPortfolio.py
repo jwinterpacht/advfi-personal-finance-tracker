@@ -148,15 +148,16 @@ class EntityPortfolio:
         
     
     def print_assets(self):
-        print("Asset List:")
+        asset_list = "Asset List:\n"
         for item in self.assets:
-            item.print_entity()
+            asset_list += item.print_entity()
+        return asset_list
             
-    
     def print_liabilities(self):
-        print("Liability List: ")
+        liability_list = ("Liability List:\n")
         for item in self.liabilities:
-            item.print_entity()
+            liability_list += item.print_entity()
+        return liability_list
     
     def get_liability_value(self, liability_id):
         for liability in self.liabilities:

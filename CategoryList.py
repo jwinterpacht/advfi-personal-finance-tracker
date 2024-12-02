@@ -20,8 +20,10 @@ class CategoryList:
 
     def remove_category(self, category_name: str) -> bool:
         for i in range(self.category_count): #loop through the categories looking for the matching name
-            if self.categories.get_name == category_name:
-                self.categories.remove[i] #if we find the name, remove it and return that everything was successful
+            if self.category_names[i] == category_name:
+                deleted_category = self.categories[i]
+                deleted_category.reset_item_category_names() #fix the category names of the items that now would otherwise be associated with a nonexistent category
+                self.categories.remove(deleted_category)
                 self.category_count -= 1
                 return True
         MainUI.MainUI.category_not_found() #if we couldn't find the category, let the user know
@@ -29,7 +31,7 @@ class CategoryList:
     
     #this is used to get just the names of the categories
     def get_category_names_str(self) -> str:
-        names = ""
+        names = "Category List:\n"
         for name in self.category_names:
             names += f"{name}\n"
         return names
@@ -55,6 +57,9 @@ class CategoryList:
         for category in self.categories:
             if category.get_name() == category_name:
                 return category
+    
+    def get_category_count(self) -> int:
+        return self.category_count
         
 
 

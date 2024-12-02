@@ -69,14 +69,15 @@ class TransactionList:
         return self._transaction_count
     
     def print_expenses(self) -> None:
-        print("\nExpense List:")
+        expense_list = ("Expense List:\n")
         for expense in self._expense_transactions:
-            expense.print_transaction()
+            expense_list += f"{expense.print_transaction()}\n"
+        return expense_list
     
     def print_incomes(self) -> None:
         income_list = "Income List:\n"
         for income in self._income_transactions:
-            income_list += income.print_transaction()
+            income_list += f"{income.print_transaction()}\n"
         return income_list
     
     def print_transactions(self) -> None:

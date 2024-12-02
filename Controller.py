@@ -66,13 +66,18 @@ class Controller:
             stop = Validator.validate_entity_name(name)
         return name
     
-    def _get_category_name():
+    def _get_new_category_name():
         stop = False
         while not stop:
             name = MainUI.MainUI.get_new_category_name(category_list.get_category_names_str())
             stop = Validator.validate_new_category_name(category_list, name)
         return name
-    
+    def _get_category_name():
+        stop = False
+        while not stop:
+            name = MainUI.MainUI.get_category_name(category_list.get_category_names_str())
+            stop = Validator.validate_category_name(category_list, name)
+        return name
     def _get_stock_symbol():
         stop = False
         while not stop:
@@ -161,7 +166,8 @@ class Controller:
             case 4:
                 Controller.income_management_menu_categorize_income()
             case 0:
-                Controller.home_screen()
+                return
+        return
 
     
     def income_management_menu_add_income():
@@ -172,12 +178,12 @@ class Controller:
 
         Operations.create_and_add_transaction(transaction_list, amount, date, desc, "income")
         MainUI.MainUI.add_transaction_success()
-        Controller.home_screen()
+        return
 
     def income_management_menu_view_income_list():
         income_list = Operations.print_income_list(transaction_list)
-        MainUI.MainUI.income_management_menu_view_income_list(income_list)
-        Controller.home_screen()
+        MainUI.MainUI.utility_print(income_list)
+        return
 
     
     def income_management_menu_remove_income():
@@ -189,7 +195,7 @@ class Controller:
             stop = Validator.validate_transaction_id(transaction_list, income_id, "income")
 
         Operations.remove_transaction(transaction_list, income_id, "income")
-        Controller.home_screen()
+        return
     
     def income_management_menu_categorize_income():
         """
@@ -199,23 +205,26 @@ class Controller:
         3. the user can then type an income ID followed by the target category
         4. by pressing enter when nothing was typed, user will be sent back to the home screen        
         """
+        #don't allow users to attempt to categorize ANY ITEMS until there are actual categories already created
+        if category_list.get_category_count() == 0:
+            MainUI.MainUI.error_no_categories()
+            Controller.home_screen()
         income_list = Operations.print_income_list(transaction_list)
-
         stop = False
         while not stop:  #get the ID of the income we are going to categorize
             income_id = MainUI.MainUI.categorize_transaction(income_list)
             stop = Validator.validate_transaction_id(transaction_list, income_id, "income")
-        
-        category_list_names = category_list.get_category_names_str()
-        stop = False
-        while not stop:   #get the target category
-            category_name = MainUI.MainUI.get_category_name(category_list_names)
-            stop = Validator.validate_category_name(category_list, category_name)
-        
+        if income_id == "-1":
+            MainUI.MainUI.action_cancelled()
+            return
+        category_name = Controller._get_category_name()
+        if category_name == "-1":
+            MainUI.MainUI.action_cancelled()
+            return
         #once we have both, now we will call the operator to assign the income to the category
         Operations.categorize_transaction(transaction_list, category_list, income_id, category_name, "income")
         MainUI.MainUI.categorize_transaction_success()
-        Controller.home_screen()
+        return
         
 
     def spending_management_menu():
@@ -229,7 +238,7 @@ class Controller:
         print(selection)
         match selection:
             case 0:
-                Controller.home_screen()
+                return
             case 1: 
                 Controller.spending_management_menu_add_expense()
             case 2:
@@ -239,7 +248,17 @@ class Controller:
             case 4:
                 #Controller.spending_management_menu_import_spending_CSV()
                 pass
-
+            case 5:
+                Controller.spending_management_menu_categorize_expense()
+                pass
+            case 6:
+                #Controller.spending_management_menu_set_category_budget()
+                pass
+            case 7:
+                #Controller.spending_management_menu_monitor_budget_adherence()
+                pass
+        return
+    
     def spending_management_menu_add_expense():
         MainUI.MainUI.spending_management_menu_add_expense()
         amount = Controller._get_transaction_amount()
@@ -248,25 +267,44 @@ class Controller:
 
         Operations.create_and_add_transaction(transaction_list, amount, date, desc, "expense")
         MainUI.MainUI.add_transaction_success()
-        Controller.home_screen()
-    
+        return
+        
     def spending_management_menu_view_expense_list():
-        MainUI.MainUI.clear_screen()
-        Operations.print_expense_list(transaction_list)
-        MainUI.MainUI.wait_for_user_input()
-        Controller.home_screen()
+        expense_list = Operations.print_expense_list(transaction_list)
+        MainUI.MainUI.utility_print(expense_list)
+        return    
     
     def spending_management_menu_delete_expense():
-        MainUI.MainUI.clear_screen() #
-        Operations.print_expense_list(transaction_list)
+        expense_list = Operations.print_expense_list(transaction_list)
 
         stop = False
         while not stop:
-            expense_id = MainUI.MainUI.remove_transaction() 
+            expense_id = MainUI.MainUI.remove_transaction(expense_list) 
             stop = Validator.validate_transaction_id(transaction_list, expense_id, "expense")
         Operations.remove_transaction(transaction_list, expense_id, "expense")
-        Controller.home_screen()    
-
+        return
+    
+    #to find a more commented version, try ctrl f "categorize_income"
+    def spending_management_menu_categorize_expense():
+        if category_list.get_category_count() == 0:
+            MainUI.MainUI.error_no_categories()
+            Controller.home_screen()
+        expense_list = Operations.print_expense_list(transaction_list)
+        stop = False
+        while not stop:  #get the ID of the income we are going to categorize
+            expense_id = MainUI.MainUI.categorize_transaction(expense_list)
+            stop = Validator.validate_transaction_id(transaction_list, expense_id, "expense")
+        if expense_id == "-1":
+            MainUI.MainUI.action_cancelled()
+            return
+        category_name = Controller._get_category_name()
+        if category_name == "-1":
+            MainUI.MainUI.action_cancelled()
+            return
+        Operations.categorize_transaction(transaction_list, category_list, expense_id, category_name, "expense")
+        MainUI.MainUI.categorize_transaction_success()
+        return
+    
     def asset_management_menu():
         assets_value = entity_portfolio.total_assets_value
         stop = False
@@ -283,8 +321,10 @@ class Controller:
                 Controller.asset_management_menu_delete_asset()
             case 4:
                 Controller.asset_management_menu_update_assets()
+            case 5:
+                Controller.asset_management_menu_categorize_assets()
             case 0:
-                Controller.home_screen()
+                return
 
         
     def asset_management_menu_add_asset():
@@ -312,39 +352,58 @@ class Controller:
         #now that we have all the data we need to create a non stock asset, we will
         #call a method in operations to do exactly that
         Operations.add_entity_to_portfolio(entity_portfolio, "asset", name, desc, value, num_owned, auto_update, stock_symbol)
-        Controller.home_screen()
+        return
 
 
     def asset_management_menu_view_asset_list():
-        Operations.asset_management_menu_view_asset_list_operations(entity_portfolio)
-        MainUI.MainUI.wait_for_user_input()
-        Controller.home_screen()
+        asset_list = Operations.asset_management_menu_view_asset_list_operations(entity_portfolio)
+        MainUI.MainUI.utility_print(asset_list)
+        return
 
     def asset_management_menu_delete_asset():
         #3
-        Operations.asset_management_menu_view_asset_list_operations(entity_portfolio)
+        asset_list = Operations.asset_management_menu_view_asset_list_operations(entity_portfolio)
         stop = False
         while not stop:
-            id = MainUI.MainUI.asset_management_menu_delete_asset()
+            id = MainUI.MainUI.asset_management_menu_delete_asset(asset_list)
             stop = Validator.validate_entity_id(entity_portfolio, "asset", id)
         #once the asset id is validated we need to actually remove the asset
         Operations.remove_entity_from_portfolio(entity_portfolio, "asset", id)
-        Controller.home_screen()
+        return
     
     def asset_management_menu_update_assets():
-        EntityPortfolio.EntityPortfolio.update_values(entity_portfolio)
+        entity_portfolio.update_values()
         MainUI.MainUI.update_asset_values_success()
-        Controller.home_screen()
+        return
+    
+    def asset_management_menu_categorize_assets():
+        if category_list.get_category_count() == 0:
+            MainUI.MainUI.error_no_categories()
+            return
+        asset_list = Operations.asset_management_menu_view_asset_list_operations(entity_portfolio) #with how many tiems I call this, it might've been smart to shorten it
+        stop = False
+        while not stop:
+            asset_id = MainUI.MainUI.categorize_entity(asset_list)
+            stop = Validator.validate_entity_id(entity_portfolio, "asset", asset_id)
+        if asset_id == "-1":
+            return
+        category_name = Controller._get_category_name()
+        if category_name == "-1":
+            return
+        Operations.categorize_entity(entity_portfolio, category_list, asset_id, category_name, "asset")
+        MainUI.MainUI.categorize_entity_success()
+        return
+        
 
     def liability_management_menu():
         stop = False
         while not stop:
             user_selection = MainUI.MainUI.liability_management_menu()
-            stop = Validator.validate_menu_entry(user_selection, MainUI.MainUI.LIABILITY_MGMG_MENU_LOW, MainUI.MainUI.LIABILITY_MGMG_MENU_HIGH)
+            stop = Validator.validate_menu_entry(user_selection, MainUI.MainUI.LIABILITY_MGMT_MENU_LOW, MainUI.MainUI.LIABILITY_MGMT_MENU_HIGH)
         selection = int(user_selection)
         match selection:
                 case 0:
-                    Controller.home_screen()
+                    return
                 case 1:
                     Controller.liability_management_menu_add_liability()
                 case 2:
@@ -355,6 +414,9 @@ class Controller:
                     Controller.liability_management_menu_delete_liability()
                 case 5:
                     Controller.liability_management_menu_track_debt()
+                case 6:
+                    Controller.liability_management_menu_categorize_liability()
+        return
 
     def liability_management_menu_add_liability():
         MainUI.MainUI.liability_management_menu_add_liability()
@@ -366,22 +428,19 @@ class Controller:
         value = Controller._get_entity_value()
         auto_update = False
         stock_symbol = "n/a"
-
         Operations.add_entity_to_portfolio(entity_portfolio, "liability", name, desc, value, num_owned, auto_update, stock_symbol)
-
-        Controller.home_screen()
-
+        return
 
     def liability_management_menu_view_liability_list():
-        Operations.liability_management_menu_view_liability_list_operations(entity_portfolio)
-        MainUI.MainUI.wait_for_user_input()
-        Controller.home_screen()
-
+        liability_list = Operations.liability_management_menu_view_liability_list_operations(entity_portfolio)
+        MainUI.MainUI.utility_print(liability_list)
+        return
+    
     def liability_management_menu_make_liability_payment():
-        Operations.liability_management_menu_view_liability_list_operations(entity_portfolio)
+        liability_list = Operations.liability_management_menu_view_liability_list_operations(entity_portfolio)
         stop = False
         while not stop:
-            id = MainUI.MainUI.liability_management_menu_get_liability_id()
+            id = MainUI.MainUI.liability_management_menu_get_liability_id(liability_list)
             stop = Validator.validate_entity_id(entity_portfolio, "liability", id)
         #once we have found the corresponding liability ID
         #we get the amount that that the user has just paid into the liability
@@ -391,22 +450,44 @@ class Controller:
             stop = Validator.validate_payment_debt(payment, entity_portfolio, id)
         #now that the payment is validated, we have to apply it to the debt
         Operations.make_liability_payment_operations(entity_portfolio, id, payment)
-        Controller.home_screen()
+        return
     
     def liability_management_menu_delete_liability():
-        Operations.liability_management_menu_view_liability_list_operations(entity_portfolio)
+        liability_list = Operations.liability_management_menu_view_liability_list_operations(entity_portfolio)
         stop = False
         while not stop:
-            id = MainUI.MainUI.liability_management_menu_get_liability_id()
+            id = MainUI.MainUI.liability_management_menu_get_liability_id(liability_list)
             stop = Validator.validate_entity_id(entity_portfolio, "liability", id)
         Operations.remove_entity_from_portfolio(entity_portfolio, "liability", id)
-        Controller.home_screen()
+        return
 
     def liability_management_menu_track_debt():
         #print out each debt and how much is left to be paid
         debt_status = Operations.liability_management_menu_track_debt_operations(entity_portfolio)
         MainUI.MainUI.liability_track_debt(debt_status)
-        Controller.home_screen()
+        return
+    
+    def liability_management_menu_categorize_liability():
+        if category_list.get_category_count() == 0:
+            MainUI.MainUI.error_no_categories()
+            return
+        liability_list = Operations.liability_management_menu_view_liability_list_operations(entity_portfolio) #with how many tiems I call this, it might've been smart to shorten it
+        stop = False
+        while not stop:
+            liability_id = MainUI.MainUI.categorize_entity(liability_list)
+            stop = Validator.validate_entity_id(entity_portfolio, "liability", liability_id)
+        if liability_id == "-1":
+            return
+        category_name = Controller._get_category_name()
+        if category_name == "-1":
+            return
+        Operations.categorize_entity(entity_portfolio, category_list, liability_id, category_name, "liability")
+        MainUI.MainUI.categorize_entity_success()
+        return
+        
+        
+
+
 
 
 
@@ -418,7 +499,7 @@ class Controller:
         MainUI.MainUI.retrieve_transactions()
         Operations.print_transactions(transaction_list)
         MainUI.MainUI.wait_for_user_input()
-        Controller.home_screen()
+        return
 
     
     def category_management_menu():
@@ -429,19 +510,26 @@ class Controller:
         selection = int(user_selection)
         match selection:
                 case 0:
-                    Controller.home_screen()
+                    return
                 case 1:
                     Controller.category_management_menu_add_category()
                 case 2:
                     Controller.category_management_menu_view_category_names()
                 case 3:
                     Controller.category_management_menu_view_category_list_info()
+                case 4:
+                    Controller.category_management_menu_delete_category()
     
     def category_management_menu_add_category():
         #need name and description
         #also need to ensure the name is unique
-        cat_name = Controller._get_category_name()
+        cat_name = Controller._get_new_category_name()
+        if cat_name == "-1":
+            MainUI.MainUI.action_cancelled()
+            return
         cat_desc = Controller._get_desc()
+
+        
         #now that we have a name and description, we will send the data to operations
         #so that operations can create the category, then add it to the list
         Operations.category_management_menu_add_category_operations(category_list, cat_name, cat_desc)
@@ -449,37 +537,79 @@ class Controller:
         #let the user know that the category has been added successfully
         MainUI.MainUI.category_added_success(cat_name)
         #send user to the home screen
-        Controller.home_screen()
+        return
         
     def category_management_menu_view_category_names():
         #go to the category list and grab the category name list
-        category_name_list = category_list.get_category_names()
+        category_name_list = category_list.get_category_names_str()
         #send to MainUI
         MainUI.MainUI.category_menu_show_category_names(category_name_list)
-        Controller.home_screen()
+        return
     
     def category_management_menu_view_category_list_info():
         category_list_info = category_list.get_category_list_info()
         MainUI.MainUI.category_menu_show_category_list_info(category_list_info)
-        Controller.home_screen()
+        return
 
-        
+    def category_management_menu_delete_category():
+        #show category names to the user
+        category_name_list = category_list.get_category_names_str()
+        stop = False
+        while not stop:
+            category_name = MainUI.MainUI.category_menu_delete_category(category_name_list)
+            stop = Validator.validate_category_name(category_list, category_name)
+        if category_name == "-1":
+            MainUI.MainUI.action_cancelled()
+            return
+        #now we actually delete the a category associated with the given name
+        Operations.category_management_menu_delete_category_operations(category_list, category_name)
+
+
+def testing(test_login, test_income, test_expense, test_asset, test_stock, test_liability, test_category):
+    if test_login:
+        if account.new_user == True:  #if we have a new user
+            Controller.new_user_setup()
+        else:
+            Controller.user_login()
+    if test_income:
+        Operations.create_and_add_transaction(transaction_list, "500.10", "10/10/10", "test 1", "income")
+        Operations.create_and_add_transaction(transaction_list, "300.22", "10/11/10", "test 2", "income")
+        Operations.create_and_add_transaction(transaction_list, "1000.12", "10/12/10", "test 3", "income")
+    if test_expense:
+        Operations.create_and_add_transaction(transaction_list, "48.25", "10/12/10", "Vegas Blackjack", "expense")
+        Operations.create_and_add_transaction(transaction_list, "10", "10/12/10", "Put it on black (it up as red)", "expense")
+    if test_asset:
+        Operations.add_entity_to_portfolio(entity_portfolio, "asset", "Land", "10sq ft", "300.23", "1", False, "n/a")
+    if test_stock:
+        Operations.add_entity_to_portfolio(entity_portfolio, "asset", "Rivian", "bloomington car company", "0", "10", True, "rivn")
+        Operations.add_entity_to_portfolio(entity_portfolio, "asset", "Amazon", "home delivery", "0", "2", True, "amzn")
+    if test_liability:
+        Operations.add_entity_to_portfolio(entity_portfolio, "liability", "Student Debt", "4 year university", "2000", "1", False, "n/a")
+        Operations.add_entity_to_portfolio(entity_portfolio, "liability", "Car Loans", "2013 Ford Fusion", "1000", "1", False, "n/a")
+
+    if test_category:
+        Operations.category_management_menu_add_category_operations(category_list, "Default Category", "")
+        Operations.category_management_menu_add_category_operations(category_list, "test", "used for testing")
 
     
 
 def main():
-    if False: #change this to True for testing the whole program, False to bypass everything
-        if account.new_user == True:  #if we have a new user
-            Controller.new_user_setup()
-            pass
-        else:
-            Controller.user_login()
-    
+    #this lets us set testing conditions when we start the program
+    #I'm sure that I'm not the only one who doesn't want to have to add stuff manually every time for testing
+    test_login = False
+    test_income = True
+    test_expense = True
+    test_asset = True
+    test_stock = True
+    test_liability = True
+    test_category = True
 
+    #now we call the method that does the testing stuff
+    testing(test_login, test_income, test_expense, test_asset, test_stock, test_liability, test_category)
 
-    test_debt = Entity.Entity(100, 1, "Student Debt", "", False, "n/a")
-    entity_portfolio.add_liability(test_debt)
-    Controller.home_screen()
+    #now we can go to the home screen with a built in user history
+    while True:
+        Controller.home_screen()
 
 
 if __name__ == "__main__":

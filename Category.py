@@ -68,6 +68,41 @@ class Category:
         self.expense_count += 1
         self.expense_list.append(expense)
         return True
+    
+    #remove items
+    def remove_asset(self, asset: Entity):
+        self.asset_count -= 1
+        self.asset_list.remove(asset)
+        return True
+    
+    def remove_liability(self, liability: Entity):
+        self.liability_count -= 1
+        self.liability_list.remove(liability)
+        return True
+    
+    def remove_income(self, income: Transaction):
+        self.income_count -= 1
+        self.income_list.remove(income)
+        return True
+    
+    def remove_expense(self, expense: Transaction):
+        self.expense_count -= 1
+        self.expense_list.remove(expense)
+        return True
+    
+    #wasn't sure what the best name for this one was but the idea is that when you delete a category from the category list
+    #you also need to makes sure that the items which were previously associated with that category get the category_name field reset
+    def reset_item_category_names(self):
+        for income in self.income_list:
+            income.set_category_name("")
+        for expense in self.expense_list:
+            expense.set_category_name("")
+        for asset in self.asset_list:
+            asset.set_category_name("")
+        for liability in self.liability_list:
+            liability.set_category_name("")
+        return True
+
 
 
 
