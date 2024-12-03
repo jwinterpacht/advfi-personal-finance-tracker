@@ -164,8 +164,9 @@ def spending_management_menu_monitor_budget_adherence_operations(category_list: 
     return category_list.monitor_budget_adherence()
     
 
-def print_transactions(transaction_list):
-    transaction_list.print_transactions()
+def print_transactions(transaction_list:TransactionList) -> str:
+    transactions = transaction_list.print_transactions()
+    return transactions
 
 
 def print_income_list(transaction_list):

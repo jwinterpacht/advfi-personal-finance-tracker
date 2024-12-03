@@ -517,15 +517,11 @@ class Controller:
 
 
 
-
-        
-
-
         
     def retrieve_transactions():
         MainUI.MainUI.retrieve_transactions()
-        Operations.print_transactions(transaction_list)
-        MainUI.MainUI.wait_for_user_input()
+        transactions = Operations.print_transactions(transaction_list)
+        MainUI.MainUI.utility_print(transactions)
         return
 
     
