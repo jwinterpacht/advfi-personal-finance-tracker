@@ -9,6 +9,7 @@ class Transaction:
         self._transaction_date = transaction_date
         self._description = description
         self._category_name = ""
+        self._within_last_month = self._is_within_last_month()
     
     # return the transaction ID
     def get_transaction_id(self) -> str:
@@ -61,3 +62,25 @@ class Transaction:
         if self._category_name != "":
             info += f"\tCategory: {self._category_name}"
         return info
+    
+    def get_is_within_last_month(self) -> bool:
+        #if it wasn't within the last month the last time we calculated it, (due to the cold, unflinching, forever forward march of time)
+        #then it probably isn't with the last month now, so reason to recalculate
+        if self._within_last_month == False:
+            return False
+        #calculate if the transaction is within the last month
+        self._within_last_month = self._is_within_last_month() #update relevant variable
+        return self._within_last_month  #return
+    
+    #checks if the transaction is within the current month and year
+    def _is_within_last_month(self) -> bool:
+        #get current date
+        today = date.today()
+        #calculate month first because it is more likely that a month has passed instead of a full year
+        if self._transaction_date.month != today.month:
+            return False
+        if self._transaction_date.year != today.year:
+            return False
+        #if it is the same date and year
+        return True
+        
