@@ -397,6 +397,7 @@ class MainUI:
 
     def integer_not_given():
         print("Please be sure to enter an integer")
+        
 
     def float_not_given():
         print("Please be sure to enter a number")
