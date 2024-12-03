@@ -207,7 +207,7 @@ class Controller:
         """
         #don't allow users to attempt to categorize ANY ITEMS until there are actual categories already created
         if category_list.get_category_count() == 0:
-            MainUI.MainUI.error_no_categories()
+            MainUI.MainUI.error_no_categories_categorization()
             Controller.home_screen()
         income_list = Operations.print_income_list(transaction_list)
         stop = False
@@ -235,7 +235,7 @@ class Controller:
             user_selection = MainUI.MainUI.spending_management_menu()
             stop = Validator.validate_menu_entry(user_selection, MainUI.MainUI.SPENDING_MGMT_MENU_LOW, MainUI.MainUI.SPENDING_MGMT_MENU_HIGH)
         selection = int(user_selection)
-        print(selection)
+        #print(selection)
         match selection:
             case 0:
                 return
@@ -250,12 +250,10 @@ class Controller:
                 pass
             case 5:
                 Controller.spending_management_menu_categorize_expense()
-                pass
             case 6:
-                #Controller.spending_management_menu_set_category_budget()
-                pass
+                Controller.spending_management_menu_set_category_budget()
             case 7:
-                #Controller.spending_management_menu_monitor_budget_adherence()
+                Controller.spending_management_menu_monitor_budget_adherence()
                 pass
         return
     
@@ -287,7 +285,7 @@ class Controller:
     #to find a more commented version, try ctrl f "categorize_income"
     def spending_management_menu_categorize_expense():
         if category_list.get_category_count() == 0:
-            MainUI.MainUI.error_no_categories()
+            MainUI.MainUI.error_no_categories_categorization()
             Controller.home_screen()
         expense_list = Operations.print_expense_list(transaction_list)
         stop = False
@@ -305,6 +303,35 @@ class Controller:
         MainUI.MainUI.categorize_transaction_success()
         return
     
+    def spending_management_menu_set_category_budget():
+        #get category name
+        #set category budget
+        #print(category_list.get_category_count)
+        if category_list.get_category_count() < 1:
+            MainUI.MainUI.error_no_categories_budgeting()
+            return
+        category_name = Controller._get_category_name()
+        if category_name == "-1":
+            MainUI.MainUI.action_cancelled()
+            return
+        
+        stop = False
+        MainUI.MainUI.get_category_budget()
+        while not stop:
+            category_budget = MainUI.MainUI.get_category_budget_2()
+            stop = Validator.validate_value(category_budget)
+        Operations.category_management_menu_set_category_budget_operations(category_list, category_name, category_budget)
+        MainUI.MainUI.set_category_budget_success()
+
+
+    def spending_management_menu_monitor_budget_adherence():
+        #here we will go to the category list, grab all of the categories that have a budget that is not -1
+        #then we will grab all of the expense transactions associated with that budget that have happened within the past month
+        #then we will total up all of those expenses and display how much the user has spent
+        adherence = Operations.spending_management_menu_monitor_budget_adherence_operations(category_list)
+        MainUI.MainUI.utility_print(adherence)
+
+
     def asset_management_menu():
         assets_value = entity_portfolio.total_assets_value
         stop = False
@@ -378,7 +405,7 @@ class Controller:
     
     def asset_management_menu_categorize_assets():
         if category_list.get_category_count() == 0:
-            MainUI.MainUI.error_no_categories()
+            MainUI.MainUI.error_no_categories_categorization()
             return
         asset_list = Operations.asset_management_menu_view_asset_list_operations(entity_portfolio) #with how many tiems I call this, it might've been smart to shorten it
         stop = False
@@ -469,7 +496,7 @@ class Controller:
     
     def liability_management_menu_categorize_liability():
         if category_list.get_category_count() == 0:
-            MainUI.MainUI.error_no_categories()
+            MainUI.MainUI.error_no_categories_categorization()
             return
         liability_list = Operations.liability_management_menu_view_liability_list_operations(entity_portfolio) #with how many tiems I call this, it might've been smart to shorten it
         stop = False
@@ -621,7 +648,7 @@ def testing(test_login, test_income, test_expense, test_asset, test_stock, test_
 def main():
     #this lets us set testing conditions when we start the program
     #I'm sure that I'm not the only one who doesn't want to have to add stuff manually every time for testing
-    do_testing = False  #will not do the testing, regardless of any other values (this testing variable has the highest priority)
+    do_testing = True  #will not do the testing, regardless of any other values (this testing variable has the highest priority)
     test_login = False
     test_income = True
     test_expense = True
