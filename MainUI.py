@@ -14,7 +14,7 @@ class MainUI:
     LIABILITY_MGMT_MENU_LOW = 0
     LIABILITY_MGMT_MENU_HIGH = 6
     CATEGORY_MGMT_MENU_LOW = 0
-    CATEGORY_MGMT_MENU_HIGH = 4
+    CATEGORY_MGMT_MENU_HIGH = 5
 
     def clear_screen():
         #pass
@@ -306,7 +306,8 @@ class MainUI:
         print("1: Add a new category")
         print("2: View all current category names")
         print("3: View all current categories with their number of associated transactions and entites")
-        print("4: Delete a category")
+        print("4: View all transactions, assets, and liabilities that are associated with a given transaction")
+        print("5: Delete a category")
         print("0: Return to main menu")
         return input()
 

@@ -102,6 +102,31 @@ class Category:
         for liability in self.liability_list:
             liability.set_category_name("")
         return True
+    
+    #used to help print out all of the items associated with a given category
+    def get_category_items_str(self) -> str:
+        items_str = f"All items associated with the category '{self.category_name}'\n\n"
+        if self.income_count > 0:
+            items_str += "Income List:\n"
+            for income in self.income_list:
+                items_str += f"{income.print_transaction()}\n"
+            items_str += "\n"
+        if self.expense_count > 0:
+            items_str += "Expense List:\n"
+            for expense in self.expense_list:
+                items_str += f"{expense.print_transaction()}\n"
+            items_str += "\n"
+        if self.asset_count > 0:
+            items_str += "Asset List:\n"
+            for asset in self.asset_list:
+                items_str += f"{asset.print_entity()}"
+            items_str += "\n"
+        if self.liability_count > 0:
+            items_str += "Liability List:\n"
+            for liability in self.liability_list:
+                items_str += f"{liability.print_entity()}"
+        return items_str
+
 
 
 

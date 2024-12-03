@@ -51,7 +51,7 @@ class Transaction:
     def get_category_name(self) -> str:
         return self._category_name
 
-    def print_transaction(self) -> None:
+    def print_transaction(self) -> str:
         id = f"ID: {self._transaction_ID}"
         amount = f"Amount: {self._amount}"
         transaction_date = f"Date: {self._transaction_date.date()}"
