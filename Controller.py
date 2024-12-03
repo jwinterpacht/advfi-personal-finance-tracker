@@ -518,6 +518,9 @@ class Controller:
                 case 3:
                     Controller.category_management_menu_view_category_list_info()
                 case 4:
+                    Controller.category_management_menu_view_category_items()
+                    
+                case 5:
                     Controller.category_management_menu_delete_category()
     
     def category_management_menu_add_category():
@@ -551,13 +554,19 @@ class Controller:
         MainUI.MainUI.category_menu_show_category_list_info(category_list_info)
         return
 
+    def category_management_menu_view_category_items():
+        #get a category from the user
+        category_name = Controller._get_category_name()
+        #get all of the incomes, expenses, assets, and liabilities associated with that category
+        category_items = Operations.category_managment_menu_view_category_items(category_list, category_name)
+        MainUI.MainUI.utility_print(category_items)
+
     def category_management_menu_delete_category():
         #show category names to the user
         category_name_list = category_list.get_category_names_str()
         stop = False
-        while not stop:
-            category_name = MainUI.MainUI.category_menu_delete_category(category_name_list)
-            stop = Validator.validate_category_name(category_list, category_name)
+        category_name = Controller._get_category_name()
+        
         if category_name == "-1":
             MainUI.MainUI.action_cancelled()
             return
@@ -565,7 +574,7 @@ class Controller:
         Operations.category_management_menu_delete_category_operations(category_list, category_name)
 
 
-def testing(test_login, test_income, test_expense, test_asset, test_stock, test_liability, test_category):
+def testing(test_login, test_income, test_expense, test_asset, test_stock, test_liability, test_category, test_category_2):
     if test_login:
         if account.new_user == True:  #if we have a new user
             Controller.new_user_setup()
@@ -591,11 +600,28 @@ def testing(test_login, test_income, test_expense, test_asset, test_stock, test_
         Operations.category_management_menu_add_category_operations(category_list, "Default Category", "")
         Operations.category_management_menu_add_category_operations(category_list, "test", "used for testing")
 
+    if test_category_2:
+        Operations.categorize_transaction(transaction_list, category_list, "1", "test", "income")
+        Operations.categorize_transaction(transaction_list, category_list, "2", "test", "income")
+        Operations.categorize_transaction(transaction_list, category_list, "3", "Default Category", "income")
+        Operations.categorize_transaction(transaction_list, category_list, "4", "test", "expense")
+        Operations.categorize_transaction(transaction_list, category_list, "5", "Default Category", "expense")
+
+        Operations.categorize_entity(entity_portfolio, category_list, "1", "test", "asset")
+        Operations.categorize_entity(entity_portfolio, category_list, "2", "test", "asset")
+        Operations.categorize_entity(entity_portfolio, category_list, "3", "Default Category", "asset")
+        Operations.categorize_entity(entity_portfolio, category_list, "4", "test", "liability")
+        Operations.categorize_entity(entity_portfolio, category_list, "5", "Default Category", "liability")
+
+        
+
+
     
 
 def main():
     #this lets us set testing conditions when we start the program
     #I'm sure that I'm not the only one who doesn't want to have to add stuff manually every time for testing
+    do_testing = False  #will not do the testing, regardless of any other values (this testing variable has the highest priority)
     test_login = False
     test_income = True
     test_expense = True
@@ -603,9 +629,11 @@ def main():
     test_stock = True
     test_liability = True
     test_category = True
+    test_category_2 = True #only make this true if income, expense, asset, stock, liability, and category are true also
 
     #now we call the method that does the testing stuff
-    testing(test_login, test_income, test_expense, test_asset, test_stock, test_liability, test_category)
+    if do_testing:
+        testing(test_login, test_income, test_expense, test_asset, test_stock, test_liability, test_category, test_category_2)
 
     #now we can go to the home screen with a built in user history
     while True:

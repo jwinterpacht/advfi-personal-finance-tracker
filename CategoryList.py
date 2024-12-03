@@ -24,6 +24,7 @@ class CategoryList:
                 deleted_category = self.categories[i]
                 deleted_category.reset_item_category_names() #fix the category names of the items that now would otherwise be associated with a nonexistent category
                 self.categories.remove(deleted_category)
+                self.category_names.remove(category_name)
                 self.category_count -= 1
                 return True
         MainUI.MainUI.category_not_found() #if we couldn't find the category, let the user know
@@ -60,6 +61,12 @@ class CategoryList:
     
     def get_category_count(self) -> int:
         return self.category_count
+
+    def get_category_items_str(self, category_name: str) -> str:
+        for category in self.categories:
+            if category.get_name() == category_name:
+                return category.get_category_items_str()
+        return "ERROR: CATEGORY NOT FOUND"                    
         
 
 

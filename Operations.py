@@ -147,6 +147,9 @@ def category_management_menu_add_category_operations(category_list, new_cat_name
     category_list.add_category(new_cat)
     return
 
+def category_managment_menu_view_category_items(category_list:CategoryList, cat_name:str) -> str:
+    return category_list.get_category_items_str(cat_name)
+
 def category_management_menu_delete_category_operations(category_list: CategoryList, cat_name: str) -> None:
     category_list.remove_category(cat_name)
     MainUI.MainUI.category_menu_delete_category_success(cat_name)
