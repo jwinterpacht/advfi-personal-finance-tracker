@@ -102,7 +102,8 @@ def validate_transaction_id(transaction_list, transaction_id: str, type):
         return False                            #automatically return false
     transaction_id = int(transaction_id)
     if transaction_id < -1:
-        print("Error: smallest allowed value is -1")
+        #print("Error: smallest allowed value is -1")
+        #MainUI.MainUI.wait_for_user_input()
         return False
     if transaction_id == -1:  #always allow user to back out of deleting a transaction
         return True
