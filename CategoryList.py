@@ -66,7 +66,18 @@ class CategoryList:
         for category in self.categories:
             if category.get_name() == category_name:
                 return category.get_category_items_str()
-        return "ERROR: CATEGORY NOT FOUND"                    
+        return "ERROR: CATEGORY NOT FOUND"            
+
+    def monitor_budget_adherence(self) -> str:
+        budget_adherence_str = "Budget Adherence:\n"
+        for category in self.categories:
+            if category.get_budget() != -1:  #if our budget is not -1 then it is a budgeted category
+                #category_adherence = category.get_budget_adherence()
+                budget_adherence_str += f"{category.get_budget_adherence()}\n"
+        return budget_adherence_str
+
+
+
         
 
 
