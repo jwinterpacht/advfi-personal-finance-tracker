@@ -33,6 +33,8 @@ class Category:
         self.income_count = 0
         self.expense_count = 0
 
+        self.budget = -1.0  #a budget of -1 will be used to signify that this category does not have a given budget
+
         
     
     def get_name(self):
@@ -127,6 +129,25 @@ class Category:
                 items_str += f"{liability.print_entity()}"
         return items_str
 
+    def set_budget(self, budget: str) -> None:
+        budget = float(budget)
+        self.budget = budget
+        return
+    
+    def get_budget(self) -> float:
+        return self.budget
+    
+    def get_budget_adherence(self):
+        #grab the total of all the expenses that have happened within the last month
+        monthly_expenses = 0.0 #set as a float
+        for expense in self.expense_list:
+            if expense.get_is_within_last_month():
+                monthly_expenses += expense.get_amount()
+        percent_spent = (monthly_expenses/self.budget) * 100
+        return f"{self.category_name}\tAmount spent this month: ${monthly_expenses:.2f}\tTotal budget: ${self.budget}\tPercentage spent: {percent_spent:.2f}%"
+    
+
+    
 
 
 

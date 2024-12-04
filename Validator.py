@@ -102,7 +102,8 @@ def validate_transaction_id(transaction_list, transaction_id: str, type):
         return False                            #automatically return false
     transaction_id = int(transaction_id)
     if transaction_id < -1:
-        print("Error: smallest allowed value is -1")
+        #print("Error: smallest allowed value is -1")
+        #MainUI.MainUI.wait_for_user_input()
         return False
     if transaction_id == -1:  #always allow user to back out of deleting a transaction
         return True
@@ -212,6 +213,13 @@ def validate_pin(pin: str):
         return False
     if int(pin) < 0:
         return False #do not allow negative pins because that's just silly
+    return True
+
+
+def validate_new_password(input_password: str) -> bool:
+    if len(input_password) < 7:
+        MainUI.MainUI.utility_print("Error: Password must be 8 characters or longer")
+        return False
     return True
 
 def validate_password(account: UserAccount, input_password: str):

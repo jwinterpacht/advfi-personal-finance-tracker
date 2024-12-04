@@ -155,11 +155,18 @@ def category_management_menu_delete_category_operations(category_list: CategoryL
     MainUI.MainUI.category_menu_delete_category_success(cat_name)
     return
 
-    
+def category_management_menu_set_category_budget_operations(category_list: CategoryList, cat_name: str, budget: str) -> None:
+    category = category_list.get_category(cat_name)
+    category.set_budget(budget)
+    return
+
+def spending_management_menu_monitor_budget_adherence_operations(category_list: CategoryList) -> str:
+    return category_list.monitor_budget_adherence()
     
 
-def print_transactions(transaction_list):
-    transaction_list.print_transactions()
+def print_transactions(transaction_list:TransactionList) -> str:
+    transactions = transaction_list.print_transactions()
+    return transactions
 
 
 def print_income_list(transaction_list):

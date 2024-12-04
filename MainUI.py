@@ -61,6 +61,16 @@ class MainUI:
         print("Enter the name of the category you would like to associate the item with, please ensure correct spelling\nEnter -1 to cancel this operation")
         return input()
     
+    def get_category_budget():
+        print("Enter the monthly budget for this category:")   
+
+    def get_category_budget_2():
+        return input("$")
+    
+    def set_category_budget_success():
+        print("Category budget successfully set")
+        MainUI.wait_for_user_input()
+    
     def get_stock_symbol():
         print("Enter the stock symbol that you want to link with the asset:")
         return input()
@@ -198,12 +208,11 @@ class MainUI:
         print("1: Add expense")
         print("2: View expense list")
         print("3: Delete expense")
-        print("--under construction--")
-        print("4: Import spending data from CSV")
-        print("5: Categorize expenses (hopefully working)")
-        print("6: Set budgets for spending categories")
-        print("7: Monitor budget adherence")
-        print("0: Return to main menu")
+        print("4: Import spending data from CSV (not working)")
+        print("5: Categorize expenses (working)")
+        print("6: Set budgets for spending categories (under construction)")
+        print("7: Monitor budget adherence (working)")
+        print("0: Return to main menu (working)")
         
         # return the user's input and give it to the Controller class
         return input()
@@ -369,12 +378,13 @@ class MainUI:
         print("Thank you for using AdvFi!")
 
     def update_asset_values_success():
-        MainUI.clear_screen()
+        #MainUI.clear_screen()
         print("All values have been updated with the most up-to-date prices")
         MainUI.wait_for_user_input()
 
     def integer_not_given():
         print("Please be sure to enter an integer")
+        
 
     def float_not_given():
         print("Please be sure to enter a number")
@@ -410,8 +420,12 @@ class MainUI:
         print("Please enter an integer between {} and {}".format(low_end, high_end))
         MainUI.wait_for_user_input()
 
-    def error_no_categories():
+    def error_no_categories_categorization():
         print("You cannot categorize an item without first creating a category using the category menu")
+        MainUI.wait_for_user_input()
+
+    def error_no_categories_budgeting():
+        print("You cannot set category budget without first creating a category using the category menu")
         MainUI.wait_for_user_input()
 
     
