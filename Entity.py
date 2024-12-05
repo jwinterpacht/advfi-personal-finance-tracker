@@ -19,7 +19,7 @@ class Entity:
             self._amount = 1
         else:
             self._amount = int(entity_amount)
-        self._real_value = self._single_value * self._amount
+        self._total_value = self._single_value * self._amount
         self._name = entity_name
         self._description = entity_description
         self._auto_update = entity_auto_update    # if an asset is set to auto-update, then we treat it like a stock
@@ -52,8 +52,8 @@ class Entity:
     def get_total_value(self):
         if(self._auto_update):
             self._single_value = self.get_stock_value(self._stock_symbol)
-            self._real_value = self._amount * self._single_value
-        return self._real_value
+            self._total_value = self._amount * self._single_value
+        return self._total_value
     
     def get_name(self):
         return self._name
@@ -74,7 +74,7 @@ class Entity:
         if self._amount == 1:
             value = f"Value: ${self._single_value:.2f}\t\t"
         else:
-            value = f"Value: ${self._single_value:.2f}\t\tOwned: {self._amount}\t\tTotal Value: ${self._real_value:.2f}\t\t"
+            value = f"Value: ${self._single_value:.2f}\t\tOwned: {self._amount}\t\tTotal Value: ${self._total_value:.2f}\t\t"
         desc = f"Desc: {self._description}"
         entity_info = f"{id}{name}{value}"
         if self._auto_update == True:
