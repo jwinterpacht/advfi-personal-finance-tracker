@@ -3,38 +3,20 @@ from typing import List
 
 class IncomeReport:
     def __init__(self):
-        self.reportDate = date.min  # Default date: 00/00/0000
-        self.totalIncome = 0.0  # Default total income is 0.0
-        self.incomeEntries = []  # List to store income amounts (floats)
+        self._totalIncome = 0.0  # Default total income is 0.0
+        self._incomeEntries = []  # List to store income amounts (floats)
 
-    # Getters
-    def getReportDate(self):
-        return self.reportDate
-
+    # getters
     def getIncomeEntries(self):
-        return self.incomeEntries
+        return self._incomeEntries
 
     def getTotalIncome(self):
-        return self.totalIncome
+        return self._totalIncome
 
-    # Setters
-    def setReportDate(self, reportDate: date):
-        self.reportDate = reportDate
-
+    # setters
     def setIncomeEntries(self, incomeEntries: List[float]):
-        self.incomeEntries = incomeEntries
-        self.totalIncome = sum(self.incomeEntries)
+        self._incomeEntries = incomeEntries
+        self._totalIncome = sum(self.incomeEntries)
 
     def setTotalIncome(self, totalIncome: float):
-        self.totalIncome = totalIncome
-
-    # Generates Report
-    def generateReport(self):
-        reportSummary = {
-            "reportDate": self.reportDate,
-            "totalIncome": self.totalIncome,
-            "incomeEntryCount": len(self.incomeEntries),
-            "incomeEntries": self.incomeEntries
-        }
-
-        return reportSummary
+        self._totalIncome = totalIncome
