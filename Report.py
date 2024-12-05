@@ -22,22 +22,9 @@ class Report(ABC):
     #     pass
 
     @abstractmethod
-    def generateAllReport(self):
+    def generate_report(self) -> bool:
         pass
 
     @abstractmethod
-    def generateCombinedReport(self):
+    def to_string(self) -> str:
         pass
-
-    @abstractmethod
-    def getFinancialHealth(self):
-        pass
-
-    @abstractmethod
-    def getIncomeReport(self):
-        pass
-
-    @abstractmethod
-    def getSpendingReport(self):
-        pass
-
