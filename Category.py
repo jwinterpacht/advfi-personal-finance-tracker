@@ -45,52 +45,42 @@ class Category:
     
     def set_name(self, new_name):
         self._category_name = new_name
-        return True
     
     def set_description(self, new_description):
         self._category_description = new_description
-        return True
     
     def add_asset(self, asset: Entity):
         self._asset_count += 1
         self._asset_list.append(asset)
-        return True
     
     def add_liability(self, liability: Entity):
         self._liability_count += 1
         self._liability_list.append(liability)
-        return True
     
     def add_income(self, income: Transaction):
         self._income_count += 1
         self._income_list.append(income)
-        return True
     
     def add_expense(self, expense: Transaction):
         self._expense_count += 1
         self._expense_list.append(expense)
-        return True
     
     #remove items
     def remove_asset(self, asset: Entity):
         self._asset_count -= 1
         self._asset_list.remove(asset)
-        return True
     
     def remove_liability(self, liability: Entity):
         self._liability_count -= 1
         self._liability_list.remove(liability)
-        return True
     
     def remove_income(self, income: Transaction):
         self._income_count -= 1
         self._income_list.remove(income)
-        return True
     
     def remove_expense(self, expense: Transaction):
         self._expense_count -= 1
         self._expense_list.remove(expense)
-        return True
     
     #wasn't sure what the best name for this one was but the idea is that when you delete a category from the category list
     #you also need to makes sure that the items which were previously associated with that category get the category_name field reset
@@ -103,7 +93,6 @@ class Category:
             asset.set_category_name("")
         for liability in self._liability_list:
             liability.set_category_name("")
-        return True
     
     #used to help print out all of the items associated with a given category
     def get_category_items_str(self) -> str:
@@ -132,7 +121,6 @@ class Category:
     def set_budget(self, budget: str) -> None:
         budget = float(budget)
         self._budget = budget
-        return
     
     def get_budget(self) -> float:
         return self.budget
