@@ -231,3 +231,14 @@ class Validator():
     @staticmethod
     def validate_password(account: UserAccount, input_password: str):
         return account.check_password(input_password)
+    
+    @staticmethod
+    def validate_file_name(file: str) -> bool:
+        try:
+            with open(file, 'r') as file:
+                content = file.read()
+            return True
+        except :
+            MainUI.MainUI.utility_print("Please enter a valid file name and ensure file is in the correct folder")
+            return False
+            

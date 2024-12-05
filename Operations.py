@@ -1,3 +1,4 @@
+import csv
 import MainUI
 import Transaction
 from datetime import datetime as dt
@@ -164,8 +165,47 @@ class Operations:
 
     def spending_management_menu_monitor_budget_adherence_operations(category_list: CategoryList) -> str:
         return category_list.monitor_budget_adherence()
-        
+    
+    def spending_management_menu_import_spending_CSV_operations(fileName: str, transaction_list: TransactionList):
 
+        with open('CSVTest.csv', 'r') as file:
+            csv_reader = csv.reader(file)
+            next(csv_reader)  # Skip the header row
+
+            for row in csv_reader:
+                if len(row) < 5:  # Ensure there are enough columns
+                    continue
+
+                # Parse transaction date
+                try:
+                    transaction_date = datetime.strptime(row[0], '%m/%d/%Y').date()
+                except ValueError:
+                    print(f"Invalid date format in row: {row}")
+                    continue
+
+                # Determine amount and description
+                withdrawal_amount = row[3].strip()
+                deposit_amount = row[4].strip()
+                description = row[2].strip() if row[2] else "No description"
+
+                # Determine income or expense and parse amount
+                if withdrawal_amount:
+                    amount = float(withdrawal_amount)
+                    income_or_expense = "Expense"
+                elif deposit_amount:
+                    amount = float(deposit_amount)
+                    income_or_expense = "Income"
+                else:
+                    print(f"Invalid transaction data in row: {row}")
+                    continue
+
+                # Add transaction to the correct list
+                if income_or_expense == "Expense":
+                    Operations.create_and_add_transaction(transaction_list, amount=amount, transaction_date=transaction_date, description=description, type="expense")
+                else:
+                    Operations.create_and_add_transaction(transaction_list, amount=amount, transaction_date=transaction_date, description=description, type="income")
+        
+        
     def print_transactions(transaction_list:TransactionList) -> str:
         transactions = transaction_list.print_transactions()
         return transactions
