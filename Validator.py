@@ -9,6 +9,7 @@ import UserAccount
 import Category
 import CategoryList
 import Stock
+import StockFactory
 
 class Validator():
 
@@ -178,7 +179,7 @@ class Validator():
     def validate_stock_symbol(stock_symbol: str):
         if stock_symbol == "":
             return False
-        if not Stock.Stock.check_valid_stock_symbol(stock_symbol):  #this means advfi couldn't find the corresponding stock
+        if not StockFactory.check_valid_stock_symbol(stock_symbol):  #this means advfi couldn't find the corresponding stock
             MainUI.MainUI.stock_not_found(stock_symbol)
             return False
         #if we make it here, then the user input stock symbol is valid
@@ -231,14 +232,3 @@ class Validator():
     @staticmethod
     def validate_password(account: UserAccount, input_password: str):
         return account.check_password(input_password)
-    
-    @staticmethod
-    def validate_file_name(file: str) -> bool:
-        try:
-            with open(file, 'r') as file:
-                content = file.read()
-            return True
-        except :
-            MainUI.MainUI.utility_print("Please enter a valid file name and ensure file is in the correct folder")
-            return False
-            
