@@ -248,8 +248,7 @@ class Controller:
             case 3:
                 Controller.spending_management_menu_delete_expense()
             case 4:
-                #Controller.spending_management_menu_import_spending_CSV()
-                pass
+                Controller.spending_management_menu_import_spending_CSV()
             case 5:
                 Controller.spending_management_menu_categorize_expense()
             case 6:
@@ -268,6 +267,7 @@ class Controller:
         Operations.Operations.create_and_add_transaction(transaction_list, amount, date, desc, "expense")
         MainUI.MainUI.add_transaction_success()
         return
+    
         
     def spending_management_menu_view_expense_list():
         expense_list = Operations.Operations.print_expense_list(transaction_list)
@@ -283,6 +283,15 @@ class Controller:
             stop = Validator.Validator.validate_transaction_id(transaction_list, expense_id, "expense")
         Operations.Operations.remove_transaction(transaction_list, expense_id, "expense")
         return
+    
+    def spending_management_menu_import_spending_CSV():
+        stop = False
+        while not stop:
+            fileName = MainUI.MainUI.spending_management_menu_import_spending_CSV()
+            stop = Validator.Validator.validate_file_name(fileName)
+        Operations.Operations.spending_management_menu_import_spending_CSV_operations()
+        
+        
     
     #to find a more commented version, try ctrl f "categorize_income"
     def spending_management_menu_categorize_expense():

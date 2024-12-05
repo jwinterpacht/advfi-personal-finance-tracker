@@ -223,6 +223,13 @@ class MainUI:
         print("Adding New Expense\n")
 
     @staticmethod
+    def spending_management_menu_import_spending_CSV() -> str:
+        MainUI.clear_screen()
+        print("Enter the name of the CSV File\n")
+        file = input()
+        return file
+
+    @staticmethod
     def asset_management_menu(assets_value: float):
         MainUI.clear_screen()
         print("Asset Management Menu\n")

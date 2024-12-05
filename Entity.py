@@ -9,6 +9,7 @@ Notable Things: Will not let you set auto_update to True unless given a valid ti
 
 
 import Stock
+import StockFactory
 
 class Entity:
 
@@ -19,7 +20,7 @@ class Entity:
             self._amount = 1
         else:
             self._amount = int(entity_amount)
-        self._total_value = self._single_value * self._amount
+        self._real_value = self._single_value * self._amount
         self._name = entity_name
         self._description = entity_description
         self._auto_update = entity_auto_update    # if an asset is set to auto-update, then we treat it like a stock
@@ -28,7 +29,8 @@ class Entity:
             if not self.check_valid_symbol(entity_stock_symbol):
                 self._auto_update = False
                 print("Stock not found, cannot auto update")
-            cur_price = self.get_stock_value(entity_stock_symbol)
+            self.stock = StockFactory.get_stock(entity_stock_symbol)
+            cur_price = self.stock.get_stock_price()
             self._single_value = cur_price
             self._total_value = self._single_value * self._amount
             self._stock_symbol = entity_stock_symbol  # if a stock symbol is not provided, it will be assigned a default value of "n/a" 
@@ -51,9 +53,9 @@ class Entity:
     
     def get_total_value(self):
         if(self._auto_update):
-            self._single_value = self.get_stock_value(self._stock_symbol)
-            self._total_value = self._amount * self._single_value
-        return self._total_value
+            self._single_value = self.stock.get_stock_price()
+            self._real_value = self._amount * self._single_value
+        return self._real_value
     
     def get_name(self):
         return self._name
@@ -74,7 +76,7 @@ class Entity:
         if self._amount == 1:
             value = f"Value: ${self._single_value:.2f}\t\t"
         else:
-            value = f"Value: ${self._single_value:.2f}\t\tOwned: {self._amount}\t\tTotal Value: ${self._total_value:.2f}\t\t"
+            value = f"Value: ${self._single_value:.2f}\t\tOwned: {self._amount}\t\tTotal Value: ${self._real_value:.2f}\t\t"
         desc = f"Desc: {self._description}"
         entity_info = f"{id}{name}{value}"
         if self._auto_update == True:
@@ -166,17 +168,16 @@ class Entity:
         return False
     
     def check_valid_symbol(self, stock_symbol: str) -> bool:
-        is_stock = Stock.Stock.check_valid_stock_symbol(stock_symbol)
+        is_stock = StockFactory.check_valid_stock_symbol(stock_symbol)
         return is_stock
 
     
     def get_stock_value(self, stock_symbol: str) -> float:
-        price = Stock.Stock.get_stock_price(stock_symbol)
+        price = self.stock.get_stock_price(stock_symbol)
         return price
             
 
             
-
 
 
 
