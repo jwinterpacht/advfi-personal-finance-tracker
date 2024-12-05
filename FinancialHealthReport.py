@@ -17,32 +17,7 @@ class FinancialHealthReport:
         self._expenses = expenses
         self._savings_rate = savings_rate
         self._debt_to_income_ratio = debt_to_income_ratio
-        self._liquidity_ratio = liquidity_ratio
         self._investment_return = investment_return
-        self._report_date = report_date
-
-    @classmethod
-    def generate_report(cls, net_worth: float, total_assets: EntityPortfolio, total_liabilities: EntityPortfolio,
-                        income: float, expenses: float, savings_rate: float, debt_to_income_ratio: float,
-                        liquidity_ratio: float, investment_return: float, report_date: date):
-        '''
-        class method that creates a FinancialHealthReport object
-
-        :param net_worth: the net worth of the user (assets - liabilities)
-        :param total_assets: the total amount of assets the user has
-        :param total_liabilities: the total amount of liabilities the user has
-        :param income: total gross income
-        :param expenses: total expenses
-        :param savings_rate: percent of income that is saved
-        :param debt_to_income_ratio: the percentage of gross income dedicated to paying debts
-        :param liquidity_ratio: determines user's ability to pay short-term debts
-        :param investment_return: how much the user has gained or lost on investments, represented by a percentage
-        :param report_date: the date when the report was generated
-        :return: a FinancialHealthReport object
-        '''
-        return cls(net_worth, total_assets, total_liabilities,
-                        income, expenses, savings_rate, debt_to_income_ratio, liquidity_ratio, investment_return,
-                   report_date)
 
     def calculate_savings_rate(self, income: float, expenses: float) -> float:
         '''
