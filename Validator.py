@@ -230,9 +230,20 @@ class Validator():
         if int(pin) < 0:
             return False #do not allow negative pins because that's just silly
         return True
+    
     @staticmethod
     def validate_password(account: UserAccount, input_password: str):
         return account.check_password(input_password)
+
+    @staticmethod
+    def validate_file_name(file: str):
+        try:
+            with open(file, 'r') as file:
+                content = file.read()
+            return True
+        except :
+            MainUI.MainUI.utility_print("Please enter a valid file name and ensure file is in the correct folder")
+            return False
     
     @staticmethod
     def validate_database_connection():

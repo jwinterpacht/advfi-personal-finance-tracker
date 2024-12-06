@@ -18,12 +18,12 @@ class Operations:
         account.set_password(password)
         account.set_pin(pin)
         
-
-
-
     def create_and_add_transaction(transaction_list: TransactionList, amount, date, desc, type: str):
         amount = float(amount)
-        date = dt.strptime(date, '%m/%d/%y')
+
+        # Do this only if it is a string
+        if isinstance(date,str):
+            date = dt.strptime(date, '%m/%d/%y')
 
         transaction = Transaction.Transaction(amount, date, desc)
 
@@ -171,7 +171,7 @@ class Operations:
     
     def spending_management_menu_import_spending_CSV_operations(fileName: str, transaction_list: TransactionList):
 
-        with open('CSVTest.csv', 'r') as file:
+        with open(fileName, 'r') as file:
             csv_reader = csv.reader(file)
             next(csv_reader)  # Skip the header row
 
@@ -181,7 +181,7 @@ class Operations:
 
                 # Parse transaction date
                 try:
-                    transaction_date = datetime.strptime(row[0], '%m/%d/%Y').date()
+                    transaction_date = dt.strptime(row[0], '%m/%d/%Y').date()
                 except ValueError:
                     print(f"Invalid date format in row: {row}")
                     continue
@@ -204,9 +204,9 @@ class Operations:
 
                 # Add transaction to the correct list
                 if income_or_expense == "Expense":
-                    Operations.create_and_add_transaction(transaction_list, amount=amount, transaction_date=transaction_date, description=description, type="expense")
+                    Operations.create_and_add_transaction(transaction_list, amount=amount, date=transaction_date, desc=description, type="expense")
                 else:
-                    Operations.create_and_add_transaction(transaction_list, amount=amount, transaction_date=transaction_date, description=description, type="income")
+                    Operations.create_and_add_transaction(transaction_list, amount=amount, date=transaction_date, desc=description, type="income")
         
         
     def print_transactions(transaction_list:TransactionList) -> str:
