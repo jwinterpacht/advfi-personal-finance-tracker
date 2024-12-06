@@ -423,7 +423,6 @@ class Controller:
             selection = MainUI.MainUI.utility_print_with_return(options)
             stop = Validator.Validator.validate_menu_entry(selection, low_end, high_end)
         selection = int(selection)
-        edited_value = ""
         match selection:
             case 0:
                 MainUI.MainUI.action_cancelled()
