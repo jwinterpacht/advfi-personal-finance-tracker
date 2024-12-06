@@ -54,7 +54,7 @@ class Entity:
     def get_total_value(self):
         if(self._auto_update):
             self._single_value = self.stock.get_stock_price()
-            self._real_value = self._amount * self._single_value
+        self._real_value = self._amount * self._single_value
         return self._real_value
     
     def get_name(self):
@@ -110,7 +110,7 @@ class Entity:
         return True
     
     def set_amount(self, new_amount):
-        self._amount = new_amount
+        self._amount = int(new_amount)
         self._total_value = self._single_value * self._amount
     
     #there is no set_total_value because we should only let the user edit the value of individual assets
