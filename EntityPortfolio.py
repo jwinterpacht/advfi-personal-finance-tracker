@@ -115,7 +115,7 @@ class EntityPortfolio:
         self.total_value = updated_asset_value - updated_liability_value
 
     #used by the validator class to check if a certain id was found in the asset list
-    def find_asset_id(self, asset_id):  #lets us handle any potential problems as early as possible
+    def find_asset_id(self, asset_id) -> bool:  #lets us handle any potential problems as early as possible
         for item in self.assets:
             if item.get_entity_id() == asset_id:
                 return True
@@ -165,7 +165,7 @@ class EntityPortfolio:
                 return liability.get_entity_value()
 
     #should only be used once we know for a fact that the entity id is valid
-    def get_entity(self, entity_id):
+    def get_entity(self, entity_id) -> Entity:
         entity_id = int(entity_id)
         for asset in self.assets:
             if Entity.Entity.get_entity_id(asset) == entity_id:
@@ -185,7 +185,7 @@ class EntityPortfolio:
     def get_debt_status(self):
         debt_status = ""
         for debt in self.liabilities:
-            percentage_paid = ((debt.initial_value - debt.single_value) / debt.initial_value) * 100
-            temp_str = f"ID: {debt.entity_id}\tName: {debt.name}\tCurrent Value: ${debt.single_value}\tStarting Value: ${debt.initial_value}\tPercentage Paid: {percentage_paid:.2f}%\n"
+            percentage_paid = ((debt._initial_value - debt._single_value) / debt._initial_value) * 100
+            temp_str = f"ID: {debt._entity_id}\tName: {debt._name}\tCurrent Value: ${debt._single_value}\tStarting Value: ${debt._initial_value}\tPercentage Paid: {percentage_paid:.2f}%\n"
             debt_status += temp_str
         return debt_status

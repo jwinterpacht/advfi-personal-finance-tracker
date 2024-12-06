@@ -10,7 +10,7 @@ import Category
 import CategoryList
 import Stock
 import StockFactory
-import mysql.connector
+#import mysql.connector
 
 class Validator():
 
@@ -72,7 +72,6 @@ class Validator():
         # user's entry must be an integer
         if not Validator._validate_integer(entry):
             return False
-        
         selection = int(entry)
         if not Validator._validate_selection_range(selection, low_end, high_end):
             return False
