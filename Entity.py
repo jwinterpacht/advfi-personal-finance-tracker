@@ -14,7 +14,7 @@ import StockFactory
 class Entity:
 
     #constructor                          #change to enum
-    def __init__(self, entity_value:float, entity_amount:int, entity_name:str, entity_description, entity_auto_update, entity_stock_symbol):  
+    def __init__(self, entity_value:float, entity_amount:int, entity_name:str, entity_description: str, entity_auto_update: bool, entity_stock_symbol: str):  
         self._single_value = entity_value
         if entity_amount == "":
             self._amount = 1

@@ -1,14 +1,16 @@
 import unittest
 import Transaction
 import Operations
+from datetime import datetime as dt
 
 #https://www.youtube.com/watch?v=6tNS--WetLI
 
 #assertion test funcs: https://docs.python.org/3/library/unittest.html#unittest.TestCase.debug
 
 class TestIncome(unittest.TestCase):
-
-    income_obj = Transaction.Transaction(500, 10/23/24, "Paycheck")
+    date = "10/23/24"
+    date = dt.strptime(date, '%m/%d/%y')
+    income_obj = Transaction.Transaction(500, date, "Paycheck")
 
 
     #test_ naming convention required

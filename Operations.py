@@ -1,5 +1,5 @@
 import csv
-import MainUI
+import MainUI 
 import Transaction
 from datetime import datetime as dt
 import TransactionList
@@ -186,7 +186,7 @@ class Operations:
 
                 # Parse transaction date
                 try:
-                    transaction_date = datetime.strptime(row[0], '%m/%d/%Y').date()
+                    transaction_date = dt.strptime(row[0], '%m/%d/%Y').date()
                 except ValueError:
                     print(f"Invalid date format in row: {row}")
                     continue
