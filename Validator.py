@@ -233,6 +233,13 @@ class Validator():
     @staticmethod
     def validate_password(account: UserAccount, input_password: str):
         return account.check_password(input_password)
+    
+    @staticmethod
+    def validate_new_password(new_pass: str):
+        if len(new_pass) < 5:
+            print("Password must be at least 5 characters.")
+            return False
+        return True
 
     @staticmethod
     def validate_file_name(file: str):
