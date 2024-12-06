@@ -244,6 +244,8 @@ class Operations:
             db.close()
         except Exception as e:
             print(f"Could not store income to database. Error: {e}")
+            return False #added bools for testing
+        return True
 
     def pull_incomes_from_database(transaction_list: TransactionList):
         try:
@@ -272,5 +274,7 @@ class Operations:
             db.close()
         except Exception as e:
             print(f"Could not grab income to database Please exit AdvFi and fix to save your data. Error: {e}")
+            return False #added bools for testing
+        return True
 
 
