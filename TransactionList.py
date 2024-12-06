@@ -65,7 +65,7 @@ class TransactionList:
     def get_total_expenses(self) -> float:
         return self._total_expenses
     
-    def get_transaction_count(self) -> float:
+    def get_transaction_count(self) -> int:
         return self._transaction_count
     
     def print_expenses(self) -> str:
