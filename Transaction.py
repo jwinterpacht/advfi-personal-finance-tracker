@@ -13,7 +13,7 @@ class Transaction:
     
     # return the transaction ID
     def get_transaction_id(self) -> str:
-        return self._transaction_id
+        return self._transaction_ID
     
     def set_transaction_id(self, new_ID: str) -> bool:
         if self._transaction_ID == -1:
