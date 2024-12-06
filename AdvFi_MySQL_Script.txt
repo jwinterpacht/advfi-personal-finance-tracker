@@ -1,0 +1,26 @@
+CREATE DATABASE advfi_database;
+USE advfi_database;
+
+-- Correct syntax for CREATE USER:
+CREATE USER 'advfi_user'@'localhost' IDENTIFIED BY 'advfi_password'; 
+GRANT ALL PRIVILEGES ON advfi_database.* TO 'advfi_user'@'localhost';
+FLUSH PRIVILEGES;
+
+-- AdvFi Tables
+
+CREATE TABLE the_user (
+    password VARCHAR(255) NOT NULL,
+    pin INT
+);
+
+-- (1) income (transaction) menu related stuff. Not named "transaction" bc it's a keyword in SQL
+CREATE TABLE income (
+    amount INT PRIMARY KEY,
+    transaction_date DATETIME NOT NULL, -- I think this is the same DATETIME that Python uses since I am using MySQL.connector
+    trans_desc TEXT, -- transaction description. I didn't simply call it "description" bc it's a keyword in SQL
+    category_name VARCHAR(255),
+    id INT -- need to del table and recreate to add this (12-3-2024)
+);
+
+
+SELECT * FROM income;

@@ -20,119 +20,107 @@ import Entity
 class Category:
 
     def __init__(self, name, description = ""): 
-        self.category_name = name
-        self.category_description = description
+        self._category_name = name
+        self._category_description = description
 
-        self.asset_list = []
-        self.liability_list = []
-        self.income_list = []
-        self.expense_list = []
+        self._asset_list = []
+        self._liability_list = []
+        self._income_list = []
+        self._expense_list = []
 
-        self.asset_count = 0
-        self.liability_count = 0
-        self.income_count = 0
-        self.expense_count = 0
+        self._asset_count = 0
+        self._liability_count = 0
+        self._income_count = 0
+        self._expense_count = 0
 
-        self.budget = -1.0  #a budget of -1 will be used to signify that this category does not have a given budget
+        self._budget = -1.0  #a budget of -1 will be used to signify that this category does not have a given budget
 
         
     
     def get_name(self):
-        return self.category_name
+        return self._category_name
     
     def get_description(self):
-        return self.category_description
+        return self._category_description
     
     def set_name(self, new_name):
-        self.category_name = new_name
-        return True
+        self._category_name = new_name
     
     def set_description(self, new_description):
-        self.category_description = new_description
-        return True
+        self._category_description = new_description
     
     def add_asset(self, asset: Entity):
-        self.asset_count += 1
-        self.asset_list.append(asset)
-        return True
+        self._asset_count += 1
+        self._asset_list.append(asset)
     
     def add_liability(self, liability: Entity):
-        self.liability_count += 1
-        self.liability_list.append(liability)
-        return True
+        self._liability_count += 1
+        self._liability_list.append(liability)
     
     def add_income(self, income: Transaction):
-        self.income_count += 1
-        self.income_list.append(income)
-        return True
+        self._income_count += 1
+        self._income_list.append(income)
     
     def add_expense(self, expense: Transaction):
-        self.expense_count += 1
-        self.expense_list.append(expense)
-        return True
+        self._expense_count += 1
+        self._expense_list.append(expense)
     
     #remove items
     def remove_asset(self, asset: Entity):
-        self.asset_count -= 1
-        self.asset_list.remove(asset)
-        return True
+        self._asset_count -= 1
+        self._asset_list.remove(asset)
     
     def remove_liability(self, liability: Entity):
-        self.liability_count -= 1
-        self.liability_list.remove(liability)
-        return True
+        self._liability_count -= 1
+        self._liability_list.remove(liability)
     
     def remove_income(self, income: Transaction):
-        self.income_count -= 1
-        self.income_list.remove(income)
-        return True
+        self._income_count -= 1
+        self._income_list.remove(income)
     
     def remove_expense(self, expense: Transaction):
-        self.expense_count -= 1
-        self.expense_list.remove(expense)
-        return True
+        self._expense_count -= 1
+        self._expense_list.remove(expense)
     
     #wasn't sure what the best name for this one was but the idea is that when you delete a category from the category list
     #you also need to makes sure that the items which were previously associated with that category get the category_name field reset
     def reset_item_category_names(self):
-        for income in self.income_list:
+        for income in self._income_list:
             income.set_category_name("")
-        for expense in self.expense_list:
+        for expense in self._expense_list:
             expense.set_category_name("")
-        for asset in self.asset_list:
+        for asset in self._asset_list:
             asset.set_category_name("")
-        for liability in self.liability_list:
+        for liability in self._liability_list:
             liability.set_category_name("")
-        return True
     
     #used to help print out all of the items associated with a given category
     def get_category_items_str(self) -> str:
         items_str = f"All items associated with the category '{self.category_name}'\n\n"
-        if self.income_count > 0:
+        if self._income_count > 0:
             items_str += "Income List:\n"
-            for income in self.income_list:
+            for income in self._income_list:
                 items_str += f"{income.print_transaction()}\n"
             items_str += "\n"
-        if self.expense_count > 0:
+        if self._expense_count > 0:
             items_str += "Expense List:\n"
-            for expense in self.expense_list:
+            for expense in self._expense_list:
                 items_str += f"{expense.print_transaction()}\n"
             items_str += "\n"
-        if self.asset_count > 0:
+        if self._asset_count > 0:
             items_str += "Asset List:\n"
-            for asset in self.asset_list:
+            for asset in self._asset_list:
                 items_str += f"{asset.print_entity()}"
             items_str += "\n"
-        if self.liability_count > 0:
+        if self._liability_count > 0:
             items_str += "Liability List:\n"
-            for liability in self.liability_list:
+            for liability in self._liability_list:
                 items_str += f"{liability.print_entity()}"
         return items_str
 
     def set_budget(self, budget: str) -> None:
         budget = float(budget)
-        self.budget = budget
-        return
+        self._budget = budget
     
     def get_budget(self) -> float:
         return self.budget
@@ -140,11 +128,11 @@ class Category:
     def get_budget_adherence(self):
         #grab the total of all the expenses that have happened within the last month
         monthly_expenses = 0.0 #set as a float
-        for expense in self.expense_list:
+        for expense in self._expense_list:
             if expense.get_is_within_last_month():
                 monthly_expenses += expense.get_amount()
-        percent_spent = (monthly_expenses/self.budget) * 100
-        return f"{self.category_name}\tAmount spent this month: ${monthly_expenses:.2f}\tTotal budget: ${self.budget}\tPercentage spent: {percent_spent:.2f}%"
+        percent_spent = (monthly_expenses/self._budget) * 100
+        return f"{self._category_name}\tAmount spent this month: ${monthly_expenses:.2f}\tTotal budget: ${self._budget}\tPercentage spent: {percent_spent:.2f}%"
     
 
     
