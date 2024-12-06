@@ -10,9 +10,9 @@ class MainUI:
     SPENDING_MGMT_MENU_LOW = 0
     SPENDING_MGMT_MENU_HIGH = 7
     ASSET_MGMT_MENU_LOW = 0
-    ASSET_MGMT_MENU_HIGH = 5
+    ASSET_MGMT_MENU_HIGH = 6
     LIABILITY_MGMT_MENU_LOW = 0
-    LIABILITY_MGMT_MENU_HIGH = 6
+    LIABILITY_MGMT_MENU_HIGH = 7
     CATEGORY_MGMT_MENU_LOW = 0
     CATEGORY_MGMT_MENU_HIGH = 5
 
@@ -167,6 +167,16 @@ class MainUI:
         print(info)
         MainUI.wait_for_user_input()
 
+    @staticmethod
+    def utility_print_no_clear(info: str) -> None:
+        print(info)
+        MainUI.wait_for_user_input()
+        
+    @staticmethod
+    def utility_print_with_return(info:str) -> str:
+        MainUI.clear_screen()
+        print(info)
+        return input()
 
     
     @staticmethod
@@ -236,9 +246,10 @@ class MainUI:
         print(f"Current total value of assets: ${assets_value}\n")
         print("1: Add asset")
         print("2: View asset list")
-        print("3: Remove asset")
-        print("4: Calculate real time asset prices")
-        print("5: Categorize assets")
+        print("3: Edit Asset")
+        print("4: Remove asset")
+        print("5: Calculate real time asset prices")
+        print("6: Categorize assets")
         print("0: Return to main menu")
         return input()
     
@@ -249,11 +260,12 @@ class MainUI:
         print("Would you like to link this asset with a stock? (y/n)")
         return input()
     
-    def asset_management_menu_delete_asset(asset_list: str):
+    def asset_management_menu_edit_delete_asset(asset_list: str, action: str):
         MainUI.clear_screen()
         print(asset_list)
-        print("\nEnter the ID of the asset you would like to remove\nEnter -1 to cancel the operation")
+        print(f"\nEnter the ID of the asset you would like to {action}\nEnter -1 to cancel the operation")
         return input()
+
     
     @staticmethod
     def liability_management_menu():
@@ -262,9 +274,10 @@ class MainUI:
         print("1: Add liability")
         print("2: View liability list")
         print("3: Make a payment towards a liability")
-        print("4: Remove liability")
-        print("5: Track outstanding debt and payment debt") 
-        print("6: Categorize liabilities")
+        print("4: Edit liability")
+        print("5: Remove liability")
+        print("6: Track outstanding debt and payment debt") 
+        print("7: Categorize liabilities")
         print("0: Return to main menu")
         return input()
     

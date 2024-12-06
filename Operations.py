@@ -8,7 +8,7 @@ import EntityPortfolio
 import UserAccount
 import Category
 import CategoryList
-import mysql.connector #allows Python to talk to MySQL database
+#import mysql.connector #allows Python to talk to MySQL database
 
 class Operations:
 
@@ -18,6 +18,7 @@ class Operations:
         account.set_password(password)
         account.set_pin(pin)
         
+
     def create_and_add_transaction(transaction_list: TransactionList, amount, date, desc, type: str):
         amount = float(amount)
 
@@ -30,7 +31,7 @@ class Operations:
         if type == "income":
             transaction_list.add_income_transaction(transaction)
             #Now, store the income transaction into the database
-            Operations.add_income_to_database(transaction)
+            #Operations.add_income_to_database(transaction)
         
         elif type == "expense":
             transaction_list.add_expense_transaction(transaction)
@@ -86,6 +87,13 @@ class Operations:
         elif type == "liability":
             category.add_liability(entity)
         entity.set_category_name(category_name)
+
+    def get_entity(entity_portfolio: EntityPortfolio, type: str, id: str) -> Entity:
+        if type == "asset":
+            return entity_portfolio.get_entity(id)
+        elif type == "liability":
+            return entity_portfolio.get_entity(id)
+        
 
 
     def asset_management_menu_view_asset_list_operations(entity_portfolio):

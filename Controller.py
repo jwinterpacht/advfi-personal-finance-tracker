@@ -356,10 +356,12 @@ class Controller:
             case 2:
                 Controller.asset_management_menu_view_asset_list()
             case 3:
-                Controller.asset_management_menu_delete_asset()
+                Controller.asset_management_menu_edit_asset()
             case 4:
-                Controller.asset_management_menu_update_assets()
+                Controller.asset_management_menu_delete_asset()
             case 5:
+                Controller.asset_management_menu_update_assets()
+            case 6:
                 Controller.asset_management_menu_categorize_assets()
             case 0:
                 return
@@ -398,12 +400,49 @@ class Controller:
         MainUI.MainUI.utility_print(asset_list)
         return
 
+    def asset_management_menu_edit_asset():
+        asset_list = Operations.Operations.asset_management_menu_view_asset_list_operations(entity_portfolio)
+        stop = False
+        while not stop:
+            id = MainUI.MainUI.asset_management_menu_edit_delete_asset(asset_list, "edit")
+            stop = Validator.Validator.validate_entity_id(entity_portfolio, "asset", id)
+        if id == "-1":
+            MainUI.MainUI.action_cancelled()
+            return
+        asset_obj = Operations.Operations.get_entity(entity_portfolio, "asset", id)
+        is_stock = asset_obj.get_auto_update()
+        low_end = 0
+        high_end = 3
+        options = f"Select a value to edit for {asset_obj.get_name()}:\n1: Edit Name\n2: Edit Description\n3: Edit Amount Owned"
+        if not is_stock:
+            options += "\n4: Edit Individual Value"
+            high_end = 4
+        options += "\n0: Cancel this action"
+        stop = False
+        while not stop:
+            selection = MainUI.MainUI.utility_print_with_return(options)
+            stop = Validator.Validator.validate_menu_entry(selection, low_end, high_end)
+        selection = int(selection)
+        match selection:
+            case 0:
+                MainUI.MainUI.action_cancelled()
+                return
+            case 1:
+                asset_obj.set_name(Controller._get_entity_name())
+            case 2:
+                asset_obj.set_description(Controller._get_desc())
+            case 3:
+                asset_obj.set_amount(Controller._get_num_owned())
+            case 4:
+                asset_obj.set_single_value(Controller._get_entity_value())
+        MainUI.MainUI.utility_print_no_clear("Update successful!")
+
     def asset_management_menu_delete_asset():
         #3
         asset_list = Operations.Operations.asset_management_menu_view_asset_list_operations(entity_portfolio)
         stop = False
         while not stop:
-            id = MainUI.MainUI.asset_management_menu_delete_asset(asset_list)
+            id = MainUI.MainUI.asset_management_menu_edit_delete_asset(asset_list, "delete")
             stop = Validator.Validator.validate_entity_id(entity_portfolio, "asset", id)
         #once the asset id is validated we need to actually remove the asset
         Operations.Operations.remove_entity_from_portfolio(entity_portfolio, "asset", id)
@@ -449,10 +488,12 @@ class Controller:
                 case 3:
                     Controller.liability_management_menu_make_liability_payment()
                 case 4:
-                    Controller.liability_management_menu_delete_liability()
+                    Controller.liability_management_menu_edit_liability()
                 case 5:
-                    Controller.liability_management_menu_track_debt()
+                    Controller.liability_management_menu_delete_liability()
                 case 6:
+                    Controller.liability_management_menu_track_debt()
+                case 7:
                     Controller.liability_management_menu_categorize_liability()
         return
 
@@ -473,6 +514,36 @@ class Controller:
         liability_list = Operations.Operations.liability_management_menu_view_liability_list_operations(entity_portfolio)
         MainUI.MainUI.utility_print(liability_list)
         return
+    
+    def liability_management_menu_edit_liability():
+        liability_list = Operations.Operations.liability_management_menu_view_liability_list_operations(entity_portfolio)
+        stop = False
+        while not stop:
+            id = MainUI.MainUI.liability_management_menu_get_liability_id(liability_list)
+            stop = Validator.Validator.validate_entity_id(entity_portfolio, "liability", id)
+        if id == "-1":
+            MainUI.MainUI.action_cancelled()
+            return
+        liability_obj = Operations.Operations.get_entity(entity_portfolio, "liability", id)
+        low_end = 0
+        high_end = 2
+
+        options = f"Select a value to edit for {liability_obj.get_name()}:\n1: Edit Name\n2: Edit Description\n0: Cancel this action"
+
+        stop = False
+        while not stop:
+            selection = MainUI.MainUI.utility_print_with_return(options)
+            stop = Validator.Validator.validate_menu_entry(selection, low_end, high_end)
+        selection = int(selection)
+        match selection:
+            case 0:
+                MainUI.MainUI.action_cancelled()
+                return
+            case 1:
+                liability_obj.set_name(Controller._get_entity_name())
+            case 2:
+                liability_obj.set_description(Controller._get_desc())
+        MainUI.MainUI.utility_print_no_clear("Update successful!")
     
     def liability_management_menu_make_liability_payment():
         liability_list = Operations.Operations.liability_management_menu_view_liability_list_operations(entity_portfolio)
@@ -666,10 +737,10 @@ def main():
     test_category_2 = True #only make this true if income, expense, asset, stock, liability, and category are true also
 
     #before anything, check whether database connection is established
-    Validator.Validator.validate_database_connection()
+    #Validator.Validator.validate_database_connection()
 
     #now that database connection is established, fill pull its data and store in program's memory
-    Operations.Operations.pull_incomes_from_database(transaction_list)
+    #Operations.Operations.pull_incomes_from_database(transaction_list)
 
     #now we call the method that does the testing stuff
     if do_testing:
