@@ -106,7 +106,7 @@ class Controller:
         Operations.Operations.create_user_account_operations(account, new_pass, new_pin)
 
         #send the user to the home screen
-        Controller.home_screen()
+        #Controller.home_screen()
     
     def user_login():
         password = MainUI.MainUI.get_password()
@@ -139,13 +139,11 @@ class Controller:
             case 6:
                 Controller.retrieve_transactions()
             case 7: 
-                #Controller.alert_center_menu()
+                Controller.category_management_menu() 
                 pass
             case 8:
                 #Controller.program_settings_menu()
                 pass
-            case 9:
-                Controller.category_management_menu() 
             case 0:
                 MainUI.MainUI.exit_adv_fi()
                 exit(0)     
@@ -189,6 +187,10 @@ class Controller:
 
     
     def income_management_menu_remove_income():
+        #ensure that there are transaction items to be recorded
+        if transaction_list.get_total_income() == 0.0:
+            MainUI.MainUI.utility_print_no_clear("Error: no pre-existing incomes to delete")
+            return
         income_list = Operations.Operations.print_income_list(transaction_list)                          #so the user can find the relevant ID
 
         stop = False
@@ -207,10 +209,14 @@ class Controller:
         3. the user can then type an income ID followed by the target category
         4. by pressing enter when nothing was typed, user will be sent back to the home screen        
         """
+        #don't allow caregorization of non-existent items
+        if transaction_list.get_total_income() == 0.0:
+            MainUI.MainUI.utility_print_no_clear("Error: no pre-existing incomes to delete")
+            return
         #don't allow users to attempt to categorize ANY ITEMS until there are actual categories already created
         if category_list.get_category_count() == 0:
             MainUI.MainUI.error_no_categories_categorization()
-            Controller.home_screen()
+            return
         income_list = Operations.Operations.print_income_list(transaction_list)
         stop = False
         while not stop:  #get the ID of the income we are going to categorize
@@ -275,6 +281,7 @@ class Controller:
         return    
     
     def spending_management_menu_delete_expense():
+
         expense_list = Operations.Operations.print_expense_list(transaction_list)
 
         stop = False
@@ -297,7 +304,7 @@ class Controller:
     def spending_management_menu_categorize_expense():
         if category_list.get_category_count() == 0:
             MainUI.MainUI.error_no_categories_categorization()
-            Controller.home_screen()
+            return
         expense_list = Operations.Operations.print_expense_list(transaction_list)
         stop = False
         while not stop:  #get the ID of the income we are going to categorize
@@ -401,6 +408,9 @@ class Controller:
         return
 
     def asset_management_menu_edit_asset():
+        if len(entity_portfolio.get_asset_list()) == 0:
+            MainUI.MainUI.utility_print_no_clear("Error: no pre-existing assets to edit")
+            return
         asset_list = Operations.Operations.asset_management_menu_view_asset_list_operations(entity_portfolio)
         stop = False
         while not stop:
@@ -438,7 +448,9 @@ class Controller:
         MainUI.MainUI.utility_print_no_clear("Update successful!")
 
     def asset_management_menu_delete_asset():
-        #3
+        if len(entity_portfolio.get_asset_list()) == 0:
+            MainUI.MainUI.utility_print_no_clear("Error: no pre-existing assets to delete")
+            return
         asset_list = Operations.Operations.asset_management_menu_view_asset_list_operations(entity_portfolio)
         stop = False
         while not stop:
@@ -516,6 +528,9 @@ class Controller:
         return
     
     def liability_management_menu_edit_liability():
+        if len(entity_portfolio.get_liability_list()) == 0:
+            MainUI.MainUI.utility_print_no_clear("Error: no pre-existing liabilities to edit")
+            return
         liability_list = Operations.Operations.liability_management_menu_view_liability_list_operations(entity_portfolio)
         stop = False
         while not stop:
@@ -546,6 +561,9 @@ class Controller:
         MainUI.MainUI.utility_print_no_clear("Update successful!")
     
     def liability_management_menu_make_liability_payment():
+        if len(entity_portfolio.get_liability_list()) == 0:
+            MainUI.MainUI.utility_print_no_clear("Error: no pre-existing liabilities to make payments towards")
+            return
         liability_list = Operations.Operations.liability_management_menu_view_liability_list_operations(entity_portfolio)
         stop = False
         while not stop:
@@ -562,6 +580,9 @@ class Controller:
         return
     
     def liability_management_menu_delete_liability():
+        if len(entity_portfolio.get_liability_list()) == 0:
+            MainUI.MainUI.utility_print_no_clear("Error: no pre-existing liabilities to delete")
+            return
         liability_list = Operations.Operations.liability_management_menu_view_liability_list_operations(entity_portfolio)
         stop = False
         while not stop:
@@ -571,6 +592,9 @@ class Controller:
         return
 
     def liability_management_menu_track_debt():
+        if len(entity_portfolio.get_liability_list()) == 0:
+            MainUI.MainUI.utility_print_no_clear("Error: no pre-existing liabilities to track debt for")
+            return
         #print out each debt and how much is left to be paid
         debt_status = Operations.Operations.liability_management_menu_track_debt_operations(entity_portfolio)
         MainUI.MainUI.liability_track_debt(debt_status)
@@ -624,7 +648,6 @@ class Controller:
                     Controller.category_management_menu_view_category_list_info()
                 case 4:
                     Controller.category_management_menu_view_category_items()
-                    
                 case 5:
                     Controller.category_management_menu_delete_category()
     
@@ -648,6 +671,9 @@ class Controller:
         return
         
     def category_management_menu_view_category_names():
+        if category_list.get_category_count() == 0:
+            MainUI.MainUI.error_no_categories_categorization()
+            return
         #go to the category list and grab the category name list
         category_name_list = category_list.get_category_names_str()
         #send to MainUI
@@ -655,11 +681,17 @@ class Controller:
         return
     
     def category_management_menu_view_category_list_info():
+        if category_list.get_category_count() == 0:
+            MainUI.MainUI.error_no_categories_categorization()
+            return
         category_list_info = category_list.get_category_list_info()
         MainUI.MainUI.category_menu_show_category_list_info(category_list_info)
         return
 
     def category_management_menu_view_category_items():
+        if category_list.get_category_count() == 0:
+            MainUI.MainUI.error_no_categories_categorization()
+            return
         #get a category from the user
         category_name = Controller._get_category_name()
         #get all of the incomes, expenses, assets, and liabilities associated with that category
@@ -668,6 +700,9 @@ class Controller:
 
     def category_management_menu_delete_category():
         #show category names to the user
+        if category_list.get_category_count() == 0:
+            MainUI.MainUI.error_no_categories_categorization()
+            return
         category_name_list = category_list.get_category_names_str()
         stop = False
         category_name = Controller._get_category_name()
