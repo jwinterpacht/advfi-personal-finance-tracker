@@ -136,9 +136,8 @@ class MainUI:
         print("4: Liability and Debt Management Menu")
         print("5: Fiancial Reports Menu (not ready yet)")
         print("6: Retrieve Transactions")
-        print("7: Alert Center Menu (not ready yet)")
+        print("7: Category Menu")
         print("8: Program Settings Menu (not ready yet)")
-        print("9: Category Menu")
         print("0: Exit AdvFi")
         return input()
 
@@ -441,11 +440,11 @@ class MainUI:
         MainUI.wait_for_user_input()
 
     def error_no_categories_categorization():
-        print("You cannot categorize an item without first creating a category using the category menu")
+        print("ERROR: You cannot complete this action without first creating a category using the category menu")
         MainUI.wait_for_user_input()
 
     def error_no_categories_budgeting():
-        print("You cannot set category budget without first creating a category using the category menu")
+        print("ERROR: You cannot set category budget without first creating a category using the category menu")
         MainUI.wait_for_user_input()
 
     

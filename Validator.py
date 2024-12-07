@@ -54,7 +54,7 @@ class Validator():
         #technically for speed this should be implemented below the validate integer
         #however this is more readable
         low_end = 0
-        high_end = 9
+        high_end = 8
 
         #if validate integer returns false
         if not Validator._validate_integer(entry):
@@ -82,8 +82,8 @@ class Validator():
         if not Validator._validate_float(amount):
             return False
         amount = float(amount)
-        if amount < 0:
-            print("Error: amount cannot be negative")
+        if not amount > 0:
+            MainUI.MainUI.utility_print_no_clear("Error: amount cannot be negative or zero")
             return False
         return True
 
@@ -96,7 +96,7 @@ class Validator():
             datetime.strptime(date, '%m/%d/%y')
 
         except:
-            print("Error: Please format date correctly.")
+            MainUI.MainUI.utility_print_no_clear("Error: Please format date correctly.")
             return False
         
         return True
@@ -133,7 +133,7 @@ class Validator():
             return False
         owned = int(num_owned)
         if owned < 0:
-            print("Error: cannot own negative entities")
+            MainUI.MainUI.utility_print_no_clear("Error: cannot own negative entities")
             return False
         return True
 
@@ -191,7 +191,7 @@ class Validator():
             return False
         entity_id = int(entity_id)
         if entity_id < -1:
-            print("Error: smallest allowed value is -1")
+            MainUI.MainUI.utility_print_no_clear("Error: smallest allowed value is -1")
             return False
         if entity_id == -1: #action cancelled
             return True
@@ -237,7 +237,7 @@ class Validator():
     @staticmethod
     def validate_new_password(new_pass: str):
         if len(new_pass) < 5:
-            print("Password must be at least 5 characters.")
+            MainUI.MainUI.utility_print_no_clear("Password must be at least 5 characters.")
             return False
         return True
 
