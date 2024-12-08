@@ -624,12 +624,12 @@ class Controller:
         return
         
     def financial_reports_menu():
-        MainUI.MainUI.financial_reports_menu()
         stop = False
         while not stop:
             user_selection = MainUI.MainUI.financial_reports_menu()
             stop = Validator.Validator.validate_menu_entry(user_selection, MainUI.MainUI.FINANCIAL_REPORTS_MENU_LOW, MainUI.MainUI.FINANCIAL_REPORTS_MENU_HIGH)
         selection = int(user_selection)
+        print("test")
         match selection:
             case 0:
                 return
@@ -648,7 +648,11 @@ class Controller:
 
     def financial_reports_menu_income_report():
         # Operations.Operations.print_income_report(transaction_list)
+        income_report = Operations.Operations.financial_reports_menu_income_report_operations(transaction_list)
+        # MainUI.MainUI.utility_print(f"type: {type(income_report)}")
+        income_report.generate_report()
         MainUI.MainUI.financial_reports_menu_income_report()
+        
 
 
     def retrieve_transactions():

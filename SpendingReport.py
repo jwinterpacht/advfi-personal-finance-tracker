@@ -2,9 +2,11 @@ from datetime import date
 from typing import List, Dict
 
 class SpendingReport:
-    def __init__(self):  
+    def __init__(self):
+        super().__init__()
+        self._total_spending_last_month = 0.0
         self._total_spending = 0.0
-        self._expenses = []
+        self._expense_entries_last_month = []
 
     # Getters
     def get_total_spending(self):
