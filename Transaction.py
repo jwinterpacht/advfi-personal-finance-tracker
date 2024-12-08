@@ -1,4 +1,4 @@
-from datetime import date
+from datetime import datetime as date
 
 class Transaction:
     
