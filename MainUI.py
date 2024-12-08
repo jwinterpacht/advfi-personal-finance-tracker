@@ -15,6 +15,8 @@ class MainUI:
     LIABILITY_MGMT_MENU_HIGH = 7
     CATEGORY_MGMT_MENU_LOW = 0
     CATEGORY_MGMT_MENU_HIGH = 5
+    PROGRAM_SETTINGS_MENU_LOW = 0
+    PROGRAM_SETTINGS_MENU_HIGH = 2
 
     def clear_screen():
         #pass
@@ -137,7 +139,7 @@ class MainUI:
         print("5: Fiancial Reports Menu (not ready yet)")
         print("6: Retrieve Transactions")
         print("7: Category Menu")
-        print("8: Program Settings Menu (not ready yet)")
+        print("8: Program Settings Menu")
         print("0: Exit AdvFi")
         return input()
 

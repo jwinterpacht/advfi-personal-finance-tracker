@@ -20,3 +20,8 @@ class UserAccount:
         if self._password == input_password:
             return True
         return False
+    
+    def check_pin(self, input_pin):
+        if self._pin == input_pin:
+            return True
+        return False

@@ -142,7 +142,7 @@ class Controller:
                 Controller.category_management_menu() 
                 pass
             case 8:
-                #Controller.program_settings_menu()
+                Controller.program_settings_menu()
                 pass
             case 0:
                 MainUI.MainUI.exit_adv_fi()
@@ -712,6 +712,54 @@ class Controller:
             return
         #now we actually delete the a category associated with the given name
         Operations.Operations.category_management_menu_delete_category_operations(category_list, category_name)
+
+
+    def program_settings_menu():
+        stop = False
+        while not stop:
+            user_selection = MainUI.MainUI.utility_print_with_return("Program Settings Menu:\n1: Change Password\n2: Program Credits\n0: Return to main menu")
+            stop = Validator.Validator.validate_menu_entry(user_selection, MainUI.MainUI.PROGRAM_SETTINGS_MENU_LOW, MainUI.MainUI.PROGRAM_SETTINGS_MENU_HIGH)
+        match int(user_selection):
+            case 0:
+                return
+            case 1:
+                Controller.program_settings_menu_change_password()
+            case 2:
+                MainUI.MainUI.utility_print("The Adv-Fi Team:\nJaden Winterpacht\nMason Myre\nJonah Raef\nFrank Watring")
+                return
+        
+    def _set_new_password():
+        stop = False
+        while not stop:
+            new_pass = MainUI.MainUI.utility_print_with_return("Please enter your new password")
+            stop = Validator.Validator.validate_new_password(new_pass)
+        account.set_password(new_pass)
+
+    def program_settings_menu_change_password():
+        while True:
+            password_input = MainUI.MainUI.utility_print_with_return("Please enter your current password: ")
+            if account.check_password(password_input):
+                Controller._set_new_password()
+                return
+            else:
+                stop = False
+                while not stop:
+                    user_input = MainUI.MainUI.utility_print_with_return("Incorrect password was provided, would you like to use your pin instead? (y/n)")
+                    stop = Validator.Validator.validate_yes_no(user_input)
+                if user_input[0] == "y":
+                    #validate the pin
+                    stop = False
+                    while not stop:
+                        user_input = MainUI.MainUI.utility_print_with_return("Please enter your pin number:\nYou can also enter -1 to cancel the password change")
+                        stop = account.check_pin(user_input)
+                        if user_input == "-1":
+                            MainUI.MainUI.action_cancelled()
+                            return
+                        if not stop:
+                            MainUI.MainUI.utility_print_with_return("Incorrect pin was provided")
+
+                    Controller._set_new_password()
+                    return
 
 
 def testing(test_login, test_income, test_expense, test_asset, test_stock, test_liability, test_category, test_category_2):
