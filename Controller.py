@@ -299,7 +299,7 @@ class Controller:
         while not stop:
             fileName = MainUI.MainUI.spending_management_menu_import_spending_CSV()
             stop = Validator.Validator.validate_file_name(fileName)
-        Operations.Operations.spending_management_menu_import_spending_CSV_operations()
+        Operations.Operations.spending_management_menu_import_spending_CSV_operations(fileName, transaction_list)
         
         
     
