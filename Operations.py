@@ -14,6 +14,7 @@ import ReportFactory
 import IncomeReport
 import SpendingReport
 import FinancialHealthReport
+import Report
 
 report_factory = ReportFactory.ReportFactory()
 
@@ -294,8 +295,8 @@ class Operations:
             return False #added bools for testing
         return True
     
-    def financial_reports_menu_income_report_operations(transaction_list: TransactionList) -> IncomeReport:
-        income_report = report_factory.get_report("income", transaction_list)
-        return income_report
+    def financial_reports_menu_report_operations(report_type, transaction_list: TransactionList) -> Report:
+        report = report_factory.get_report(report_type, transaction_list)
+        return report
 
 

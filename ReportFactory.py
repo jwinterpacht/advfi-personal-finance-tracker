@@ -23,7 +23,7 @@ class ReportFactory():
         elif report_type == "income":
             return IncomeReport.IncomeReport(transaction_list)
         elif report_type == "spending":
-            return SpendingReport()
+            return SpendingReport.SpendingReport(transaction_list)
         else:
             print(f"Invalid report type: {report_type}")
             return None
