@@ -202,7 +202,7 @@ class Operations:
 
                 # Determine income or expense and parse amount
                 if withdrawal_amount:
-                    amount = float(withdrawal_amount)
+                    amount = abs(float(withdrawal_amount))
                     income_or_expense = "Expense"
                 elif deposit_amount:
                     amount = float(deposit_amount)

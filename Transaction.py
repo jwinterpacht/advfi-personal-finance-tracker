@@ -10,7 +10,7 @@ class Transaction:
         self._description = description
         self._category_name = ""
         self._within_last_month = self._is_within_last_month()
-    
+        
     # return the transaction ID
     def get_transaction_id(self) -> str:
         return self._transaction_ID
