@@ -8,7 +8,8 @@ import EntityPortfolio
 import UserAccount
 import Category
 import CategoryList
-#import mysql.connector #allows Python to talk to MySQL database
+import mysql.connector #allows Python to talk to MySQL database
+import MySQLOperations
 
 class Operations:
 
@@ -29,12 +30,12 @@ class Operations:
         transaction = Transaction.Transaction(amount, date, desc)
 
         if type == "income":
-            transaction_list.add_income_transaction(transaction)
+            transaction_list.add_income_transaction(transaction) #make sure that it updates local list, not just DB
             #Now, store the income transaction into the database
-            #Operations.add_income_to_database(transaction)
-        
+            MySQLOperations.MySQLOperations.add_transaction_to_database(transaction, "income")
         elif type == "expense":
             transaction_list.add_expense_transaction(transaction)
+            MySQLOperations.MySQLOperations.add_transaction_to_database(transaction, "expense")
         
         else:
             print("error")

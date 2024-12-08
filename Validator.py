@@ -10,7 +10,7 @@ import Category
 import CategoryList
 import Stock
 import StockFactory
-#import mysql.connector
+import mysql.connector
 
 class Validator():
 

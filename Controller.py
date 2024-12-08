@@ -14,6 +14,8 @@ import TransactionList
 import UserAccount
 import CategoryList
 import Category
+import mysql.connector
+import MySQLOperations
 
 
 entity_portfolio = EntityPortfolio.EntityPortfolio()
@@ -198,6 +200,7 @@ class Controller:
             income_id = MainUI.MainUI.remove_transaction(income_list) 
             stop = Validator.Validator.validate_transaction_id(transaction_list, income_id, "income")
 
+        MySQLOperations.MySQLOperations.delete_transaction_from_db(transaction_list, income_id, "income")
         Operations.Operations.remove_transaction(transaction_list, income_id, "income")
         return
     
@@ -288,6 +291,7 @@ class Controller:
         while not stop:
             expense_id = MainUI.MainUI.remove_transaction(expense_list) 
             stop = Validator.Validator.validate_transaction_id(transaction_list, expense_id, "expense")
+        MySQLOperations.MySQLOperations.delete_transaction_from_db(transaction_list, expense_id, "expense")
         Operations.Operations.remove_transaction(transaction_list, expense_id, "expense")
         return
     
@@ -820,10 +824,10 @@ def main():
     test_category_2 = True #only make this true if income, expense, asset, stock, liability, and category are true also
 
     #before anything, check whether database connection is established
-    #Validator.Validator.validate_database_connection()
+    Validator.Validator.validate_database_connection()
 
     #now that database connection is established, fill pull its data and store in program's memory
-    #Operations.Operations.pull_incomes_from_database(transaction_list)
+    MySQLOperations.MySQLOperations.pull_trans_from_database(transaction_list)
 
     #now we call the method that does the testing stuff
     if do_testing:
