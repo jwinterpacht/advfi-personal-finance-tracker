@@ -96,7 +96,7 @@ class Category:
     
     #used to help print out all of the items associated with a given category
     def get_category_items_str(self) -> str:
-        items_str = f"All items associated with the category '{self.category_name}'\n\n"
+        items_str = f"All items associated with the category '{self._category_name}'\n\n"
         if self._income_count > 0:
             items_str += "Income List:\n"
             for income in self._income_list:
