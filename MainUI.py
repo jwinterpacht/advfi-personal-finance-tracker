@@ -17,6 +17,8 @@ class MainUI:
     CATEGORY_MGMT_MENU_HIGH = 5
     PROGRAM_SETTINGS_MENU_LOW = 0
     PROGRAM_SETTINGS_MENU_HIGH = 2
+    FINANCIAL_REPORTS_MENU_HIGH = 4
+    FINANCIAL_REPORTS_MENU_LOW = 0
 
     def clear_screen():
         #pass
@@ -136,7 +138,7 @@ class MainUI:
         print("2: Spending and Expense Management Menu")
         print("3: Asset Management Menu")
         print("4: Liability and Debt Management Menu")
-        print("5: Fiancial Reports Menu (not ready yet)")
+        print("5: Financial Reports Menu")
         print("6: Retrieve Transactions")
         print("7: Category Menu")
         print("8: Program Settings Menu")
@@ -302,6 +304,15 @@ class MainUI:
         print("3: Generate financial health report")
         print("4: Retrieve previously generated report from the database")  # goes to a sub-menu where all previously saved reports show up, maybe only display this option if user previously saved report to database
         print("0: Return to main menu")
+        return input()
+    
+    @staticmethod
+    def financial_reports_menu_income_report():
+        MainUI.clear_screen()
+        print("1: Save income report to database")
+        print("2: Save income report as PDF")
+        print("0: Exit without saving")
+        return input()
 
     @staticmethod
     def retrieve_transactions():

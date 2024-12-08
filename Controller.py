@@ -136,8 +136,7 @@ class Controller:
             case 4: 
                 Controller.liability_management_menu()
             case 5:
-                #Controller.financial_reports_menu()
-                pass
+                Controller.financial_reports_menu()
             case 6:
                 Controller.retrieve_transactions()
             case 7: 
@@ -624,12 +623,34 @@ class Controller:
         MainUI.MainUI.categorize_entity_success()
         return
         
-        
+    def financial_reports_menu():
+        MainUI.MainUI.financial_reports_menu()
+        stop = False
+        while not stop:
+            user_selection = MainUI.MainUI.financial_reports_menu()
+            stop = Validator.Validator.validate_menu_entry(user_selection, MainUI.MainUI.FINANCIAL_REPORTS_MENU_LOW, MainUI.MainUI.FINANCIAL_REPORTS_MENU_HIGH)
+        selection = int(user_selection)
+        match selection:
+            case 0:
+                return
+            case 1:
+                Controller.financial_reports_menu_income_report()
+            case 2:
+                # Controller.financial_reports_menu_spending_report()
+                pass
+            case 3:
+                # Controller.financial_reports_menu_financial_health_report()
+                pass
+            case 4:
+                # Controller.financial_reports_menu_retrieve_report()
+                pass
+    
+
+    def financial_reports_menu_income_report():
+        # Operations.Operations.print_income_report(transaction_list)
+        MainUI.MainUI.financial_reports_menu_income_report()
 
 
-
-
-        
     def retrieve_transactions():
         MainUI.MainUI.retrieve_transactions()
         transactions = Operations.Operations.print_transactions(transaction_list)
