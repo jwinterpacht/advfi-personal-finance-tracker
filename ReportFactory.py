@@ -12,13 +12,16 @@ import Report
 import FinancialHealthReport
 import IncomeReport
 import SpendingReport
+import TransactionList
+import EntityPortfolio
+
 
 class ReportFactory():
-    def get_report(report_type: str):
+    def get_report(self, report_type: str, transaction_list: TransactionList):
         if report_type == "financial":
-            return FinancialHealthReport()
+            return FinancialHealthReport.FinancialHealthReport()
         elif report_type == "income":
-            return IncomeReport()
+            return IncomeReport.IncomeReport(transaction_list)
         elif report_type == "spending":
             return SpendingReport()
         else:
