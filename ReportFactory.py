@@ -13,6 +13,14 @@ import FinancialHealthReport
 import IncomeReport
 import SpendingReport
 
-class ReportFactory(Report):
-    def get_report():
-        pass # to do
+class ReportFactory():
+    def get_report(report_type: str):
+        if report_type == "financial":
+            return FinancialHealthReport()
+        elif report_type == "income":
+            return IncomeReport()
+        elif report_type == "spending":
+            return SpendingReport()
+        else:
+            print(f"Invalid report type: {report_type}")
+            return None
