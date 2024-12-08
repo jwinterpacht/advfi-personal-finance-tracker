@@ -1,9 +1,9 @@
 '''
 
 test.py
-_pycache__/
+_pycache__
 
 # Ignore .pyc files
-*.pyc
+.pyc
 
 '''
