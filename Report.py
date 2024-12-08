@@ -17,10 +17,6 @@ class Report(ABC):
     def __init__(self, report_date):
         self.reportDate = report_date
 
-    # @abstractmethod
-    # def getReportData(self):
-    #     pass
-
     @abstractmethod
     def generate_report(self) -> bool:
         pass

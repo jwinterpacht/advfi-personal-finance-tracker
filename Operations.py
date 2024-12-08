@@ -10,9 +10,15 @@ import Category
 import CategoryList
 import mysql.connector #allows Python to talk to MySQL database
 import MySQLOperations
+import ReportFactory
+import IncomeReport
+import SpendingReport
+import FinancialHealthReport
+
+report_factory = ReportFactory.ReportFactory()
 
 class Operations:
-
+    
     
     def create_user_account_operations(account: UserAccount, password: str, pin: str):
         account.new_user = False
@@ -287,5 +293,9 @@ class Operations:
             print(f"Could not grab income to database Please exit AdvFi and fix to save your data. Error: {e}")
             return False #added bools for testing
         return True
+    
+    def financial_reports_menu_income_report_operations(transaction_list: TransactionList) -> IncomeReport:
+        income_report = report_factory.get_report("income", transaction_list)
+        return income_report
 
 
