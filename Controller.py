@@ -636,8 +636,7 @@ class Controller:
             case 1:
                 Controller.financial_reports_menu_income_report()
             case 2:
-                # Controller.financial_reports_menu_spending_report()
-                pass
+                Controller.financial_reports_menu_spending_report()
             case 3:
                 # Controller.financial_reports_menu_financial_health_report()
                 pass
@@ -648,10 +647,15 @@ class Controller:
 
     def financial_reports_menu_income_report():
         # Operations.Operations.print_income_report(transaction_list)
-        income_report = Operations.Operations.financial_reports_menu_income_report_operations(transaction_list)
+        income_report = Operations.Operations.financial_reports_menu_report_operations("income", transaction_list)
         # MainUI.MainUI.utility_print(f"type: {type(income_report)}")
         income_report.generate_report()
-        MainUI.MainUI.financial_reports_menu_income_report()
+        MainUI.MainUI.financial_reports_menu_report_options("income")
+    
+    def financial_reports_menu_spending_report():
+        spending_report = Operations.Operations.financial_reports_menu_report_operations("spending", transaction_list)
+        spending_report.generate_report()
+        MainUI.MainUI.financial_reports_menu_report_options("spending")
         
 
 

@@ -307,11 +307,11 @@ class MainUI:
         return input()
     
     @staticmethod
-    def financial_reports_menu_income_report():
+    def financial_reports_menu_report_options(report_type: str):
         MainUI.clear_screen()
-        print("1: Save income report to database")
-        print("2: Save income report as PDF")
-        print("0: Exit without saving")
+        print(f"1: Save {report_type} report to database")
+        print(f"2: Save {report_type} report as PDF")
+        print(f"0: Exit without saving")
         return input()
 
     @staticmethod
