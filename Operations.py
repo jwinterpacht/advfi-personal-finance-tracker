@@ -134,9 +134,11 @@ class Operations:
             return
 
         if type == "asset":
+            MySQLOperations.MySQLOperations.delete_entity_from_db(entity_portfolio, "asset", entity_id)
             entity_portfolio.remove_asset(entity_id)
 
         elif type == "liability":
+            MySQLOperations.MySQLOperations.delete_entity_from_db(entity_portfolio, "liability", entity_id)
             entity_portfolio.remove_liability(entity_id)
         
         MainUI.MainUI.remove_entity_success(type)

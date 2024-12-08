@@ -194,18 +194,18 @@ class MySQLOperations:
         return True
     
 
-    def delete_entity_from_db(transaction_list: TransactionList, id: str, type: str):
+    def delete_entity_from_db(entity_portfolio: EntityPortfolio, type: str, id):
         try:
             db = mysql.connector.connect(user='advfi_user', password='advfi_password', host='localhost', database='advfi_database')
             db_cursor = db.cursor() #cursor() acts as an interace between AdvFi and the database
-            del_income_query = ("DELETE FROM income WHERE id = %s")
-            del_expense_query = ("DELETE FROM expense WHERE id = %s")
+            del_asset_query = ("DELETE FROM asset WHERE id = %s")
+            del_liability_query = ("DELETE FROM liability WHERE id = %s")
 
-            if type == "income":
+            if type == "asset":
                 #add the data to database using the above query
-                db_cursor.execute(del_income_query, (id,)) #execute() sends query to the SQL database server for execution
-            else: #type == "expense"
-                db_cursor.execute(del_expense_query, (id,)) #passing 'id' as a 'tuple' to make .execute() func happy
+                db_cursor.execute(del_asset_query, (id,)) #execute() sends query to the SQL database server for execution
+            else: #type == "liability"
+                db_cursor.execute(del_liability_query, (id,)) #passing 'id' as a 'tuple' to make .execute() func happy
 
             db.commit() #commit() saves changes, made by cursor(), into the database
 
