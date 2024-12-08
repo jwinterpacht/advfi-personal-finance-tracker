@@ -1,3 +1,6 @@
+
+-- ADVFI STUFF!
+drop database advfi_database; --:shocked:
 CREATE DATABASE advfi_database;
 USE advfi_database;
 
@@ -15,24 +18,24 @@ CREATE TABLE the_user (
 
 -- (1) income (transaction) menu related stuff. Not named "transaction" bc it's a keyword in SQL
 CREATE TABLE income (
-    amount INT PRIMARY KEY,
+    amount INT,
     transaction_date DATETIME NOT NULL, -- I think this is the same DATETIME that Python uses since I am using MySQL.connector
     trans_desc TEXT, -- transaction description. I didn't simply call it "description" bc it's a keyword in SQL
     category_name VARCHAR(255),
-    id INT -- need to del table and recreate to add this (12-3-2024)
+    id INT PRIMARY KEY -- need to del table and recreate to add this (12-3-2024)
 );
 SELECT * FROM income;
 
+
+
 CREATE TABLE expense (
-    amount INT PRIMARY KEY,
+    amount INT,
     transaction_date DATETIME NOT NULL, -- I think this is the same DATETIME that Python uses since I am using MySQL.connector
     trans_desc TEXT, -- transaction description. I didn't simply call it "description" bc it's a keyword in SQL
     category_name VARCHAR(255),
-    id INT -- need to del table and recreate to add this (12-3-2024)
+    id INT PRIMARY KEY -- need to del table and recreate to add this (12-3-2024)
 );
 SELECT * FROM expense;
-
-
 
 -- ENTITY class stuff
 CREATE TABLE asset (
@@ -56,5 +59,3 @@ CREATE TABLE liability (
     id INT PRIMARY KEY
 );
 SELECT * FROM liability;
-
-
