@@ -123,7 +123,7 @@ class Category:
         self._budget = budget
     
     def get_budget(self) -> float:
-        return self.budget
+        return self._budget
     
     def get_budget_adherence(self):
         #grab the total of all the expenses that have happened within the last month

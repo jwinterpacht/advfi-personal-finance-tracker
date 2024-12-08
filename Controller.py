@@ -262,6 +262,8 @@ class Controller:
             case 6:
                 Controller.spending_management_menu_set_category_budget()
             case 7:
+                Controller.spending_management_menu_delete_category_budget()
+            case 8:
                 Controller.spending_management_menu_monitor_budget_adherence()
                 pass
         return
@@ -344,7 +346,22 @@ class Controller:
         Operations.Operations.category_management_menu_set_category_budget_operations(category_list, category_name, category_budget)
         MainUI.MainUI.set_category_budget_success()
 
-
+    def spending_management_menu_delete_category_budget():
+        """
+        editing a category budget
+        first, grab the category name that we are editing
+        then set the budget to -1.0
+        """
+        if category_list.get_category_count() < 1:
+            MainUI.MainUI.error_no_categories_budgeting()
+            return
+        category_name = Controller._get_category_name()
+        if category_name == "-1":
+            MainUI.MainUI.action_cancelled()
+            return
+        Operations.Operations.category_management_menu_set_category_budget_operations(category_list, category_name, -1.0)
+        MainUI.MainUI.utility_print_no_clear(f"Budget for category '{category_name}' deleted successfully")
+        
     def spending_management_menu_monitor_budget_adherence():
         #here we will go to the category list, grab all of the categories that have a budget that is not -1
         #then we will grab all of the expense transactions associated with that budget that have happened within the past month
