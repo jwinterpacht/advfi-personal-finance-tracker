@@ -116,9 +116,9 @@ class Operations:
 
         #now we need to add it to the respective list
         if type == "asset":
-            entity_portfolio.add_asset(new_entity)
+            entity_portfolio.add_asset(new_entity, False)
         elif type == "liability":
-            entity_portfolio.add_liability(new_entity)
+            entity_portfolio.add_liability(new_entity, False)
             
         MainUI.MainUI.add_entity_success(type)
 

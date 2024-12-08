@@ -4,7 +4,7 @@ import TransactionList
 import Entity
 import EntityPortfolio
 import MainUI #need for util print
-import time #for debugging
+#import time #for debugging
 
 
 class MySQLOperations:
@@ -160,9 +160,11 @@ class MySQLOperations:
                 desc = row[3]
                 auto_update = row[4]
                 stock_symbol = row[5]
+                the_id = row[6]
 
                 #add transaction to the transaction_list
                 asset = Entity.Entity(value, amount, name, desc, auto_update, stock_symbol)
+                asset.set_entity_id(the_id)
                 entity_portfolio.add_asset(asset, True)
                 
 
@@ -175,22 +177,42 @@ class MySQLOperations:
                 name = row[2]
                 desc = row[3]
                 auto_update = row[4]
-                stock_symbol = "na"
+                stock_symbol = row[5]
                 the_id = row[6]
 
                 #add transaction to the transaction_list
                 liability = Entity.Entity(value, amount, name, desc, auto_update, stock_symbol) #this line is where it fails
                 liability.set_entity_id(the_id)
-                time.sleep(5)
                 entity_portfolio.add_liability(liability, True)
-                print("EntityPortfolio liabilities:", entity_portfolio.get_liability_list())
-
-            time.sleep(3)
             
             #close database connection
             db_cursor.close()
             db.close()
         except Exception as e:
             print(f"Could not grab income to database Please exit AdvFi and fix to save your data. Error: {e}")
+            return False #added bools for testing
+        return True
+    
+
+    def delete_entity_from_db(transaction_list: TransactionList, id: str, type: str):
+        try:
+            db = mysql.connector.connect(user='advfi_user', password='advfi_password', host='localhost', database='advfi_database')
+            db_cursor = db.cursor() #cursor() acts as an interace between AdvFi and the database
+            del_income_query = ("DELETE FROM income WHERE id = %s")
+            del_expense_query = ("DELETE FROM expense WHERE id = %s")
+
+            if type == "income":
+                #add the data to database using the above query
+                db_cursor.execute(del_income_query, (id,)) #execute() sends query to the SQL database server for execution
+            else: #type == "expense"
+                db_cursor.execute(del_expense_query, (id,)) #passing 'id' as a 'tuple' to make .execute() func happy
+
+            db.commit() #commit() saves changes, made by cursor(), into the database
+
+            #close database connection; avoid any possible trouble because we good programmer
+            db_cursor.close()
+            db.close()
+        except Exception as e:
+            print(f"Could not remove transaction from database. Error: {e}")
             return False #added bools for testing
         return True
