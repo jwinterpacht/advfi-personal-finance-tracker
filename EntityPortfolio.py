@@ -55,10 +55,11 @@ class EntityPortfolio:
             return self.category_list[0]  #solution: just return the default category, this implementation prevents the deletion of the default category and always ensures it is stored at the 0 index
     
     #add given entity as an asset
-    def add_asset(self, entity: Entity) -> None:
+    def add_asset(self, entity: Entity, database_reading: bool) -> None:
         self.entity_count += 1  # increment next_entity_ID 
         self.next_entity_id += 1
-        entity.set_entity_id(self.next_entity_id)
+        if not database_reading:
+            entity.set_entity_id(self.next_entity_id)
         self.assets.append(entity)
         self.update_values()  # do this every time we add or remove an entity to ensure that we always give the user up-to-date information
         
@@ -75,10 +76,11 @@ class EntityPortfolio:
         print("Error: could not find the corresponding asset ID, please ensure you provide a valid entity ID")
         return False
     
-    def add_liability(self, entity: Entity):
+    def add_liability(self, entity: Entity, database_reading: bool):
         self.next_entity_id += 1
         self.entity_count += 1
-        entity.set_entity_id(self.next_entity_id)
+        if not database_reading:
+            entity.set_entity_id(self.next_entity_id)
         self.liabilities.append(entity)
         self.update_values()
         return True

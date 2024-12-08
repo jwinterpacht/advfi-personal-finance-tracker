@@ -30,11 +30,11 @@ class Operations:
         transaction = Transaction.Transaction(amount, date, desc)
 
         if type == "income":
-            transaction_list.add_income_transaction(transaction) #make sure that it updates local list, not just DB
+            transaction_list.add_income_transaction(transaction, False) #make sure that it updates local list, not just DB
             #Now, store the income transaction into the database
             MySQLOperations.MySQLOperations.add_transaction_to_database(transaction, "income")
         elif type == "expense":
-            transaction_list.add_expense_transaction(transaction)
+            transaction_list.add_expense_transaction(transaction, False)
             MySQLOperations.MySQLOperations.add_transaction_to_database(transaction, "expense")
         
         else:
@@ -84,9 +84,9 @@ class Operations:
                 old_category.remove_liability(entity)
             
         if type == "asset":
-            category.add_asset(entity)
+            category.add_asset(entity, False)
         elif type == "liability":
-            category.add_liability(entity)
+            category.add_liability(entity, False)
         entity.set_category_name(category_name)
 
     def get_entity(entity_portfolio: EntityPortfolio, type: str, id: str) -> Entity:
