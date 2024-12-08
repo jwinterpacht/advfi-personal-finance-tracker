@@ -138,7 +138,7 @@ class Validator():
         return True
 
     @staticmethod
-    def validate_yes_no(user_input: str):
+    def validate_yes_no(user_input: str) -> bool:
         if user_input == "":
             return False
         if user_input[0] == "y":
