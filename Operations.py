@@ -190,7 +190,7 @@ class Operations:
 
                 # Parse transaction date
                 try:
-                    transaction_date = dt.strptime(row[0], '%m/%d/%Y').date()
+                    transaction_date = dt.strptime(row[0], '%m/%d/%Y')
                 except ValueError:
                     print(f"Invalid date format in row: {row}")
                     continue
