@@ -9,15 +9,17 @@ class TransactionList:
         self._total_expenses = 0
         self._transaction_count = 0 #this is used to set transaction IDs
     
-    def add_income_transaction(self, income: Transaction) -> None:
+    def add_income_transaction(self, income: Transaction, database_reading: bool) -> None:
         self._transaction_count += 1  #increment our transaction count
-        income.set_transaction_id(self._transaction_count)
+        if not database_reading:
+            income.set_transaction_id(self._transaction_count)
         self._income_transactions.append(income)
         self._total_income += income._amount
     
-    def add_expense_transaction(self, expense: Transaction) -> None:
+    def add_expense_transaction(self, expense: Transaction, database_reading: bool) -> None:
         self._transaction_count += 1  #increment our transaction count
-        expense.set_transaction_id(self._transaction_count)
+        if not database_reading:
+            expense.set_transaction_id(self._transaction_count)
         self._expense_transactions.append(expense)
         self._total_expenses += expense._amount
 

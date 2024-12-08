@@ -64,7 +64,7 @@ class MySQLOperations:
                 trans = Transaction.Transaction(amount, trans_date, desc) #limits of Transaction.__init__
                 trans.set_category_name(category_name)
                 trans.set_transaction_id(trans_id)
-                transaction_list.add_income_transaction(trans)
+                transaction_list.add_income_transaction(trans, True)
 
 
 
@@ -83,7 +83,7 @@ class MySQLOperations:
                 trans = Transaction.Transaction(amount, trans_date, desc) #limits of Transaction.__init__
                 trans.set_category_name(category_name)
                 trans.set_transaction_id(trans_id)
-                transaction_list.add_expense_transaction(trans)
+                transaction_list.add_expense_transaction(trans, True)
 
             #close database connection
             db_cursor.close()
@@ -163,7 +163,7 @@ class MySQLOperations:
 
                 #add transaction to the transaction_list
                 asset = Entity.Entity(value, amount, name, desc, auto_update, stock_symbol)
-                entity_portfolio.add_asset(asset)
+                entity_portfolio.add_asset(asset, True)
                 
 
             '''Liabilities'''
@@ -176,11 +176,13 @@ class MySQLOperations:
                 desc = row[3]
                 auto_update = row[4]
                 stock_symbol = "na"
+                the_id = row[6]
 
                 #add transaction to the transaction_list
-                liability = Entity(value, amount, name, desc, auto_update, stock_symbol) #this line is where it fails
+                liability = Entity.Entity(value, amount, name, desc, auto_update, stock_symbol) #this line is where it fails
+                liability.set_entity_id(the_id)
                 time.sleep(5)
-                entity_portfolio.add_liability(liability)
+                entity_portfolio.add_liability(liability, True)
                 print("EntityPortfolio liabilities:", entity_portfolio.get_liability_list())
 
             time.sleep(3)
