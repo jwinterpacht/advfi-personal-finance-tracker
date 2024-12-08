@@ -21,6 +21,40 @@ CREATE TABLE income (
     category_name VARCHAR(255),
     id INT -- need to del table and recreate to add this (12-3-2024)
 );
-
-
 SELECT * FROM income;
+
+CREATE TABLE expense (
+    amount INT PRIMARY KEY,
+    transaction_date DATETIME NOT NULL, -- I think this is the same DATETIME that Python uses since I am using MySQL.connector
+    trans_desc TEXT, -- transaction description. I didn't simply call it "description" bc it's a keyword in SQL
+    category_name VARCHAR(255),
+    id INT -- need to del table and recreate to add this (12-3-2024)
+);
+SELECT * FROM expense;
+
+
+
+-- ENTITY class stuff
+CREATE TABLE asset (
+    entity_value float,
+    entity_amount INT,
+    entity_name VARCHAR(255),
+    entity_desc TEXT,
+    entity_auto_update bool,
+    entity_stock_symbol VARCHAR(255),
+    id INT PRIMARY KEY
+);
+SELECT * FROM asset;
+
+CREATE TABLE liability (
+    entity_value float,
+    entity_amount INT,
+    entity_name VARCHAR(255),
+    entity_desc TEXT,
+    entity_auto_update bool,
+    entity_stock_symbol VARCHAR(255),
+    id INT PRIMARY KEY
+);
+SELECT * FROM liability;
+
+
