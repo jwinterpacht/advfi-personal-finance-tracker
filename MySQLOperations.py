@@ -1,7 +1,10 @@
 import mysql.connector
 import Transaction
 import TransactionList
-
+import Entity
+import EntityPortfolio
+import MainUI #need for util print
+import time #for debugging
 
 
 class MySQLOperations:
@@ -110,5 +113,82 @@ class MySQLOperations:
             db.close()
         except Exception as e:
             print(f"Could not remove transaction from database. Error: {e}")
+            return False #added bools for testing
+        return True
+
+
+
+    '''ENTITY STUFF'''
+    def add_entity_to_db(type: str, name, desc, value, num_owned, auto_update, stock_symbol, id):
+        try:
+            db = mysql.connector.connect(user='advfi_user', password='advfi_password', host='localhost', database='advfi_database')
+            db_cursor = db.cursor() #cursor() acts as an interace between AdvFi and the database
+            add_asset_query = ("INSERT INTO asset (entity_value, entity_amount, entity_name, entity_desc, entity_auto_update, entity_stock_symbol, id) "
+                            "VALUES (%s, %s, %s, %s, %s, %s, %s)")
+            
+            add_liability_query = ("INSERT INTO liability (entity_value, entity_amount, entity_name, entity_desc, entity_auto_update, entity_stock_symbol, id) "
+                            "VALUES (%s, %s, %s, %s, %s, %s, %s)")
+            
+            new_entity_data = (value, num_owned, name, desc, auto_update, stock_symbol, id)
+
+            if type == "asset":
+                #add the data to database using the above query
+                db_cursor.execute(add_asset_query, new_entity_data) #execute() sends query to the SQL database server for execution
+            else: #type == "liability"
+                db_cursor.execute(add_liability_query, new_entity_data)
+
+            db.commit() #commit() saves changes, made by cursor(), into the database
+
+            #close database connection; avoid any possible trouble because we good programmer
+            db_cursor.close()
+            db.close()
+        except Exception as e:
+            print(f"Could not store income to database. Error: {e}")
+            return False #added bools for testing
+        return True
+    
+    def pull_entities_from_database(entity_portfolio: EntityPortfolio):
+        try:
+            db = mysql.connector.connect(user='advfi_user', password='advfi_password', host='localhost', database='advfi_database')
+            db_cursor = db.cursor()
+            db_cursor.execute("SELECT * FROM asset")
+            assets = db_cursor.fetchall()
+            for row in assets:
+                value = row[0]
+                amount = row[1]
+                name = row[2]
+                desc = row[3]
+                auto_update = row[4]
+                stock_symbol = row[5]
+
+                #add transaction to the transaction_list
+                asset = Entity.Entity(value, amount, name, desc, auto_update, stock_symbol)
+                entity_portfolio.add_asset(asset)
+                
+
+            '''Liabilities'''
+            db_cursor.execute("SELECT * FROM liability")
+            liabilities = db_cursor.fetchall()
+            for row in liabilities:
+                value = row[0]
+                amount = row[1]
+                name = row[2]
+                desc = row[3]
+                auto_update = row[4]
+                stock_symbol = "na"
+
+                #add transaction to the transaction_list
+                liability = Entity(value, amount, name, desc, auto_update, stock_symbol) #this line is where it fails
+                time.sleep(5)
+                entity_portfolio.add_liability(liability)
+                print("EntityPortfolio liabilities:", entity_portfolio.get_liability_list())
+
+            time.sleep(3)
+            
+            #close database connection
+            db_cursor.close()
+            db.close()
+        except Exception as e:
+            print(f"Could not grab income to database Please exit AdvFi and fix to save your data. Error: {e}")
             return False #added bools for testing
         return True

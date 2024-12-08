@@ -403,6 +403,7 @@ class Controller:
         #now that we have all the data we need to create a non stock asset, we will
         #call a method in operations to do exactly that
         Operations.Operations.add_entity_to_portfolio(entity_portfolio, "asset", name, desc, value, num_owned, auto_update, stock_symbol)
+        MySQLOperations.MySQLOperations.add_entity_to_db("asset", name, desc, value, num_owned, auto_update, stock_symbol, entity_portfolio.next_entity_id)
         return
 
 
@@ -524,6 +525,7 @@ class Controller:
         auto_update = False
         stock_symbol = "n/a"
         Operations.Operations.add_entity_to_portfolio(entity_portfolio, "liability", name, desc, value, num_owned, auto_update, stock_symbol)
+        MySQLOperations.MySQLOperations.add_entity_to_db("liability", name, desc, value, num_owned, auto_update, stock_symbol, entity_portfolio.next_entity_id)
         return
 
     def liability_management_menu_view_liability_list():
@@ -828,6 +830,7 @@ def main():
 
     #now that database connection is established, fill pull its data and store in program's memory
     MySQLOperations.MySQLOperations.pull_trans_from_database(transaction_list)
+    MySQLOperations.MySQLOperations.pull_entities_from_database(entity_portfolio)
 
     #now we call the method that does the testing stuff
     if do_testing:
