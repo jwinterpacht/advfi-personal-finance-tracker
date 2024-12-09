@@ -77,8 +77,11 @@ class Operations:
             old_category = category_list.get_category(transaction.get_category_name())
         if type == "income":
             category.add_income(transaction)
+            #add to categorization to the income in the database
+            MySQLOperations.MySQLOperations.set_transaction_category(transaction_list, transaction_id, type, category_name)
         elif type == "expense":
             category.add_expense(transaction)
+            MySQLOperations.MySQLOperations.set_transaction_category(transaction_list, transaction_id, type, category_name)
         transaction.set_category_name(category_name)
 
     def categorize_entity(entity_list: EntityPortfolio, category_list: CategoryList, entity_id: str, category_name: str, type: str) -> None:
@@ -93,9 +96,12 @@ class Operations:
                 old_category.remove_liability(entity)
             
         if type == "asset":
-            category.add_asset(entity, False)
+            category.add_asset(entity)
+            #add categorization of entity to DATABASE!!
+            MySQLOperations.MySQLOperations.set_entity_category(entity_list, entity_id, type, category_name)
         elif type == "liability":
-            category.add_liability(entity, False)
+            category.add_liability(entity)
+            MySQLOperations.MySQLOperations.set_entity_category(entity_list, entity_id, type, category_name)
         entity.set_category_name(category_name)
 
     def get_entity(entity_portfolio: EntityPortfolio, type: str, id: str) -> Entity:
@@ -171,6 +177,7 @@ class Operations:
         new_cat = Category.Category(new_cat_name, new_cat_desc)
         #add that new category to the list
         category_list.add_category(new_cat)
+        MySQLOperations.MySQLOperations.add_category(new_cat_name, new_cat_desc)
         return
 
     def category_managment_menu_view_category_items(category_list:CategoryList, cat_name:str) -> str:
