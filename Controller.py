@@ -650,7 +650,6 @@ class Controller:
             user_selection = MainUI.MainUI.financial_reports_menu()
             stop = Validator.Validator.validate_menu_entry(user_selection, MainUI.MainUI.FINANCIAL_REPORTS_MENU_LOW, MainUI.MainUI.FINANCIAL_REPORTS_MENU_HIGH)
         selection = int(user_selection)
-        print("test")
         match selection:
             case 0:
                 return
@@ -818,7 +817,7 @@ class Controller:
     def program_settings_menu():
         stop = False
         while not stop:
-            user_selection = MainUI.MainUI.utility_print_with_return("Program Settings Menu:\n1: Change Password\n2: Program Credits\ndelete user account\n0: Return to main menu")
+            user_selection = MainUI.MainUI.utility_print_with_return("Program Settings Menu:\n1: Change Password\n2: Program Credits\n3: Delete user account\n0: Return to main menu")
             stop = Validator.Validator.validate_menu_entry(user_selection, MainUI.MainUI.PROGRAM_SETTINGS_MENU_LOW, MainUI.MainUI.PROGRAM_SETTINGS_MENU_HIGH)
         match int(user_selection):
             case 0:
