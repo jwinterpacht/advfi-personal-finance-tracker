@@ -16,6 +16,19 @@ def test_add_income():
     assert new_income.get_transaction_date() == dt.strptime(date, '%m/%d/%y')
     assert new_income.get_description() == desc
 
+category_list = CategoryList.CategoryList()
+new_cat = Category.Category("test", "category used for testing")
+
+def test_add_budget():
+    category_list.add_category(new_cat)
+    new_cat.set_budget(600.0)
+    assert new_cat.get_budget() == 600.0
+
+def test_remove_budget():
+    new_cat.set_budget(-1.0)
+    assert new_cat.get_budget() == -1.0
+
+
 
 
     
