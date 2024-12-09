@@ -15,7 +15,7 @@ class Report(ABC):
     # = datetime.now() # year/month/day (i.e. 2024/10/17)
 
     def __init__(self, report_date):
-        self.reportDate = report_date
+        self._report_date = report_date
 
     @abstractmethod
     def generate_report(self) -> bool:

@@ -2,13 +2,11 @@ from datetime import date
 from typing import List, Dict
 import TransactionList
 import MainUI
+from Report import Report
 
-from reportlab.lib.pagesizes import letter
-from reportlab.pdfgen import canvas
-
-class SpendingReport:
-    def __init__(self, transaction_list: TransactionList):
-        super().__init__()
+class SpendingReport(Report):
+    def __init__(self, report_date: date, transaction_list: TransactionList):
+        super().__init__(report_date)
         self._total_spending_last_month = 0.0
         self._expense_entries_last_month = []
         for expense in transaction_list._expense_transactions:
@@ -40,49 +38,13 @@ class SpendingReport:
         self._total_spending_last_month = total_spending_last_month
 
     def generate_report(self):
-        spending_report = f"Spending Report\n-----------------\nTotal lifetime spending: ${self._total_spending}\n\nTotal spending from last month: ${self._total_spending_last_month}\n\nEach spending entry from last month:\n"
+        spending_report = f"Spending Report\n{self._report_date}\n-----------------\nTotal lifetime spending: ${self._total_spending}\n\nTotal spending from last month: ${self._total_spending_last_month}\n\nEach spending entry from last month:\n"
         for expense in self._expense_entries_last_month:
             spending_report += f"{expense.print_transaction()}\n"
         MainUI.MainUI.utility_print(spending_report)
 
     def to_string(self) -> str:
-        spending_report = f"Spending Report\nTotal lifetime spending: ${self._total_spending}\n\nTotal spending from last month: ${self._total_spending_last_month}\n\nEach spending entry from last month:\n"
+        spending_report = f"Spending Report\n{self._report_date}\n-----------------\nTotal lifetime spending: ${self._total_spending}\n\nTotal spending from last month: ${self._total_spending_last_month}\n\nEach spending entry from last month:\n"
         for expense in self._expense_entries_last_month:
             spending_report += f"{expense.print_transaction()}\n"
         return spending_report
-
-    # We can use validate_file_name to validate input 
-    def generate_pdf_report(self, filename: str, transaction_list: TransactionList):
-        # Create a canvas object for the PDF
-        c = canvas.Canvas(filename, pagesize=letter)
-        width, height = letter  # 8.5 x 11 inches
-
-        # Title of the report
-        c.setFont("Helvetica-Bold", 16)
-        c.drawString(100, height - 40, "Spending Report")
-        
-        # Subtitle with date
-        c.setFont("Helvetica", 12)
-        c.drawString(100, height - 60, f"Generated on: {date.now().strftime('%B %d, %Y')}")
-
-        # Total spending
-        c.drawString(100, height - 100, f"Total lifetime spending: ${self._total_spending:.2f}")
-        c.drawString(100, height - 120, f"Total spending from last month: ${self._total_spending_last_month:.2f}")
-
-        # Each spending entry
-        y_position = height - 160
-        c.drawString(100, y_position, "Each spending entry from last month:")
-
-        y_position -= 20  # Adjusting for the next line
-        c.setFont("Helvetica", 10)
-        for expense in self._expense_entries_last_month:
-            if y_position < 40:  # If we're near the bottom, start a new page
-                c.showPage()
-                c.setFont("Helvetica", 10)
-                y_position = height - 40  # Reset y_position for the new page
-            c.drawString(100, y_position, expense.print_transaction(transaction_list))
-            y_position -= 15  # Move down for the next entry
-
-        # Save the PDF to the file
-        c.save()
-        print(f"PDF report saved as {filename}")
