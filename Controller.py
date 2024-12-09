@@ -16,6 +16,7 @@ import CategoryList
 import Category
 import mysql.connector
 import MySQLOperations
+import IncomeReport
 
 
 entity_portfolio = EntityPortfolio.EntityPortfolio()
@@ -106,12 +107,15 @@ class Controller:
 
         #create the account using the information input by the user
         Operations.Operations.create_user_account_operations(account, new_pass, new_pin)
+        MySQLOperations.MySQLOperations.create_user_account(account)
+        account.new_user = False
 
         #send the user to the home screen
         #Controller.home_screen()
     
     def user_login():
         password = MainUI.MainUI.get_password()
+        account = MySQLOperations.MySQLOperations.get_user_account()
 
         while not Validator.Validator.validate_password(account, password):
             password = MainUI.MainUI.invalid_password()
@@ -656,10 +660,9 @@ class Controller:
                 Controller.financial_reports_menu_spending_report()
             case 3:
                 Controller.financial_reports_menu_financial_health_report()
-                pass
             case 4:
-                # Controller.financial_reports_menu_retrieve_report()
-                pass
+                Controller.financial_reports_menu_retrieve_report()
+                # MySQLOperations.MySQLOperations.get_report()
     
 
     def financial_reports_menu_income_report():
@@ -667,19 +670,59 @@ class Controller:
         income_report = Operations.Operations.financial_reports_menu_report_operations("income", transaction_list)
         # MainUI.MainUI.utility_print(f"type: {type(income_report)}")
         income_report.generate_report()
-        MainUI.MainUI.financial_reports_menu_report_options("income")
+        #MainUI.MainUI.financial_reports_menu_report_options("income")
+        stop = False
+        while not stop:
+            user_selection = MainUI.MainUI.financial_reports_menu_report_options("income")
+            stop = Validator.Validator.validate_menu_entry(user_selection, MainUI.MainUI.FINANCIAL_REPORTS_OPTIONS_LOW, MainUI.MainUI.FINANCIAL_REPORTS_OPTIONS_HIGH)
+        selection = int(user_selection)
+        match selection:
+            case 0:
+                return
+            case 1:
+                MySQLOperations.MySQLOperations.add_income_report(income_report.to_string()) #REPORT!!!!
+            case 2:
+                MySQLOperations.MySQLOperations.get_income_report() #DCHANGE
 
     
     def financial_reports_menu_spending_report():
         spending_report = Operations.Operations.financial_reports_menu_report_operations("spending", transaction_list)
         spending_report.generate_report()
-        MainUI.MainUI.financial_reports_menu_report_options("spending")
+        stop = False
+        while not stop:
+            user_selection = MainUI.MainUI.financial_reports_menu_report_options("spending")
+            stop = Validator.Validator.validate_menu_entry(user_selection, MainUI.MainUI.FINANCIAL_REPORTS_OPTIONS_LOW, MainUI.MainUI.FINANCIAL_REPORTS_OPTIONS_HIGH)
+        selection = int(user_selection)
+        match selection:
+            case 0:
+                return
+            case 1:
+                MySQLOperations.MySQLOperations.add_spending_report(spending_report.to_string()) #REPORT!!!!
+            case 2:
+                MySQLOperations.MySQLOperations.get_spending_report() #DCHANGE
         
 
     def financial_reports_menu_financial_health_report():
         financial_health_report = Operations.Operations.financial_reports_menu_report_operations("financial health", transaction_list, entity_portfolio)
         financial_health_report.generate_report()
-        MainUI.MainUI.financial_reports_menu_report_options("financial health")
+        stop = False
+        while not stop:
+            user_selection = MainUI.MainUI.financial_reports_menu_report_options("financial health")
+            stop = Validator.Validator.validate_menu_entry(user_selection, MainUI.MainUI.FINANCIAL_REPORTS_OPTIONS_LOW, MainUI.MainUI.FINANCIAL_REPORTS_OPTIONS_HIGH)
+        selection = int(user_selection)
+        match selection:
+            case 0:
+                return
+            case 1:
+                MySQLOperations.MySQLOperations.add_health_report(financial_health_report.to_string()) #REPORT!!!!
+            case 2:
+                MySQLOperations.MySQLOperations.get_health_report() 
+
+    def financial_reports_menu_retrieve_report():
+        #MySQLOperations.MySQLOperations.get_report()
+        MySQLOperations.MySQLOperations.get_income_report()
+        MySQLOperations.MySQLOperations.get_spending_report()
+        MySQLOperations.MySQLOperations.get_health_report()
 
 
     def retrieve_transactions():
@@ -775,7 +818,7 @@ class Controller:
     def program_settings_menu():
         stop = False
         while not stop:
-            user_selection = MainUI.MainUI.utility_print_with_return("Program Settings Menu:\n1: Change Password\n2: Program Credits\n0: Return to main menu")
+            user_selection = MainUI.MainUI.utility_print_with_return("Program Settings Menu:\n1: Change Password\n2: Program Credits\ndelete user account\n0: Return to main menu")
             stop = Validator.Validator.validate_menu_entry(user_selection, MainUI.MainUI.PROGRAM_SETTINGS_MENU_LOW, MainUI.MainUI.PROGRAM_SETTINGS_MENU_HIGH)
         match int(user_selection):
             case 0:
@@ -784,7 +827,10 @@ class Controller:
                 Controller.program_settings_menu_change_password()
             case 2:
                 MainUI.MainUI.utility_print("The Adv-Fi Team:\nJaden Winterpacht\nMason Myre\nJonah Raef\nFrank Watring")
-                return
+            case 3:
+                MySQLOperations.MySQLOperations.delete_account()
+                MainUI.MainUI.utility_print("User account was deleted")
+                exit(0)
         
     def _set_new_password():
         stop = False
@@ -821,11 +867,7 @@ class Controller:
 
 
 def testing(test_login, test_income, test_expense, test_asset, test_stock, test_liability, test_category, test_category_2):
-    if test_login:
-        if account.new_user == True:  #if we have a new user
-            Controller.new_user_setup()
-        else:
-            Controller.user_login()
+    
     if test_income:
         Operations.Operations.create_and_add_transaction(transaction_list, "500.10", "10/10/10", "test 1", "income")
         Operations.Operations.create_and_add_transaction(transaction_list, "300.22", "10/11/10", "test 2", "income")
@@ -868,7 +910,7 @@ def main():
     #this lets us set testing conditions when we start the program
     #I'm sure that I'm not the only one who doesn't want to have to add stuff manually every time for testing
     do_testing = False  #will not do the testing, regardless of any other values (this testing variable has the highest priority)
-    test_login = False
+    test_login = True
     test_income = True
     test_expense = True
     test_asset = True
@@ -884,6 +926,13 @@ def main():
     MySQLOperations.MySQLOperations.pull_trans_from_database(transaction_list)
     MySQLOperations.MySQLOperations.pull_entities_from_database(entity_portfolio)
     MySQLOperations.MySQLOperations.pull_categories_from_db(category_list)
+    user_exists= MySQLOperations.MySQLOperations.check_account_state()
+    if user_exists:  #if we have a new user
+        Controller.user_login()
+        
+    else:
+        Controller.new_user_setup()
+        MySQLOperations.MySQLOperations.set_account_state()
 
     #now we call the method that does the testing stuff
     if do_testing:

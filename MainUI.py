@@ -16,9 +16,11 @@ class MainUI:
     CATEGORY_MGMT_MENU_LOW = 0
     CATEGORY_MGMT_MENU_HIGH = 5
     PROGRAM_SETTINGS_MENU_LOW = 0
-    PROGRAM_SETTINGS_MENU_HIGH = 2
+    PROGRAM_SETTINGS_MENU_HIGH = 3
     FINANCIAL_REPORTS_MENU_HIGH = 4
     FINANCIAL_REPORTS_MENU_LOW = 0
+    FINANCIAL_REPORTS_OPTIONS_LOW = 0
+    FINANCIAL_REPORTS_OPTIONS_HIGH = 2
 
     def clear_screen():
         #pass
@@ -332,7 +334,8 @@ class MainUI:
         MainUI.clear_screen()
         print("\nProgram Settings Menu:")
         print("1: change password")
-        print("2: delete user account")
+        print("2: view program credits")
+        print("3: delete user account")
         print("0: Return to main menu")
 
     @staticmethod

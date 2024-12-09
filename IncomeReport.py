@@ -17,6 +17,9 @@ class IncomeReport(Report):
         self._total_income = transaction_list.get_total_income()  # Default total income is 0.0
 
     # getters
+    def get_report_date(self):
+        return self._report_date
+    
     def get_income_entries_last_month(self):
         return self._income_entries_last_month
 
