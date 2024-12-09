@@ -2,10 +2,11 @@ from datetime import date
 from typing import List, Dict
 import TransactionList
 import MainUI
+from Report import Report
 
-class SpendingReport:
-    def __init__(self, transaction_list: TransactionList):
-        super().__init__()
+class SpendingReport(Report):
+    def __init__(self, report_date: date, transaction_list: TransactionList):
+        super().__init__(report_date)
         self._total_spending_last_month = 0.0
         self._expense_entries_last_month = []
         for expense in transaction_list._expense_transactions:
@@ -37,13 +38,13 @@ class SpendingReport:
         self._total_spending_last_month = total_spending_last_month
 
     def generate_report(self):
-        spending_report = f"Spending Report\n-----------------\nTotal lifetime spending: ${self._total_spending}\n\nTotal spending from last month: ${self._total_spending_last_month}\n\nEach spending entry from last month:\n"
+        spending_report = f"Spending Report\n{self._report_date}\n-----------------\nTotal lifetime spending: ${self._total_spending}\n\nTotal spending from last month: ${self._total_spending_last_month}\n\nEach spending entry from last month:\n"
         for expense in self._expense_entries_last_month:
             spending_report += f"{expense.print_transaction()}\n"
         MainUI.MainUI.utility_print(spending_report)
 
     def to_string(self) -> str:
-        spending_report = f"Spending Report\nTotal lifetime spending: ${self._total_spending}\n\nTotal spending from last month: ${self._total_spending_last_month}\n\nEach spending entry from last month:\n"
+        spending_report = f"Spending Report\n{self._report_date}\n-----------------\nTotal lifetime spending: ${self._total_spending}\n\nTotal spending from last month: ${self._total_spending_last_month}\n\nEach spending entry from last month:\n"
         for expense in self._expense_entries_last_month:
             spending_report += f"{expense.print_transaction()}\n"
         return spending_report

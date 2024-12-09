@@ -655,7 +655,7 @@ class Controller:
             case 2:
                 Controller.financial_reports_menu_spending_report()
             case 3:
-                # Controller.financial_reports_menu_financial_health_report()
+                Controller.financial_reports_menu_financial_health_report()
                 pass
             case 4:
                 # Controller.financial_reports_menu_retrieve_report()
@@ -668,12 +668,18 @@ class Controller:
         # MainUI.MainUI.utility_print(f"type: {type(income_report)}")
         income_report.generate_report()
         MainUI.MainUI.financial_reports_menu_report_options("income")
+
     
     def financial_reports_menu_spending_report():
         spending_report = Operations.Operations.financial_reports_menu_report_operations("spending", transaction_list)
         spending_report.generate_report()
         MainUI.MainUI.financial_reports_menu_report_options("spending")
         
+
+    def financial_reports_menu_financial_health_report():
+        financial_health_report = Operations.Operations.financial_reports_menu_report_operations("financial health", transaction_list, entity_portfolio)
+        financial_health_report.generate_report()
+        MainUI.MainUI.financial_reports_menu_report_options("financial health")
 
 
     def retrieve_transactions():
