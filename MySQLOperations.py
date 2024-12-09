@@ -335,3 +335,85 @@ class MySQLOperations:
             print(f"Could not set transaction category to the database. Error: {e}")
             return False #added bools for testing
         return True
+    
+
+
+
+
+    #REPORT METHODS!!!!
+    def add_report(report_date: str, total_income: float, total_income_last_month: float, income_entries: list):
+        """
+        Adds a new income report and its entries to the database.
+
+        :param report_date: Date of the report (format: 'YYYY-MM-DD').
+        :param total_income: Total lifetime income.
+        :param total_income_last_month: Total income for the last month.
+        :param income_entries: A list of dictionaries, each containing:
+                            - income_date (str): Date of the income transaction.
+                            - amount (float): Income amount.
+                            - description (str): Description of the income entry.
+        :return: True if the operation is successful, False otherwise.
+        """
+        try:
+            db = mysql.connector.connect(user='advfi_user', password='advfi_password', host='localhost', database='advfi_database')
+            db_cursor = db.cursor()
+
+            # Add report to income_report table
+            add_report_query = ("INSERT INTO income_report (report_date, total_income, total_income_last_month) "
+                                "VALUES (%s, %s, %s)")
+            report_data = (report_date, total_income, total_income_last_month)
+            db_cursor.execute(add_report_query, report_data)
+
+            # Get the last inserted report ID
+            report_id = db_cursor.lastrowid
+
+            # Add income entries to income_entry table
+            add_entry_query = ("INSERT INTO income_entry (report_id, income_date, amount, description) "
+                            "VALUES (%s, %s, %s, %s)")
+            for entry in income_entries:
+                entry_data = (report_id, entry['income_date'], entry['amount'], entry['description'])
+                db_cursor.execute(add_entry_query, entry_data)
+
+            # Commit changes
+            db.commit()
+            db_cursor.close()
+            db.close()
+        except Exception as e:
+            print(f"Could not add report to the database. Error: {e}")
+            return False
+        return True
+
+    def get_report(report_id: int):
+        """
+        Retrieves a report and its associated entries from the database.
+
+        :param report_id: The ID of the report to retrieve.
+        :return: A dictionary containing the report details and its entries, or None if the operation fails.
+        """
+        try:
+            db = mysql.connector.connect(user='advfi_user', password='advfi_password', host='localhost', database='advfi_database')
+            db_cursor = db.cursor(dictionary=True)  # Use dictionary cursor for better readability
+
+            # Fetch report details
+            get_report_query = "SELECT * FROM income_report WHERE report_id = %s"
+            db_cursor.execute(get_report_query, (report_id,))
+            report = db_cursor.fetchone()
+
+            if not report:
+                print(f"Report with ID {report_id} not found.")
+                return None
+
+            # Fetch associated income entries
+            get_entries_query = "SELECT * FROM income_entry WHERE report_id = %s"
+            db_cursor.execute(get_entries_query, (report_id,))
+            entries = db_cursor.fetchall()
+
+            db_cursor.close()
+            db.close()
+
+            # Combine report and entries into a single dictionary
+            report['income_entries'] = entries
+            return report
+        except Exception as e:
+            print(f"Could not retrieve report from the database. Error: {e}")
+            return None
