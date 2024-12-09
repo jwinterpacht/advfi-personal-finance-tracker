@@ -3,6 +3,8 @@ import Transaction
 import TransactionList
 import Entity
 import EntityPortfolio
+import CategoryList
+import Category
 import MainUI #need for util print
 #import time #for debugging
 
@@ -213,6 +215,89 @@ class MySQLOperations:
             db_cursor.close()
             db.close()
         except Exception as e:
-            print(f"Could not remove transaction from database. Error: {e}")
+            print(f"Could not remove entity from database. Error: {e}")
+            return False #added bools for testing
+        return True
+
+
+
+    '''Category stuff!'''
+    def add_category(cat_name: str, cat_desc: str):
+        try:
+            db = mysql.connector.connect(user='advfi_user', password='advfi_password', host='localhost', database='advfi_database')
+            db_cursor = db.cursor() #cursor() acts as an interace between AdvFi and the database
+            add_cat_query = ("INSERT INTO category (cat_name, cat_desc) " "VALUES (%s, %s)")
+            
+            new_entity_data = (cat_name, cat_desc)
+            db_cursor.execute(add_cat_query, new_entity_data)
+            db.commit()
+            db_cursor.close()
+            db.close()
+        except Exception as e:
+            print(f"Could not add category to the database. Error: {e}")
+            return False #added bools for testing
+        return True
+    
+
+    def set_transaction_category(transaction_list: TransactionList, id: str, type: str, category_name: str):
+        try:
+            db = mysql.connector.connect(user='advfi_user', password='advfi_password', host='localhost', database='advfi_database')
+            db_cursor = db.cursor() #cursor() acts as an interace between AdvFi and the database
+            update_income_query = ("UPDATE income SET category_name = %s WHERE id = %s")
+            
+            update_expense_query = ("UPDATE expense SET category_name = %s WHERE id = %s")
+            
+            new_trans_data = (category_name, id)
+            if type == "income":
+                db_cursor.execute(update_income_query, new_trans_data)
+            else:
+                db_cursor.execute(update_expense_query, new_trans_data)
+            db.commit()
+            db_cursor.close()
+            db.close()
+        except Exception as e:
+            print(f"Could not set transaction category to the database. Error: {e}")
+            return False #added bools for testing
+        return True
+
+    def set_entity_category(entity_portfolio: EntityPortfolio, id: str, type: str, category_name: str):
+        MainUI.MainUI.utility_print(f"Type: {type}, ID: {id}, Category: {category_name}")
+        try:
+            db = mysql.connector.connect(user='advfi_user', password='advfi_password', host='localhost', database='advfi_database')
+            db_cursor = db.cursor() #cursor() acts as an interace between AdvFi and the database
+            update_asset_query = ("UPDATE asset SET cat_name = %s WHERE id = %s")
+            update_liability_query = ("UPDATE liability SET cat_name = %s WHERE id = %s")
+
+            MainUI.MainUI.utility_print(f"Type: {type}, ID: {id}, Category: {category_name}")
+            
+            new_trans_data = (category_name, id)
+            if type == "asset":
+                db_cursor.execute(update_asset_query, new_trans_data)
+            else:
+                db_cursor.execute(update_liability_query, new_trans_data)
+            db.commit()
+            db_cursor.close()
+            db.close()
+        except Exception as e:
+            print(f"Could not set transaction category to the database. Error: {e}")
+            return False #added bools for testing
+        return True
+
+    def pull_categories_from_db(cat_list: CategoryList):
+        try:
+            db = mysql.connector.connect(user='advfi_user', password='advfi_password', host='localhost', database='advfi_database')
+            db_cursor = db.cursor() #cursor() acts as an interace between AdvFi and the database
+            db_cursor.execute("SELECT * FROM category")
+            categories = db_cursor.fetchall()
+            for row in categories:
+                name = row[0]
+                desc = row[1]
+                temp_cat = Category.Category(name, desc)
+                cat_list.add_category(temp_cat)
+
+            db_cursor.close()
+            db.close()
+        except Exception as e:
+            print(f"Could not add category to the database. Error: {e}")
             return False #added bools for testing
         return True

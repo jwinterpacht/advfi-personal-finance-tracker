@@ -856,6 +856,7 @@ def main():
     #now that database connection is established, fill pull its data and store in program's memory
     MySQLOperations.MySQLOperations.pull_trans_from_database(transaction_list)
     MySQLOperations.MySQLOperations.pull_entities_from_database(entity_portfolio)
+    MySQLOperations.MySQLOperations.pull_categories_from_db(category_list)
 
     #now we call the method that does the testing stuff
     if do_testing:
