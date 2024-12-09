@@ -1,7 +1,7 @@
 import csv
 import MainUI 
 import Transaction
-from datetime import datetime as dt
+from datetime import date, datetime as dt
 import TransactionList
 import Entity
 import EntityPortfolio
@@ -15,6 +15,8 @@ import IncomeReport
 import SpendingReport
 import FinancialHealthReport
 import Report
+from reportlab.lib.pagesizes import letter
+from reportlab.pdfgen import canvas
 
 report_factory = ReportFactory.ReportFactory()
 
@@ -75,8 +77,11 @@ class Operations:
             old_category = category_list.get_category(transaction.get_category_name())
         if type == "income":
             category.add_income(transaction)
+            #add to categorization to the income in the database
+            MySQLOperations.MySQLOperations.set_transaction_category(transaction_list, transaction_id, type, category_name)
         elif type == "expense":
             category.add_expense(transaction)
+            MySQLOperations.MySQLOperations.set_transaction_category(transaction_list, transaction_id, type, category_name)
         transaction.set_category_name(category_name)
 
     def categorize_entity(entity_list: EntityPortfolio, category_list: CategoryList, entity_id: str, category_name: str, type: str) -> None:
@@ -91,9 +96,12 @@ class Operations:
                 old_category.remove_liability(entity)
             
         if type == "asset":
-            category.add_asset(entity, False)
+            category.add_asset(entity)
+            #add categorization of entity to DATABASE!!
+            MySQLOperations.MySQLOperations.set_entity_category(entity_list, entity_id, type, category_name)
         elif type == "liability":
-            category.add_liability(entity, False)
+            category.add_liability(entity)
+            MySQLOperations.MySQLOperations.set_entity_category(entity_list, entity_id, type, category_name)
         entity.set_category_name(category_name)
 
     def get_entity(entity_portfolio: EntityPortfolio, type: str, id: str) -> Entity:
@@ -169,6 +177,7 @@ class Operations:
         new_cat = Category.Category(new_cat_name, new_cat_desc)
         #add that new category to the list
         category_list.add_category(new_cat)
+        MySQLOperations.MySQLOperations.add_category(new_cat_name, new_cat_desc)
         return
 
     def category_managment_menu_view_category_items(category_list:CategoryList, cat_name:str) -> str:
@@ -303,4 +312,61 @@ class Operations:
             report = report_factory.get_report(report_type, transaction_list)
         return report
 
+    # We can use validate_file_name to validate input 
+    def generate_pdf_report(self, filename: str, reportTyp: str, reportStr: str, reportScr = ""):
+        logo = r"""
+            _      __                     ____  _____ 
+           / \    |  \   \     /         |        |   
+          /---\   |   |   \   /    ===   |--      |   
+         /     \  |__/     \_/           |      __|__ 
+        """
+        
+            # Create a new PDF
+        c = canvas.Canvas(filename)
+        
+        # Set font and size for the logo
+        c.setFont("Courier-Bold", 12)
+        
+        # Draw the logo text
+        y_position = 750  # Start drawing at this y-coordinate
+        for line in logo.splitlines():
+            c.drawString(100, y_position, line)
+            y_position -= 15  # Move down by 15 units for the next line
 
+        # Set font for the "Income Report" title text
+        c.setFont("Helvetica-Bold", 16)
+        
+        # Calculate the width of the "Income Report" text
+        title_text = "Report Type"
+        title_width = c.stringWidth(title_text, "Helvetica-Bold", 16)
+        
+        # Calculate the x position to center the title text
+        x_position = (c._pagesize[0] - title_width) / 2  # Center the text on the page
+
+        # Draw the "Income Report" text centered
+        c.drawString(x_position, y_position - 30, title_text)  # Position it below the logo
+
+        # Set font for the "Report" text (left justified)
+        c.setFont("Helvetica", 12)
+        
+        # Draw the "Report" text below and left justified
+        c.drawString(100, y_position - 60, "Report String")  # Left-justified at the same x as the logo
+
+        if reportScr:
+            reportScr = "ADV-FI Score: " + str(reportScr)
+            c.setFont("Helvetica-Bold", 40)
+
+            # Calculate the width of the score text for medium alignment
+            score_width = c.stringWidth(reportScr, "Helvetica-Bold", 40)
+            medium_x_position = (c._pagesize[0] - score_width) / 2
+
+            # Add margin above the score
+            margin_above_score = 20  # Adjust this value to change the margin size
+            adjusted_y_position = y_position - 90 - margin_above_score
+
+            # Draw the ADV-FI score text with adjusted position
+            c.drawString(medium_x_position, adjusted_y_position, reportScr)
+
+            # Save the PDF
+            c.save()
+            print(f"PDF saved as {filename}")
