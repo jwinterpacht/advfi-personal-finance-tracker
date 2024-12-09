@@ -239,6 +239,40 @@ class MySQLOperations:
             return False #added bools for testing
         return True
     
+    #budget is part of category
+    def update_budget(cat_name: str, new_budget: float):
+        try:
+            db = mysql.connector.connect(user='advfi_user', password='advfi_password', host='localhost', database='advfi_database')
+            db_cursor = db.cursor() #cursor() acts as an interace between AdvFi and the database
+
+            update_query = "UPDATE category SET budget = %s WHERE cat_name = %s"
+            db_cursor.execute(update_query, (new_budget, cat_name))
+            db.commit()
+            db_cursor.close()
+            db.close()
+        except Exception as e:
+            print(f"Could not add category to the database. Error: {e}")
+            return False #added bools for testing
+        return True
+    
+    #budget is part of category
+    def delete_budget(cat_name: str):
+        try:
+            db = mysql.connector.connect(user='advfi_user', password='advfi_password', host='localhost', database='advfi_database')
+            db_cursor = db.cursor() #cursor() acts as an interace between AdvFi and the database
+
+            new_budget = -1.0 #-1.0 means no budget
+            
+            update_query = "UPDATE category SET budget = %s WHERE cat_name = %s"
+            db_cursor.execute(update_query, (new_budget, cat_name))
+            db.commit()
+            db_cursor.close()
+            db.close()
+        except Exception as e:
+            print(f"Could not add category to the database. Error: {e}")
+            return False #added bools for testing
+        return True
+    
 
     def set_transaction_category(transaction_list: TransactionList, id: str, type: str, category_name: str):
         try:

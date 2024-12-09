@@ -191,6 +191,7 @@ class Operations:
     def category_management_menu_set_category_budget_operations(category_list: CategoryList, cat_name: str, budget: str) -> None:
         category = category_list.get_category(cat_name)
         category.set_budget(budget)
+        MySQLOperations.MySQLOperations.update_budget(cat_name, float(budget))
         return
 
     def spending_management_menu_monitor_budget_adherence_operations(category_list: CategoryList) -> str:
