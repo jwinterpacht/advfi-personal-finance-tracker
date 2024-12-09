@@ -37,13 +37,13 @@ class IncomeReport:
         self._total_income_last_month = total_income_last_month
 
     def generate_report(self):
-        income_report = f"Income Report\nTotal lifetime income: ${self._total_income}\nTotal income from last month: ${self._total_income_last_month}\nEach income entry from last month:\n"
+        income_report = f"Income Report\n---------------\nTotal lifetime income: ${self._total_income}\n\nTotal income from last month: ${self._total_income_last_month}\n\nEach income entry from last month:\n"
         for income in self._income_entries_last_month:
             income_report += f"{income.print_transaction()}\n"
         MainUI.MainUI.utility_print(income_report)
 
     def to_string(self) -> str:
-        income_report = f"Income Report\nTotal lifetime income: ${self._total_income}\nTotal income from last month: ${self._total_income_last_month}\nEach income entry from last month:\n"
+        income_report = f"Income Report\nTotal lifetime income: ${self._total_income}\n\nTotal income from last month: ${self._total_income_last_month}\n\nEach income entry from last month:\n"
         for income in self._income_entries_last_month:
             income_report += f"{income.print_transaction()}\n"
         return income_report

@@ -28,8 +28,8 @@ class TestSpendingManagement(unittest.TestCase):
         self.assertGreater(total_transactions, 0, "No transactions were imported.")
         
         # Optional: Print a summary for debugging
-        print("Income Transactions:", self.transaction_list.get_total_income())
-        print("Expense Transactions:", self.transaction_list.get_total_expenses())
+        self.assertAlmostEqual(self.transaction_list.get_total_expenses(), 945.76)
+        self.assertEqual(self.transaction_list.get_total_income(), 595.73)
 
 if __name__ == "__main__":
     unittest.main()

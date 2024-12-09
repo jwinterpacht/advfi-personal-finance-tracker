@@ -8,7 +8,7 @@ class MainUI:
     INCOME_MGMT_MENU_LOW = 0
     INCOME_MGMT_MENU_HIGH = 4
     SPENDING_MGMT_MENU_LOW = 0
-    SPENDING_MGMT_MENU_HIGH = 7
+    SPENDING_MGMT_MENU_HIGH = 8
     ASSET_MGMT_MENU_LOW = 0
     ASSET_MGMT_MENU_HIGH = 6
     LIABILITY_MGMT_MENU_LOW = 0
@@ -221,11 +221,12 @@ class MainUI:
         print("1: Add expense")
         print("2: View expense list")
         print("3: Delete expense")
-        print("4: Import spending data from CSV (not working)")
-        print("5: Categorize expenses (working)")
-        print("6: Set budgets for spending categories (under construction)")
-        print("7: Monitor budget adherence (working)")
-        print("0: Return to main menu (working)")
+        print("4: Import spending data from CSV")
+        print("5: Categorize expenses")
+        print("6: Set/Edit budgets for spending categories")
+        print("7: Delete category budgets")
+        print("8: Monitor budget adherence")
+        print("0: Return to main menu")
         
         # return the user's input and give it to the Controller class
         return input()
@@ -307,11 +308,11 @@ class MainUI:
         return input()
     
     @staticmethod
-    def financial_reports_menu_income_report():
+    def financial_reports_menu_report_options(report_type: str):
         MainUI.clear_screen()
-        print("1: Save income report to database")
-        print("2: Save income report as PDF")
-        print("0: Exit without saving")
+        print(f"1: Save {report_type} report to database")
+        print(f"2: Save {report_type} report as PDF")
+        print(f"0: Exit without saving")
         return input()
 
     @staticmethod
@@ -457,7 +458,7 @@ class MainUI:
         MainUI.wait_for_user_input()
 
     def error_no_categories_budgeting():
-        print("ERROR: You cannot set category budget without first creating a category using the category menu")
+        print("ERROR: You cannot set/edit category budget without first creating a category using the category menu")
         MainUI.wait_for_user_input()
 
     
