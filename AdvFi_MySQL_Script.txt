@@ -1,6 +1,11 @@
-
 -- ADVFI STUFF!
 drop database advfi_database;
+drop table the_user;
+drop table income;
+drop table expense;
+drop table asset;
+drop table liability;
+drop table category;
 CREATE DATABASE advfi_database;
 USE advfi_database;
 
