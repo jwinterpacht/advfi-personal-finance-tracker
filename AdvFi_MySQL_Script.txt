@@ -1,6 +1,6 @@
 
 -- ADVFI STUFF!
-drop database advfi_database; --:shocked:
+drop database advfi_database;
 CREATE DATABASE advfi_database;
 USE advfi_database;
 
@@ -45,7 +45,8 @@ CREATE TABLE asset (
     entity_desc TEXT,
     entity_auto_update bool,
     entity_stock_symbol VARCHAR(255),
-    id INT PRIMARY KEY
+    id INT PRIMARY KEY,
+    cat_name VARCHAR(255)
 );
 SELECT * FROM asset;
 
@@ -56,6 +57,17 @@ CREATE TABLE liability (
     entity_desc TEXT,
     entity_auto_update bool,
     entity_stock_symbol VARCHAR(255),
-    id INT PRIMARY KEY
+    id INT PRIMARY KEY,
+    cat_name VARCHAR(255)
 );
 SELECT * FROM liability;
+
+CREATE TABLE category(
+	cat_name varchar(255) PRIMARY KEY,
+    cat_desc TEXT,
+    income_count INT,
+    expense_count INT,
+    asset_count INT,
+    liability_count INT
+);
+SELECT * FROM category;
