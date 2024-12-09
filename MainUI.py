@@ -308,6 +308,13 @@ class MainUI:
         return input()
     
     @staticmethod
+    def financial_reports_menu_export_to_pdf():
+        MainUI.clear_screen()
+        print("Enter the name of the file you want saved\n")
+        file = input()
+        return file
+    
+    @staticmethod
     def financial_reports_menu_report_options(report_type: str):
         MainUI.clear_screen()
         print(f"1: Save {report_type} report to database")

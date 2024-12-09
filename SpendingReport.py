@@ -3,8 +3,6 @@ from typing import List, Dict
 import TransactionList
 import MainUI
 
-from reportlab.lib.pagesizes import letter
-from reportlab.pdfgen import canvas
 
 class SpendingReport:
     def __init__(self, transaction_list: TransactionList):
@@ -50,39 +48,3 @@ class SpendingReport:
         for expense in self._expense_entries_last_month:
             spending_report += f"{expense.print_transaction()}\n"
         return spending_report
-
-    # We can use validate_file_name to validate input 
-    def generate_pdf_report(self, filename: str, transaction_list: TransactionList):
-        # Create a canvas object for the PDF
-        c = canvas.Canvas(filename, pagesize=letter)
-        width, height = letter  # 8.5 x 11 inches
-
-        # Title of the report
-        c.setFont("Helvetica-Bold", 16)
-        c.drawString(100, height - 40, "Spending Report")
-        
-        # Subtitle with date
-        c.setFont("Helvetica", 12)
-        c.drawString(100, height - 60, f"Generated on: {date.now().strftime('%B %d, %Y')}")
-
-        # Total spending
-        c.drawString(100, height - 100, f"Total lifetime spending: ${self._total_spending:.2f}")
-        c.drawString(100, height - 120, f"Total spending from last month: ${self._total_spending_last_month:.2f}")
-
-        # Each spending entry
-        y_position = height - 160
-        c.drawString(100, y_position, "Each spending entry from last month:")
-
-        y_position -= 20  # Adjusting for the next line
-        c.setFont("Helvetica", 10)
-        for expense in self._expense_entries_last_month:
-            if y_position < 40:  # If we're near the bottom, start a new page
-                c.showPage()
-                c.setFont("Helvetica", 10)
-                y_position = height - 40  # Reset y_position for the new page
-            c.drawString(100, y_position, expense.print_transaction(transaction_list))
-            y_position -= 15  # Move down for the next entry
-
-        # Save the PDF to the file
-        c.save()
-        print(f"PDF report saved as {filename}")

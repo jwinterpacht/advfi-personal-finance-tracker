@@ -302,7 +302,7 @@ class Operations:
         return report
 
     # We can use validate_file_name to validate input 
-    def generate_pdf_report(self, filename: str, reportTyp: str, reportStr: str):
+    def generate_pdf_report(self, filename: str, reportTyp: str, reportStr: str, reportScr = ""):
         logo = r"""
             _      __                     ____  _____ 
            / \    |  \   \     /         |        |   
@@ -310,7 +310,7 @@ class Operations:
          /     \  |__/     \_/           |      __|__ 
         """
         
-        # Create a new PDF
+            # Create a new PDF
         c = canvas.Canvas(filename)
         
         # Set font and size for the logo
@@ -326,7 +326,7 @@ class Operations:
         c.setFont("Helvetica-Bold", 16)
         
         # Calculate the width of the "Income Report" text
-        title_text = reportTyp
+        title_text = "Report Type"
         title_width = c.stringWidth(title_text, "Helvetica-Bold", 16)
         
         # Calculate the x position to center the title text
@@ -339,8 +339,23 @@ class Operations:
         c.setFont("Helvetica", 12)
         
         # Draw the "Report" text below and left justified
-        c.drawString(100, y_position - 60, reportStr)  # Left-justified at the same x as the logo
+        c.drawString(100, y_position - 60, "Report String")  # Left-justified at the same x as the logo
 
-        # Save the PDF
-        c.save()
-        print(f"PDF saved as {filename}")
+        if reportScr:
+            reportScr = "ADV-FI Score: " + str(reportScr)
+            c.setFont("Helvetica-Bold", 40)
+
+            # Calculate the width of the score text for medium alignment
+            score_width = c.stringWidth(reportScr, "Helvetica-Bold", 40)
+            medium_x_position = (c._pagesize[0] - score_width) / 2
+
+            # Add margin above the score
+            margin_above_score = 20  # Adjust this value to change the margin size
+            adjusted_y_position = y_position - 90 - margin_above_score
+
+            # Draw the ADV-FI score text with adjusted position
+            c.drawString(medium_x_position, adjusted_y_position, reportScr)
+
+            # Save the PDF
+            c.save()
+            print(f"PDF saved as {filename}")
