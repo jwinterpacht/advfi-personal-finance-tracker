@@ -1,7 +1,7 @@
 import csv
 import MainUI 
 import Transaction
-from datetime import datetime as dt
+from datetime import date, datetime as dt
 import TransactionList
 import Entity
 import EntityPortfolio
@@ -15,6 +15,8 @@ import IncomeReport
 import SpendingReport
 import FinancialHealthReport
 import Report
+from reportlab.lib.pagesizes import letter
+from reportlab.pdfgen import canvas
 
 report_factory = ReportFactory.ReportFactory()
 
@@ -299,4 +301,46 @@ class Operations:
         report = report_factory.get_report(report_type, transaction_list)
         return report
 
+    # We can use validate_file_name to validate input 
+    def generate_pdf_report(self, filename: str, reportTyp: str, reportStr: str):
+        logo = r"""
+            _      __                     ____  _____ 
+           / \    |  \   \     /         |        |   
+          /---\   |   |   \   /    ===   |--      |   
+         /     \  |__/     \_/           |      __|__ 
+        """
+        
+        # Create a new PDF
+        c = canvas.Canvas(filename)
+        
+        # Set font and size for the logo
+        c.setFont("Courier-Bold", 12)
+        
+        # Draw the logo text
+        y_position = 750  # Start drawing at this y-coordinate
+        for line in logo.splitlines():
+            c.drawString(100, y_position, line)
+            y_position -= 15  # Move down by 15 units for the next line
 
+        # Set font for the "Income Report" title text
+        c.setFont("Helvetica-Bold", 16)
+        
+        # Calculate the width of the "Income Report" text
+        title_text = reportTyp
+        title_width = c.stringWidth(title_text, "Helvetica-Bold", 16)
+        
+        # Calculate the x position to center the title text
+        x_position = (c._pagesize[0] - title_width) / 2  # Center the text on the page
+
+        # Draw the "Income Report" text centered
+        c.drawString(x_position, y_position - 30, title_text)  # Position it below the logo
+
+        # Set font for the "Report" text (left justified)
+        c.setFont("Helvetica", 12)
+        
+        # Draw the "Report" text below and left justified
+        c.drawString(100, y_position - 60, reportStr)  # Left-justified at the same x as the logo
+
+        # Save the PDF
+        c.save()
+        print(f"PDF saved as {filename}")
