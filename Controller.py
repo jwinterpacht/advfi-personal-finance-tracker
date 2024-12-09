@@ -16,6 +16,7 @@ import CategoryList
 import Category
 import mysql.connector
 import MySQLOperations
+import IncomeReport
 
 
 entity_portfolio = EntityPortfolio.EntityPortfolio()
@@ -106,12 +107,15 @@ class Controller:
 
         #create the account using the information input by the user
         Operations.Operations.create_user_account_operations(account, new_pass, new_pin)
+        MySQLOperations.MySQLOperations.create_user_account(account)
+        account.new_user = False
 
         #send the user to the home screen
         #Controller.home_screen()
     
     def user_login():
         password = MainUI.MainUI.get_password()
+        account = MySQLOperations.MySQLOperations.get_user_account()
 
         while not Validator.Validator.validate_password(account, password):
             password = MainUI.MainUI.invalid_password()
@@ -459,13 +463,25 @@ class Controller:
                 MainUI.MainUI.action_cancelled()
                 return
             case 1:
-                asset_obj.set_name(Controller._get_entity_name())
+                #asset_obj.set_name(Controller._get_entity_name())
+                user_input = Controller._get_entity_name()
+                asset_obj.set_name(user_input)
+                MySQLOperations.MySQLOperations.edit_entity_name(id, "asset", user_input)
             case 2:
-                asset_obj.set_description(Controller._get_desc())
+                #asset_obj.set_description(Controller._get_desc())
+                user_input = Controller._get_desc()
+                asset_obj.set_description(user_input)
+                MySQLOperations.MySQLOperations.edit_entity_description(id, "asset", user_input)
             case 3:
-                asset_obj.set_amount(Controller._get_num_owned())
+                #asset_obj.set_amount(Controller._get_num_owned())
+                user_input = Controller._get_num_owned()
+                asset_obj.set_amount(user_input)
+                MySQLOperations.MySQLOperations.edit_entity_amount(id, "asset", user_input)
             case 4:
-                asset_obj.set_single_value(Controller._get_entity_value())
+                #asset_obj.set_single_value(Controller._get_entity_value())
+                user_input = Controller._get_entity_value()
+                asset_obj.set_single_value(user_input)
+                MySQLOperations.MySQLOperations.edit_entity_value(id, "asset", user_input)
         MainUI.MainUI.utility_print_no_clear("Update successful!")
 
     def asset_management_menu_delete_asset():
@@ -577,9 +593,15 @@ class Controller:
                 MainUI.MainUI.action_cancelled()
                 return
             case 1:
-                liability_obj.set_name(Controller._get_entity_name())
+                #liability_obj.set_name(Controller._get_entity_name())
+                user_input = Controller._get_entity_name()
+                liability_obj.set_name(user_input)
+                MySQLOperations.MySQLOperations.edit_entity_name(id, "liability", user_input)
             case 2:
-                liability_obj.set_description(Controller._get_desc())
+                #liability_obj.set_description(Controller._get_desc())
+                user_input = Controller._get_desc()
+                liability_obj.set_description(user_input)
+                MySQLOperations.MySQLOperations.edit_entity_description(id, "liability", user_input)
         MainUI.MainUI.utility_print_no_clear("Update successful!")
     
     def liability_management_menu_make_liability_payment():
@@ -646,7 +668,6 @@ class Controller:
             user_selection = MainUI.MainUI.financial_reports_menu()
             stop = Validator.Validator.validate_menu_entry(user_selection, MainUI.MainUI.FINANCIAL_REPORTS_MENU_LOW, MainUI.MainUI.FINANCIAL_REPORTS_MENU_HIGH)
         selection = int(user_selection)
-        #print("test")
         match selection:
             case 0:
                 return
@@ -656,10 +677,9 @@ class Controller:
                 Controller.financial_reports_menu_spending_report()
             case 3:
                 Controller.financial_reports_menu_financial_health_report()
-                
             case 4:
-                # Controller.financial_reports_menu_retrieve_report()
-                pass
+                Controller.financial_reports_menu_retrieve_report()
+                # MySQLOperations.MySQLOperations.get_report()
     
 
     def financial_reports_menu_income_report():
@@ -667,28 +687,19 @@ class Controller:
         income_report = Operations.Operations.financial_reports_menu_report_operations("income", transaction_list)
         # MainUI.MainUI.utility_print(f"type: {type(income_report)}")
         income_report.generate_report()
+        #MainUI.MainUI.financial_reports_menu_report_options("income")
         stop = False
         while not stop:
-            user_input = MainUI.MainUI.financial_reports_menu_report_options("income")
-            stop = Validator.Validator.validate_menu_entry(user_input, 0, 3)
-        match int(user_input):
+            user_selection = MainUI.MainUI.financial_reports_menu_report_options("income")
+            stop = Validator.Validator.validate_menu_entry(user_selection, MainUI.MainUI.FINANCIAL_REPORTS_OPTIONS_LOW, MainUI.MainUI.FINANCIAL_REPORTS_OPTIONS_HIGH)
+        selection = int(user_selection)
+        match selection:
             case 0:
                 return
             case 1:
-                return
+                MySQLOperations.MySQLOperations.add_income_report(income_report.to_string()) #REPORT!!!!
             case 2:
-                #pdf stuff
-                filename = MainUI.MainUI.financial_reports_menu_export_to_pdf()
-                header = income_report.get_header()
-                body = income_report.get_body()
-                Operations.Operations.generate_pdf_report(filename, header, body)
-            case 3:
-                #pdf stuff
-                filename = MainUI.MainUI.financial_reports_menu_export_to_pdf()
-                header = income_report.get_header()
-                body = income_report.get_body()
-                Operations.Operations.generate_pdf_report(filename, header, body)
-                return
+                MySQLOperations.MySQLOperations.get_income_report() #DCHANGE
 
     
     def financial_reports_menu_spending_report():
@@ -696,26 +707,16 @@ class Controller:
         spending_report.generate_report()
         stop = False
         while not stop:
-            user_input = MainUI.MainUI.financial_reports_menu_report_options("spending")
-            stop = Validator.Validator.validate_menu_entry(user_input, 0, 3)
-        match int(user_input):
+            user_selection = MainUI.MainUI.financial_reports_menu_report_options("spending")
+            stop = Validator.Validator.validate_menu_entry(user_selection, MainUI.MainUI.FINANCIAL_REPORTS_OPTIONS_LOW, MainUI.MainUI.FINANCIAL_REPORTS_OPTIONS_HIGH)
+        selection = int(user_selection)
+        match selection:
             case 0:
                 return
             case 1:
-                return
+                MySQLOperations.MySQLOperations.add_spending_report(spending_report.to_string()) #REPORT!!!!
             case 2:
-                #pdf stuff
-                filename = MainUI.MainUI.financial_reports_menu_export_to_pdf()
-                header = spending_report.get_header()
-                body = spending_report.get_body()
-                Operations.Operations.generate_pdf_report(filename, header, body)
-            case 3:
-                #pdf stuff
-                filename = MainUI.MainUI.financial_reports_menu_export_to_pdf()
-                header = spending_report.get_header()
-                body = spending_report.get_body()
-                Operations.Operations.generate_pdf_report(filename, header, body)
-                return
+                MySQLOperations.MySQLOperations.get_spending_report() #DCHANGE
         
 
     def financial_reports_menu_financial_health_report():
@@ -723,28 +724,23 @@ class Controller:
         financial_health_report.generate_report()
         stop = False
         while not stop:
-            user_input = MainUI.MainUI.financial_reports_menu_report_options("financial health")
-            stop = Validator.Validator.validate_menu_entry(user_input, 0, 3)
-        match int(user_input):
+            user_selection = MainUI.MainUI.financial_reports_menu_report_options("financial health")
+            stop = Validator.Validator.validate_menu_entry(user_selection, MainUI.MainUI.FINANCIAL_REPORTS_OPTIONS_LOW, MainUI.MainUI.FINANCIAL_REPORTS_OPTIONS_HIGH)
+        selection = int(user_selection)
+        match selection:
             case 0:
                 return
             case 1:
-                return
+                MySQLOperations.MySQLOperations.add_health_report(financial_health_report.to_string()) #REPORT!!!!
             case 2:
-                #pdf stuff
-                filename = MainUI.MainUI.financial_reports_menu_export_to_pdf()
-                header = financial_health_report.get_header()
-                body = financial_health_report.get_body()
-                score = financial_health_report.get_score()
-                Operations.Operations.generate_pdf_report(filename, header, body, score)
-            case 3:
-                #pdf stuff
-                filename = MainUI.MainUI.financial_reports_menu_export_to_pdf()
-                header = financial_health_report.get_header()
-                body = financial_health_report.get_body()
-                score = financial_health_report.get_score()
-                Operations.Operations.generate_pdf_report(filename, header, body, score)
-                return
+                MySQLOperations.MySQLOperations.get_health_report() 
+
+    def financial_reports_menu_retrieve_report():
+        #MySQLOperations.MySQLOperations.get_report()
+        MySQLOperations.MySQLOperations.get_income_report()
+        MySQLOperations.MySQLOperations.get_spending_report()
+        MySQLOperations.MySQLOperations.get_health_report()
+
 
     def retrieve_transactions():
         MainUI.MainUI.retrieve_transactions()
@@ -839,7 +835,7 @@ class Controller:
     def program_settings_menu():
         stop = False
         while not stop:
-            user_selection = MainUI.MainUI.utility_print_with_return("Program Settings Menu:\n1: Change Password\n2: Program Credits\n0: Return to main menu")
+            user_selection = MainUI.MainUI.utility_print_with_return("Program Settings Menu:\n1: Change Password\n2: Program Credits\n3: Delete user account\n0: Return to main menu")
             stop = Validator.Validator.validate_menu_entry(user_selection, MainUI.MainUI.PROGRAM_SETTINGS_MENU_LOW, MainUI.MainUI.PROGRAM_SETTINGS_MENU_HIGH)
         match int(user_selection):
             case 0:
@@ -848,7 +844,10 @@ class Controller:
                 Controller.program_settings_menu_change_password()
             case 2:
                 MainUI.MainUI.utility_print("The Adv-Fi Team:\nJaden Winterpacht\nMason Myre\nJonah Raef\nFrank Watring")
-                return
+            case 3:
+                MySQLOperations.MySQLOperations.delete_account()
+                MainUI.MainUI.utility_print("User account was deleted")
+                exit(0)
         
     def _set_new_password():
         stop = False
@@ -885,11 +884,7 @@ class Controller:
 
 
 def testing(test_login, test_income, test_expense, test_asset, test_stock, test_liability, test_category, test_category_2):
-    if test_login:
-        if account.new_user == True:  #if we have a new user
-            Controller.new_user_setup()
-        else:
-            Controller.user_login()
+    
     if test_income:
         Operations.Operations.create_and_add_transaction(transaction_list, "500.10", "10/10/10", "test 1", "income")
         Operations.Operations.create_and_add_transaction(transaction_list, "300.22", "10/11/10", "test 2", "income")
@@ -932,7 +927,7 @@ def main():
     #this lets us set testing conditions when we start the program
     #I'm sure that I'm not the only one who doesn't want to have to add stuff manually every time for testing
     do_testing = False  #will not do the testing, regardless of any other values (this testing variable has the highest priority)
-    test_login = False
+    test_login = True
     test_income = True
     test_expense = True
     test_asset = True
@@ -948,6 +943,13 @@ def main():
     MySQLOperations.MySQLOperations.pull_trans_from_database(transaction_list)
     MySQLOperations.MySQLOperations.pull_entities_from_database(entity_portfolio)
     MySQLOperations.MySQLOperations.pull_categories_from_db(category_list)
+    user_exists= MySQLOperations.MySQLOperations.check_account_state()
+    if user_exists:  #if we have a new user
+        Controller.user_login()
+        
+    else:
+        Controller.new_user_setup()
+        MySQLOperations.MySQLOperations.set_account_state()
 
     #now we call the method that does the testing stuff
     if do_testing:

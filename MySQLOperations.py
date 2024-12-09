@@ -5,6 +5,7 @@ import Entity
 import EntityPortfolio
 import CategoryList
 import Category
+import UserAccount
 import MainUI #need for util print
 #import time #for debugging
 
@@ -220,6 +221,78 @@ class MySQLOperations:
         return True
 
 
+    #ENTITY EDIT METHODS
+    def edit_entity_name(entity_id: str, type: str, new_name: str):
+        try:
+            db = mysql.connector.connect(user='advfi_user', password='advfi_password', host='localhost', database='advfi_database')
+            db_cursor = db.cursor()
+
+            update_query = f"UPDATE {type} SET entity_name = %s WHERE id = %s"
+            db_cursor.execute(update_query, (new_name, entity_id))
+
+            db.commit()
+            print(f"Entity name updated to '{new_name}' for ID {entity_id}.")
+            db_cursor.close()
+            db.close()
+            return True
+        except Exception as e:
+            print(f"Could not update entity name. Error: {e}")
+            return False
+
+    def edit_entity_description(entity_id: str, type: str, new_description: str):
+        try:
+            db = mysql.connector.connect(user='advfi_user', password='advfi_password', host='localhost', database='advfi_database')
+            db_cursor = db.cursor()
+
+            update_query = f"UPDATE {type} SET entity_desc = %s WHERE id = %s"
+            db_cursor.execute(update_query, (new_description, entity_id))
+
+            db.commit()
+            print(f"Entity description updated for ID {entity_id}.")
+            db_cursor.close()
+            db.close()
+            return True
+        except Exception as e:
+            print(f"Could not update entity description. Error: {e}")
+            return False
+
+
+    def edit_entity_amount(entity_id: str, type: str, new_amount: int):
+        try:
+            db = mysql.connector.connect(user='advfi_user', password='advfi_password', host='localhost', database='advfi_database')
+            db_cursor = db.cursor()
+
+            update_query = f"UPDATE {type} SET entity_amount = %s WHERE id = %s"
+            db_cursor.execute(update_query, (new_amount, entity_id))
+
+            db.commit()
+            print(f"Entity amount updated to '{new_amount}' for ID {entity_id}.")
+            db_cursor.close()
+            db.close()
+            return True
+        except Exception as e:
+            print(f"Could not update entity amount. Error: {e}")
+            return False
+
+
+    def edit_entity_value(entity_id: str, type: str, new_value: float):
+        try:
+            db = mysql.connector.connect(user='advfi_user', password='advfi_password', host='localhost', database='advfi_database')
+            db_cursor = db.cursor()
+
+            update_query = f"UPDATE {type} SET entity_value = %s WHERE id = %s"
+            db_cursor.execute(update_query, (new_value, entity_id))
+
+            db.commit()
+            print(f"Entity value updated to '{new_value}' for ID {entity_id}.")
+            db_cursor.close()
+            db.close()
+            return True
+        except Exception as e:
+            print(f"Could not update entity value. Error: {e}")
+            return False
+
+
 
     '''Category stuff!'''
     def add_category(cat_name: str, cat_desc: str):
@@ -230,6 +303,40 @@ class MySQLOperations:
             
             new_entity_data = (cat_name, cat_desc)
             db_cursor.execute(add_cat_query, new_entity_data)
+            db.commit()
+            db_cursor.close()
+            db.close()
+        except Exception as e:
+            print(f"Could not add category to the database. Error: {e}")
+            return False #added bools for testing
+        return True
+    
+    #budget is part of category
+    def update_budget(cat_name: str, new_budget: float):
+        try:
+            db = mysql.connector.connect(user='advfi_user', password='advfi_password', host='localhost', database='advfi_database')
+            db_cursor = db.cursor() #cursor() acts as an interace between AdvFi and the database
+
+            update_query = "UPDATE category SET budget = %s WHERE cat_name = %s"
+            db_cursor.execute(update_query, (new_budget, cat_name))
+            db.commit()
+            db_cursor.close()
+            db.close()
+        except Exception as e:
+            print(f"Could not add category to the database. Error: {e}")
+            return False #added bools for testing
+        return True
+    
+    #budget is part of category
+    def delete_budget(cat_name: str):
+        try:
+            db = mysql.connector.connect(user='advfi_user', password='advfi_password', host='localhost', database='advfi_database')
+            db_cursor = db.cursor() #cursor() acts as an interace between AdvFi and the database
+
+            new_budget = -1.0 #-1.0 means no budget
+            
+            update_query = "UPDATE category SET budget = %s WHERE cat_name = %s"
+            db_cursor.execute(update_query, (new_budget, cat_name))
             db.commit()
             db_cursor.close()
             db.close()
@@ -341,38 +448,14 @@ class MySQLOperations:
 
 
     #REPORT METHODS!!!!
-    def add_report(report_date: str, total_income: float, total_income_last_month: float, income_entries: list):
-        """
-        Adds a new income report and its entries to the database.
-
-        :param report_date: Date of the report (format: 'YYYY-MM-DD').
-        :param total_income: Total lifetime income.
-        :param total_income_last_month: Total income for the last month.
-        :param income_entries: A list of dictionaries, each containing:
-                            - income_date (str): Date of the income transaction.
-                            - amount (float): Income amount.
-                            - description (str): Description of the income entry.
-        :return: True if the operation is successful, False otherwise.
-        """
+    def add_income_report(report_str: str):
         try:
             db = mysql.connector.connect(user='advfi_user', password='advfi_password', host='localhost', database='advfi_database')
             db_cursor = db.cursor()
 
             # Add report to income_report table
-            add_report_query = ("INSERT INTO income_report (report_date, total_income, total_income_last_month) "
-                                "VALUES (%s, %s, %s)")
-            report_data = (report_date, total_income, total_income_last_month)
-            db_cursor.execute(add_report_query, report_data)
-
-            # Get the last inserted report ID
-            report_id = db_cursor.lastrowid
-
-            # Add income entries to income_entry table
-            add_entry_query = ("INSERT INTO income_entry (report_id, income_date, amount, description) "
-                            "VALUES (%s, %s, %s, %s)")
-            for entry in income_entries:
-                entry_data = (report_id, entry['income_date'], entry['amount'], entry['description'])
-                db_cursor.execute(add_entry_query, entry_data)
+            add_report_query = ("INSERT INTO income_report (income_entries_string) "  "VALUES (%s)")
+            db_cursor.execute(add_report_query, (report_str,))
 
             # Commit changes
             db.commit()
@@ -383,37 +466,220 @@ class MySQLOperations:
             return False
         return True
 
-    def get_report(report_id: int):
-        """
-        Retrieves a report and its associated entries from the database.
-
-        :param report_id: The ID of the report to retrieve.
-        :return: A dictionary containing the report details and its entries, or None if the operation fails.
-        """
+    def get_income_report():
         try:
             db = mysql.connector.connect(user='advfi_user', password='advfi_password', host='localhost', database='advfi_database')
-            db_cursor = db.cursor(dictionary=True)  # Use dictionary cursor for better readability
+            db_cursor = db.cursor()
 
-            # Fetch report details
-            get_report_query = "SELECT * FROM income_report WHERE report_id = %s"
-            db_cursor.execute(get_report_query, (report_id,))
-            report = db_cursor.fetchone()
+            # Add report to income_report table
+            query = ("SELECT * FROM income_report WHERE id = %s")
+            #the_report = db_cursor.execute(query, (report_id,))
+            db_cursor.execute("SELECT * FROM income_report")
+            the_report = db_cursor.fetchall()
 
-            if not report:
-                print(f"Report with ID {report_id} not found.")
-                return None
+            for row in the_report:
+                MainUI.MainUI.utility_print(row)
 
-            # Fetch associated income entries
-            get_entries_query = "SELECT * FROM income_entry WHERE report_id = %s"
-            db_cursor.execute(get_entries_query, (report_id,))
-            entries = db_cursor.fetchall()
-
+            # Commit changes
+            db.commit()
             db_cursor.close()
             db.close()
-
-            # Combine report and entries into a single dictionary
-            report['income_entries'] = entries
-            return report
         except Exception as e:
-            print(f"Could not retrieve report from the database. Error: {e}")
-            return None
+            print(f"Could not add report to the database. Error: {e}")
+            return False
+        return True
+
+
+    def add_spending_report(report_str: str):
+        try:
+            db = mysql.connector.connect(user='advfi_user', password='advfi_password', host='localhost', database='advfi_database')
+            db_cursor = db.cursor()
+
+            # Add report to income_report table
+            add_report_query = ("INSERT INTO spending_report (income_entries_string) "  "VALUES (%s)")
+            db_cursor.execute(add_report_query, (report_str,))
+
+            # Commit changes
+            db.commit()
+            db_cursor.close()
+            db.close()
+        except Exception as e:
+            print(f"Could not add report to the database. Error: {e}")
+            return False
+        return True
+
+    def get_spending_report():
+        try:
+            db = mysql.connector.connect(user='advfi_user', password='advfi_password', host='localhost', database='advfi_database')
+            db_cursor = db.cursor()
+
+            # Add report to income_report table
+            db_cursor.execute("SELECT * FROM spending_report")
+            the_report = db_cursor.fetchall()
+
+            #MainUI.MainUI.utility_print(the_report)
+            for row in the_report:
+                MainUI.MainUI.utility_print(row)
+
+            # Commit changes
+            db.commit()
+            db_cursor.close()
+            db.close()
+        except Exception as e:
+            print(f"Could not add report to the database. Error: {e}")
+            return False
+        return True
+    
+
+    def add_health_report(report_str: str):
+        try:
+            db = mysql.connector.connect(user='advfi_user', password='advfi_password', host='localhost', database='advfi_database')
+            db_cursor = db.cursor()
+
+            # Add report to income_report table
+            add_report_query = ("INSERT INTO health_report (income_entries_string) "  "VALUES (%s)")
+            db_cursor.execute(add_report_query, (report_str,))
+
+            # Commit changes
+            db.commit()
+            db_cursor.close()
+            db.close()
+        except Exception as e:
+            print(f"Could not add report to the database. Error: {e}")
+            return False
+        return True
+
+    def get_health_report():
+        try:
+            db = mysql.connector.connect(user='advfi_user', password='advfi_password', host='localhost', database='advfi_database')
+            db_cursor = db.cursor()
+
+            # Add report to income_report table
+            db_cursor.execute("SELECT * FROM health_report")
+            the_report = db_cursor.fetchall()
+
+           # MainUI.MainUI.utility_print(the_report[1])
+            for row in the_report:
+                MainUI.MainUI.utility_print(row)
+
+            # Commit changes
+            db.commit()
+            db_cursor.close()
+            db.close()
+        except Exception as e:
+            print(f"Could not add report to the database. Error: {e}")
+            return False
+        return True
+    
+
+
+    # USER ACCOUNT QUERIES
+    def create_user_account(user_account: UserAccount):
+        try:
+            db = mysql.connector.connect(user='advfi_user', password='advfi_password', host='localhost', database='advfi_database')
+            db_cursor = db.cursor()
+
+            # Add report to income_report table
+            #db_cursor.execute("INSERT INTO health_report (income_entries_string) "  "VALUES (%s)", )
+            #the_report = db_cursor.fetchall()
+
+            user_data = (user_account._password, user_account._pin)
+            query = ("INSERT INTO the_user (password, pin) "  "VALUES (%s, %s)")
+            db_cursor.execute(query, user_data)
+
+            # Commit changes
+            db.commit()
+            db_cursor.close()
+            db.close()
+        except Exception as e:
+            print(f"Could not add report to the database. Error: {e}")
+            return False
+        return True
+    
+    def get_user_account():
+        empty_account = UserAccount.UserAccount()
+        try:
+            db = mysql.connector.connect(user='advfi_user', password='advfi_password', host='localhost', database='advfi_database')
+            db_cursor = db.cursor()
+
+            # Add report to income_report table
+            #db_cursor.execute("INSERT INTO health_report (income_entries_string) "  "VALUES (%s)", )
+            #the_report = db_cursor.fetchall()
+
+            query = ("SELECT * FROM the_user")
+            result = db_cursor.execute(query)
+
+            user_account = UserAccount.UserAccount()
+            user_account.set_password(result[0])
+            user_account.set_pin(result[1])
+
+
+
+            # Commit changes
+            db.commit()
+            db_cursor.close()
+            db.close()
+        except Exception as e:
+            print(f"Could not add report to the database. Error: {e}")
+            return empty_account
+        return user_account
+    
+    def check_account_state():
+        try:
+            db = mysql.connector.connect(user='advfi_user', password='advfi_password', host='localhost', database='advfi_database')
+            db_cursor = db.cursor()
+
+            query = ("SELECT * FROM user_state")
+            db_cursor.execute(query)
+            the_state = db_cursor.fetchone()
+            the_state = the_state[0]
+
+            # Commit changes
+            db.commit()
+            db_cursor.close()
+            db.close()
+            return the_state
+        except Exception as e:
+            print(f"Could not add report to the database. Error: {e}")
+            return False
+        return the_state
+    
+    def set_account_state():
+        try:
+            db = mysql.connector.connect(user='advfi_user', password='advfi_password', host='localhost', database='advfi_database')
+            db_cursor = db.cursor()
+
+            update_query = ("UPDATE user_state SET user_exists = TRUE")
+            db_cursor.execute(update_query)
+
+            # Commit changes
+            db.commit()
+            db_cursor.close()
+            db.close()
+        except Exception as e:
+            print(f"Could not add report to the database. Error: {e}")
+            return False
+        return True
+    
+    def delete_account():
+        try:
+            db = mysql.connector.connect(user='advfi_user', password='advfi_password', host='localhost', database='advfi_database')
+            db_cursor = db.cursor()
+
+            #drop tables
+            db_cursor.execute("drop table the_user")
+            db_cursor.execute("drop table user_state")
+
+            #recreate tables
+            db_cursor.execute("CREATE TABLE the_user (password VARCHAR(255) NOT NULL,pin INT)")
+            db_cursor.execute("CREATE TABLE user_state (user_exists BOOLEAN DEFAULT FALSE)")
+            db_cursor.execute("INSERT INTO user_state () VALUES ()")
+
+            # Commit changes
+            db.commit()
+            db_cursor.close()
+            db.close()
+        except Exception as e:
+            print(f"Could not add report to the database. Error: {e}")
+            return False
+        return True

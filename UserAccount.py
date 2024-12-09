@@ -1,6 +1,5 @@
 import TransactionList
 import EntityPortfolio
-
 class UserAccount:
     def __init__(self):
         #self._username = username
