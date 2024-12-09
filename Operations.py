@@ -304,8 +304,12 @@ class Operations:
             return False #added bools for testing
         return True
     
-    def financial_reports_menu_report_operations(report_type, transaction_list: TransactionList) -> Report:
-        report = report_factory.get_report(report_type, transaction_list)
+    def financial_reports_menu_report_operations(report_type, transaction_list: TransactionList, entity_portfolio=None) -> Report:
+        if report_type == "financial health":
+            report = report_factory.get_report(report_type, transaction_list, entity_portfolio)
+        # income or spending report
+        else:
+            report = report_factory.get_report(report_type, transaction_list)
         return report
 
     # We can use validate_file_name to validate input 
