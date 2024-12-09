@@ -16,6 +16,7 @@ Here's how this will work: we're gonna have a parent called CategoryList.py that
 
 import Transaction
 import Entity
+import MySQLOperations
 
 class Category:
 
@@ -35,13 +36,36 @@ class Category:
 
         self._budget = -1.0  #a budget of -1 will be used to signify that this category does not have a given budget
 
-        
+
+    def get_asset_count(self):
+        return self._asset_count
     
+    def get_liability_count(self):
+        return self._liability_count
+        
+    def get_income_count(self):
+        return self._income_count
+    
+    def get_expense_count(self):
+        return self._expense_count
+
     def get_name(self):
         return self._category_name
     
     def get_description(self):
         return self._category_description
+    
+    def set_income(self, new_val):
+        self._income_count = new_val or 0
+
+    def set_expense(self, new_val):
+        self._expense_count = new_val or 0
+
+    def set_asset(self, new_val):
+        self._asset_count = new_val or 0
+
+    def set_liability(self, new_val):
+        self._liability_count = new_val or 0
     
     def set_name(self, new_name):
         self._category_name = new_name
@@ -60,6 +84,7 @@ class Category:
     def add_income(self, income: Transaction):
         self._income_count += 1
         self._income_list.append(income)
+        #MySQLOperations.MySQLOperations.update_category_counts(self._category_name, self._income_count, "income")
     
     def add_expense(self, expense: Transaction):
         self._expense_count += 1

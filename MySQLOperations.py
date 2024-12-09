@@ -292,12 +292,46 @@ class MySQLOperations:
             for row in categories:
                 name = row[0]
                 desc = row[1]
+                income_count = row[2]
+                expense_count = row[3]
+                asset_count = row[4]
+                liability_count = row[5]
                 temp_cat = Category.Category(name, desc)
+                temp_cat.set_income(income_count)
+                temp_cat.set_expense(expense_count)
+                temp_cat.set_asset(asset_count)
+                temp_cat.set_liability(liability_count)
                 cat_list.add_category(temp_cat)
 
             db_cursor.close()
             db.close()
         except Exception as e:
             print(f"Could not add category to the database. Error: {e}")
+            return False #added bools for testing
+        return True
+    
+    def update_category_counts(cat_name: str, income_count: int, type: str):
+        try:
+            db = mysql.connector.connect(user='advfi_user', password='advfi_password', host='localhost', database='advfi_database')
+            db_cursor = db.cursor() #cursor() acts as an interace between AdvFi and the database
+            update_income_query = ("UPDATE category SET income_count = %s WHERE cat_name = %s")
+            update_expense_query = ("UPDATE category SET expense_count = %s WHERE cat_name = %s")
+            update_asset_query = ("UPDATE category SET asset_count = %s WHERE cat_name = %s")
+            update_liability_query = ("UPDATE category SET liability_count = %s WHERE cat_name = %s")
+            
+            new_trans_data = (income_count, cat_name)
+            if type == "income":
+                db_cursor.execute(update_income_query, new_trans_data)
+            elif type == "expense":
+                db_cursor.execute(update_expense_query, new_trans_data)
+            elif type == "asset":
+                db_cursor.execute(update_asset_query, new_trans_data)
+            else: #type == "liability"
+                db_cursor.execute(update_liability_query, new_trans_data)
+            db.commit()
+            db_cursor.close()
+            db.close()
+        except Exception as e:
+            print(f"Could not set transaction category to the database. Error: {e}")
             return False #added bools for testing
         return True

@@ -79,14 +79,17 @@ class Operations:
             category.add_income(transaction)
             #add to categorization to the income in the database
             MySQLOperations.MySQLOperations.set_transaction_category(transaction_list, transaction_id, type, category_name)
+            MySQLOperations.MySQLOperations.update_category_counts(category_name, category.get_income_count(), "income")
         elif type == "expense":
             category.add_expense(transaction)
             MySQLOperations.MySQLOperations.set_transaction_category(transaction_list, transaction_id, type, category_name)
+            MySQLOperations.MySQLOperations.update_category_counts(category_name, category.get_income_count(), "expense")
         transaction.set_category_name(category_name)
 
     def categorize_entity(entity_list: EntityPortfolio, category_list: CategoryList, entity_id: str, category_name: str, type: str) -> None:
         category = category_list.get_category(category_name)
         entity = entity_list.get_entity(entity_id)
+        MainUI.MainUI.utility_print(category._asset_count)
         #we have this part here to ensure that when you recategorize an entity, it is removed from the previous category
         if entity.get_category_name() != "":
             old_category = category_list.get_category(entity.get_category_name())
@@ -99,9 +102,11 @@ class Operations:
             category.add_asset(entity)
             #add categorization of entity to DATABASE!!
             MySQLOperations.MySQLOperations.set_entity_category(entity_list, entity_id, type, category_name)
+            MySQLOperations.MySQLOperations.update_category_counts(category_name, category.get_income_count(), "asset")
         elif type == "liability":
             category.add_liability(entity)
             MySQLOperations.MySQLOperations.set_entity_category(entity_list, entity_id, type, category_name)
+            MySQLOperations.MySQLOperations.update_category_counts(category_name, category.get_income_count(), "liability")
         entity.set_category_name(category_name)
 
     def get_entity(entity_portfolio: EntityPortfolio, type: str, id: str) -> Entity:
