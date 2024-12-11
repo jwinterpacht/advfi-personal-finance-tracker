@@ -65,7 +65,7 @@ class FinancialHealthReport(Report):
         total_debt = entity_portfolio.get_liabilities_value()
         # if user has no debt, double their AdvFi Score
         if total_debt == 0:
-            return 2
+            return "n/a"
         
 
         asset_to_debt_ratio = ((total_assets + total_income - total_expenses) / total_debt)
@@ -84,19 +84,30 @@ class FinancialHealthReport(Report):
         return net_worth
     
     def calculate_advfi_score(self):
+        advfi_score = 1
         if type(self._investment_return) == float:
-            advfi_score = abs(int(self._savings_rate * self._investment_return * self._asset_to_debt_ratio))
-            return advfi_score
-        advfi_score = abs(int(self._savings_rate * self._asset_to_debt_ratio))
-        return advfi_score
+            advfi_score *= (self._investment_return * 100)
+        if type(self._asset_to_debt_ratio) == float:
+            advfi_score *= self._asset_to_debt_ratio
+        else:
+            advfi_score *= 2  #if no debts, just multiply by 2
+        if type(self._savings_rate) == float:
+            advfi_score *= self._savings_rate
+        return int(advfi_score)
     
     def generate_report(self):
         header = f"Financial Health Report\n{self._report_date}\n---------------------------\n"
         net_worth = f"Net worth: ${self._net_worth:.2f}\n\n"
         items = f"Total asset value: ${self._total_assets:.2f}\nTotal debt value: ${self._total_liabilities}\nTotal income: ${self._total_income}\nTotal spending: ${self._total_expenses}\n\n"
         savings_rate = f"Savings rate: {self._savings_rate:.2f}%\n"
-        investment_return = f"Investment return: {self._investment_return * 100}%\n"
-        asset_debt_ratio = f"Asset to Debt Ratio: {self._asset_to_debt_ratio:.2f}%\n\n"
+        if type(self._investment_return) == float:
+            investment_return = f"Investment return: {self._investment_return:.2f}%\n"
+        else: 
+            investment_return = f"Investment return: {self._investment_return}\n"
+        if type(self._asset_to_debt_ratio) == float:
+            asset_debt_ratio = f"Asset to Debt Ratio: {self._asset_to_debt_ratio:.2f}%\n\n"
+        else:
+            asset_debt_ratio = f"Asset to Debt Ratio: {self._asset_to_debt_ratio}\n\n"
 
         advfi_score = f"AdvFi Score: {self._advfi_score}\n"
         financial_health_report = header + net_worth + items + savings_rate + investment_return + asset_debt_ratio + advfi_score
@@ -107,12 +118,18 @@ class FinancialHealthReport(Report):
         net_worth = f"Net worth: ${self._net_worth:.2f}\n\n"
         items = f"Total asset value: ${self._total_assets:.2f}\nTotal debt value: ${self._total_liabilities}\nTotal income: ${self._total_income}\nTotal spending: ${self._total_expenses}\n\n"
         savings_rate = f"Savings rate: {self._savings_rate:.2f}%\n"
-        investment_return = f"Investment return: {self._investment_return}%\n"
-        asset_debt_ratio = f"Asset to Debt Ratio: {self._asset_to_debt_ratio:.2f}%\n\n"
+        if type(self._investment_return) == float:
+            investment_return = f"Investment return: {self._investment_return:.2f}%\n"
+        else: 
+            investment_return = f"Investment return: {self._investment_return}\n"
+        if type(self._asset_to_debt_ratio) == float:
+            asset_debt_ratio = f"Asset to Debt Ratio: {self._asset_to_debt_ratio:.2f}%\n\n"
+        else:
+            asset_debt_ratio = f"Asset to Debt Ratio: {self._asset_to_debt_ratio}\n\n"
 
         
         advfi_score = f"AdvFi Score: {self._advfi_score}\n"
-        financial_health_report = header + net_worth + items + savings_rate + investment_return + advfi_score
+        financial_health_report = header + net_worth + items + savings_rate + investment_return + asset_debt_ratio + advfi_score
         return financial_health_report
     
     def get_header(self) -> str:
@@ -124,10 +141,15 @@ class FinancialHealthReport(Report):
         net_worth = f"Net worth: ${self._net_worth:.2f}\n\n"
         items = f"Total asset value: ${self._total_assets:.2f}\nTotal debt value: ${self._total_liabilities}\nTotal income: ${self._total_income}\nTotal spending: ${self._total_expenses}\n\n"
         savings_rate = f"Savings rate: {self._savings_rate:.2f}%\n"
-        inv_return = self._investment_return
-        investment_return = f"Investment return: {self._investment_return}%\n"
-        asset_debt_ratio = f"Asset to Debt Ratio: {self._asset_to_debt_ratio:.2f}\n\n"
-        body = net_worth + items + savings_rate + investment_return
+        if type(self._investment_return) == float:
+            investment_return = f"Investment return: {self._investment_return:.2f}%\n"
+        else: 
+            investment_return = f"Investment return: {self._investment_return}\n"
+        if type(self._asset_to_debt_ratio) == float:
+            asset_debt_ratio = f"Asset to Debt Ratio: {self._asset_to_debt_ratio:.2f}%\n\n"
+        else:
+            asset_debt_ratio = f"Asset to Debt Ratio: {self._asset_to_debt_ratio}\n\n"
+        body = net_worth + items + savings_rate + investment_return + asset_debt_ratio
         return body
     
     def get_score(self) -> str:
