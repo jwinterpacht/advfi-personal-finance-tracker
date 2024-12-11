@@ -31,6 +31,9 @@ class FinancialHealthReport(Report):
 
         :return: the savings rate
         '''
+        #prevent divide by zero
+        if self._total_expenses == 0:
+            return 1.0
         net_income = self._total_income - self._total_expenses
         savings_rate = (net_income / self._total_income) * 100
         return savings_rate
@@ -38,7 +41,7 @@ class FinancialHealthReport(Report):
     def calculate_investment_return(self, entity_portfolio: EntityPortfolio):
         #set variables
         if entity_portfolio.get_asset_list() == []:
-            return -1
+            return "n/a"
         initial_investment_value = 0
         current_investment_value = 0
         asset_list = entity_portfolio.get_asset_list()
@@ -63,8 +66,13 @@ class FinancialHealthReport(Report):
         # if user has no debt, double their AdvFi Score
         if total_debt == 0:
             return 2
+        
 
-        asset_to_debt_ratio = ((total_assets + total_income - total_expenses) / total_debt) * 100
+        asset_to_debt_ratio = ((total_assets + total_income - total_expenses) / total_debt)
+        
+        #make a floor value because theres no real reason to penalize this hard ()
+        if asset_to_debt_ratio < .1:
+            asset_to_debt_ratio = .1
         return asset_to_debt_ratio
     
     def calculate_current_net_worth(self, entity_portfolio: EntityPortfolio, transaction_list: TransactionList):
@@ -76,33 +84,33 @@ class FinancialHealthReport(Report):
         return net_worth
     
     def calculate_advfi_score(self):
-        advfi_score = abs(int(self._savings_rate * self._investment_return * self._asset_to_debt_ratio))
+        if type(self._investment_return) == float:
+            advfi_score = abs(int(self._savings_rate * self._investment_return * self._asset_to_debt_ratio))
+            return advfi_score
+        advfi_score = abs(int(self._savings_rate * self._asset_to_debt_ratio))
         return advfi_score
     
     def generate_report(self):
         header = f"Financial Health Report\n{self._report_date}\n---------------------------\n"
-        net_worth = f"Net worth: ${self._net_worth}\n\n"
-        items = f"Total asset value: ${self._total_assets}\nTotal debt value: ${self._total_liabilities}\nTotal income: ${self._total_income}\nTotal spending: ${self._total_expenses}\n\n"
+        net_worth = f"Net worth: ${self._net_worth:.2f}\n\n"
+        items = f"Total asset value: ${self._total_assets:.2f}\nTotal debt value: ${self._total_liabilities}\nTotal income: ${self._total_income}\nTotal spending: ${self._total_expenses}\n\n"
         savings_rate = f"Savings rate: {self._savings_rate:.2f}%\n"
-        inv_return = self._investment_return
-        if inv_return != -1:
-            investment_return = f"Investment return: {self._investment_return}%\n\n"
-        else:
-            investment_return = f"Investment return: N/A\n\n"
+        investment_return = f"Investment return: {self._investment_return * 100}%\n"
+        asset_debt_ratio = f"Asset to Debt Ratio: {self._asset_to_debt_ratio:.2f}%\n\n"
+
         advfi_score = f"AdvFi Score: {self._advfi_score}\n"
-        financial_health_report = header + net_worth + items + savings_rate + investment_return + advfi_score
+        financial_health_report = header + net_worth + items + savings_rate + investment_return + asset_debt_ratio + advfi_score
         MainUI.MainUI.utility_print(financial_health_report)
 
     def to_string(self) -> str:
         header = f"Financial Health Report\n{self._report_date}\n---------------------------\n"
-        net_worth = f"Net worth: ${self._net_worth}\n\n"
-        items = f"Total asset value: ${self._total_assets}\nTotal debt value: ${self._total_liabilities}\nTotal income: ${self._total_income}\nTotal spending: ${self._total_expenses}\n\n"
+        net_worth = f"Net worth: ${self._net_worth:.2f}\n\n"
+        items = f"Total asset value: ${self._total_assets:.2f}\nTotal debt value: ${self._total_liabilities}\nTotal income: ${self._total_income}\nTotal spending: ${self._total_expenses}\n\n"
         savings_rate = f"Savings rate: {self._savings_rate:.2f}%\n"
-        inv_return = self._investment_return
-        if inv_return != -1:
-            investment_return = f"Investment return: {self._investment_return}%\n\n"
-        else:
-            investment_return = f"Investment return: N/A\n\n"
+        investment_return = f"Investment return: {self._investment_return}%\n"
+        asset_debt_ratio = f"Asset to Debt Ratio: {self._asset_to_debt_ratio:.2f}%\n\n"
+
+        
         advfi_score = f"AdvFi Score: {self._advfi_score}\n"
         financial_health_report = header + net_worth + items + savings_rate + investment_return + advfi_score
         return financial_health_report
@@ -113,14 +121,12 @@ class FinancialHealthReport(Report):
     
     def get_body(self) -> str:
         body = ""
-        net_worth = f"Net worth: ${self._net_worth}\n\n"
-        items = f"Total asset value: ${self._total_assets}\nTotal debt value: ${self._total_liabilities}\nTotal income: ${self._total_income}\nTotal spending: ${self._total_expenses}\n\n"
+        net_worth = f"Net worth: ${self._net_worth:.2f}\n\n"
+        items = f"Total asset value: ${self._total_assets:.2f}\nTotal debt value: ${self._total_liabilities}\nTotal income: ${self._total_income}\nTotal spending: ${self._total_expenses}\n\n"
         savings_rate = f"Savings rate: {self._savings_rate:.2f}%\n"
         inv_return = self._investment_return
-        if inv_return != -1:
-            investment_return = f"Investment return: {self._investment_return}%\n\n"
-        else:
-            investment_return = f"Investment return: N/A\n\n"
+        investment_return = f"Investment return: {self._investment_return}%\n"
+        asset_debt_ratio = f"Asset to Debt Ratio: {self._asset_to_debt_ratio:.2f}\n\n"
         body = net_worth + items + savings_rate + investment_return
         return body
     
