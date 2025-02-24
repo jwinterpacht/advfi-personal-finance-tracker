@@ -18,7 +18,7 @@ Frank Watring       <br/> <br/>
 
 
 This was a semester long project that we undertook for IT326 - Principles of Software Engineering at Illinois State university.<br/><br/>
-Adv-Fi was a project inspired by the now discontinued Intuit Mint, as we were not satisfied with the alternatives. Adv-Fi hopes to capture the same feeling of Mint, as well as putting our own spin on things with our Adv-Fi score, which was an idea inspired by weightlifting apps that give user a strenth score. <br/><br/>
+Adv-Fi was a project inspired by the now discontinued Intuit Mint, as we were not satisfied with the alternatives. Adv-Fi hopes to capture the same feeling of Mint, as well as putting our own spin on things with our Adv-Fi score, which was an idea inspired by weightlifting apps that give user a strength score. <br/><br/>
 As we worked on the project, we created an SRS document to help plan our progress, alongside a use-case diagram, multiple sequence diagrams, and a class diagram to aid our efforts. <br/><br/>
 As a team, we know the product could have been improved in multiple aspects, however we are still proud of what we have created. The opportunity to develop Adv-Fi was not just the opportunity to develop a piece of software, but was in irreplacable learning opportunity within the realm of software engineering. <br/> 
 - We learned about important design patterns such factories, decorators, singletons, and many more that we had the chance to implement to really help us understand how we might one day use them in a professional environment.<br/>
